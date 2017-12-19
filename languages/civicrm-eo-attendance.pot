@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the CiviCRM Event Organiser Attendance package.
 msgid ""
 msgstr ""
-"Project-Id-Version: CiviCRM Event Organiser Attendance 0.5.2\n"
+"Project-Id-Version: CiviCRM Event Organiser Attendance 0.5.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/civicrm-eo-attendance\n"
-"POT-Creation-Date: 2017-08-02 13:21:55+00:00\n"
+"POT-Creation-Date: 2017-12-19 09:40:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -44,7 +44,7 @@ msgstr ""
 #: assets/templates/custom-data-event/event-form.php:40
 #: assets/templates/custom-data-participant/event-form.php:25
 #: includes/civicrm-eo-attendance-rendez-vous.php:280
-#: includes/civicrm-eo-attendance-rendez-vous.php:1450
+#: includes/civicrm-eo-attendance-rendez-vous.php:1480
 msgid "Submit"
 msgstr ""
 
@@ -121,8 +121,8 @@ msgid "The profile shown on the Participant Listing page. Select \"Disabled\" if
 msgstr ""
 
 #: assets/widgets/custom-data-event-widget.php:26
-#: includes/civicrm-eo-attendance-custom-data-event.php:438
-#: includes/civicrm-eo-attendance-custom-data-event.php:599
+#: includes/civicrm-eo-attendance-custom-data-event.php:450
+#: includes/civicrm-eo-attendance-custom-data-event.php:612
 msgid "Event Feedback"
 msgstr ""
 
@@ -131,7 +131,9 @@ msgid "Use this widget to show a list of feedback for events."
 msgstr ""
 
 #: assets/widgets/custom-data-event-widget.php:83
+#: assets/widgets/custom-data-event-widget.php:514
 #: assets/widgets/custom-data-participant-widget.php:83
+#: assets/widgets/custom-data-participant-widget.php:446
 msgid "You are up-to-date with your feedback."
 msgstr ""
 
@@ -149,9 +151,47 @@ msgstr ""
 msgid "Max number to show:"
 msgstr ""
 
+#: assets/widgets/custom-data-event-widget.php:327
+#: assets/widgets/custom-data-participant-widget.php:290
+msgid "Leave feedback"
+msgstr ""
+
+#: assets/widgets/custom-data-event-widget.php:508
+#: assets/widgets/custom-data-participant-widget.php:439
+#: includes/civicrm-eo-attendance-custom-data-event.php:492
+#: includes/civicrm-eo-attendance-custom-data-participant.php:694
+#: includes/civicrm-eo-attendance-rendez-vous.php:282
+msgid "Processing..."
+msgstr ""
+
+#: assets/widgets/custom-data-event-widget.php:509
+#: includes/civicrm-eo-attendance-custom-data-event.php:493
+msgid "You must enter values for each field"
+msgstr ""
+
+#: assets/widgets/custom-data-event-widget.php:510
+#: includes/civicrm-eo-attendance-custom-data-event.php:494
+msgid "You must enter positive values for each field"
+msgstr ""
+
+#: assets/widgets/custom-data-event-widget.php:511
+#: includes/civicrm-eo-attendance-custom-data-event.php:496
+msgid "Number of attendees must be the sum of boys and girls"
+msgstr ""
+
+#: assets/widgets/custom-data-event-widget.php:512
+#: includes/civicrm-eo-attendance-custom-data-event.php:497
+msgid "Youngest must be younger than oldest"
+msgstr ""
+
+#: assets/widgets/custom-data-event-widget.php:513
+#: includes/civicrm-eo-attendance-custom-data-event.php:495
+msgid "You must enter positive values for ages"
+msgstr ""
+
 #: assets/widgets/custom-data-participant-widget.php:26
-#: includes/civicrm-eo-attendance-custom-data-participant.php:622
-#: includes/civicrm-eo-attendance-custom-data-participant.php:795
+#: includes/civicrm-eo-attendance-custom-data-participant.php:652
+#: includes/civicrm-eo-attendance-custom-data-participant.php:828
 msgid "Participant Feedback"
 msgstr ""
 
@@ -163,46 +203,54 @@ msgstr ""
 msgid "Participant Feedback Required"
 msgstr ""
 
+#: assets/widgets/custom-data-participant-widget.php:440
+#: includes/civicrm-eo-attendance-custom-data-participant.php:695
+msgid "You must enter values for each field."
+msgstr ""
+
+#: assets/widgets/custom-data-participant-widget.php:441
+#: includes/civicrm-eo-attendance-custom-data-participant.php:696
+msgid "You must enter numeric values for each field."
+msgstr ""
+
+#: assets/widgets/custom-data-participant-widget.php:442
+#: includes/civicrm-eo-attendance-custom-data-participant.php:697
+msgid "You must enter whole numbers in each field."
+msgstr ""
+
+#: assets/widgets/custom-data-participant-widget.php:443
+#: includes/civicrm-eo-attendance-custom-data-participant.php:698
+msgid "You must enter positive values for each field."
+msgstr ""
+
+#: assets/widgets/custom-data-participant-widget.php:444
+#: includes/civicrm-eo-attendance-custom-data-participant.php:699
+msgid "Really? You worked no time at all?"
+msgstr ""
+
+#: assets/widgets/custom-data-participant-widget.php:445
+#: includes/civicrm-eo-attendance-custom-data-participant.php:700
+msgid "The number of minutes must be less than 60."
+msgstr ""
+
 #: includes/civicrm-eo-attendance-custom-data-event.php:138
 msgid "Event Statistics"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-custom-data-event.php:480
-#: includes/civicrm-eo-attendance-custom-data-participant.php:664
-#: includes/civicrm-eo-attendance-rendez-vous.php:282
-msgid "Processing..."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-event.php:481
-msgid "You must enter values for each field"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-event.php:482
-msgid "You must enter positive values for each field"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-event.php:483
-msgid "Number of attendees must be the sum of boys and girls"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-event.php:484
-msgid "Youngest must be younger than oldest"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-event.php:594
-#: includes/civicrm-eo-attendance-custom-data-participant.php:790
+#: includes/civicrm-eo-attendance-custom-data-event.php:607
+#: includes/civicrm-eo-attendance-custom-data-participant.php:823
 msgid "Feedback for %s"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-custom-data-event.php:716
-#: includes/civicrm-eo-attendance-custom-data-participant.php:946
-#: includes/civicrm-eo-attendance-rendez-vous.php:1580
+#: includes/civicrm-eo-attendance-custom-data-event.php:732
+#: includes/civicrm-eo-attendance-custom-data-participant.php:985
+#: includes/civicrm-eo-attendance-rendez-vous.php:1616
 msgid "Oops! Something went wrong."
 msgstr ""
 
-#: includes/civicrm-eo-attendance-custom-data-event.php:797
-#: includes/civicrm-eo-attendance-custom-data-participant.php:1025
-#: includes/civicrm-eo-attendance-rendez-vous.php:1747
+#: includes/civicrm-eo-attendance-custom-data-event.php:819
+#: includes/civicrm-eo-attendance-custom-data-participant.php:1070
+#: includes/civicrm-eo-attendance-rendez-vous.php:1801
 msgid "Thanks!"
 msgstr ""
 
@@ -218,52 +266,28 @@ msgstr ""
 msgid "Minutes Worked"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-custom-data-participant.php:665
-msgid "You must enter values for each field."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-participant.php:666
-msgid "You must enter numeric values for each field."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-participant.php:667
-msgid "You must enter whole numbers in each field."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-participant.php:668
-msgid "You must enter positive values for each field."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-participant.php:669
-msgid "Really? You worked no time at all?"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-participant.php:670
-msgid "The number of minutes must be less than 60."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-participant-listing.php:347
+#: includes/civicrm-eo-attendance-participant-listing.php:350
 msgid "Disabled"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-participant-listing.php:743
-#: includes/civicrm-eo-attendance-participant-listing.php:904
+#: includes/civicrm-eo-attendance-participant-listing.php:746
+#: includes/civicrm-eo-attendance-participant-listing.php:907
 msgid "Participants and Registration"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-participant-listing.php:899
+#: includes/civicrm-eo-attendance-participant-listing.php:902
 msgid "Participants for %s"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-participant-listing.php:1090
+#: includes/civicrm-eo-attendance-participant-listing.php:1096
 msgid "No participants for this event"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-participant-listing.php:1145
+#: includes/civicrm-eo-attendance-participant-listing.php:1154
 msgid "Register for this event"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-participant-listing.php:1160
+#: includes/civicrm-eo-attendance-participant-listing.php:1169
 msgid "Registration is closed"
 msgstr ""
 
@@ -272,7 +296,7 @@ msgid "Attendance"
 msgstr ""
 
 #: includes/civicrm-eo-attendance-rendez-vous.php:281
-#: includes/civicrm-eo-attendance-rendez-vous.php:1448
+#: includes/civicrm-eo-attendance-rendez-vous.php:1478
 msgid "Update"
 msgstr ""
 
@@ -288,67 +312,67 @@ msgstr ""
 msgid "Rendez-vous successfully refreshed."
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:486
+#: includes/civicrm-eo-attendance-rendez-vous.php:495
 msgid "Refreshing all Rendez-vous failed."
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:488
+#: includes/civicrm-eo-attendance-rendez-vous.php:497
 msgid "All Rendez-vous successfully refreshed."
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:597
+#: includes/civicrm-eo-attendance-rendez-vous.php:609
 msgid "Availability for %s"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:675
+#: includes/civicrm-eo-attendance-rendez-vous.php:690
 msgid "Erfurt"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:1072
+#: includes/civicrm-eo-attendance-rendez-vous.php:1102
 msgid "Refresh All"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:1130
+#: includes/civicrm-eo-attendance-rendez-vous.php:1160
 msgid "Edit"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:1135
+#: includes/civicrm-eo-attendance-rendez-vous.php:1165
 msgid "Refresh"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:1254
+#: includes/civicrm-eo-attendance-rendez-vous.php:1284
 msgid "I am not available this month"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:1308
+#: includes/civicrm-eo-attendance-rendez-vous.php:1338
 msgid "Registration"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:1351
+#: includes/civicrm-eo-attendance-rendez-vous.php:1381
 msgid "Register"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:1650
+#: includes/civicrm-eo-attendance-rendez-vous.php:1689
 msgid "Registration via Rendez Vous"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:1945
+#: includes/civicrm-eo-attendance-rendez-vous.php:1999
 msgid "Enable Attendance"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:1962
+#: includes/civicrm-eo-attendance-rendez-vous.php:2016
 msgid "Select an Organiser"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:2011
+#: includes/civicrm-eo-attendance-rendez-vous.php:2068
 msgid "Choose who is responsible for Attendance"
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:2316
+#: includes/civicrm-eo-attendance-rendez-vous.php:2400
 msgid "%1$s cannot attend \"%2$s\""
 msgstr ""
 
-#: includes/civicrm-eo-attendance-rendez-vous.php:2327
+#: includes/civicrm-eo-attendance-rendez-vous.php:2411
 msgid "Unfortunately %1$s can no longer attend \"%2$s\" on %3$s at %4$s and their registration for this event has been cancelled. Please visit the \"%5$s\" to review registrations for this event."
 msgstr ""
 #. Plugin Name of the plugin/theme
