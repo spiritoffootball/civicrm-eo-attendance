@@ -1,0 +1,248 @@
+/**
+ * CiviCRM Event Organiser Attendance Stylesheet.
+ *
+ * Implements styles on EO Event pages.
+ *
+ * @package CiviCRM_Event_Organiser_Attendance
+ */
+
+
+
+/* List styles */
+span.civicrm-eo-custom-data-event,
+span.civicrm-eo-custom-data-participant
+{
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.civicrm-eo-custom-data-event > ul,
+.civicrm-eo-custom-data-participant > ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+.civicrm-eo-custom-data-event > ul > li,
+.civicrm-eo-custom-data-participant > ul > li
+{
+	list-style: none;
+	list-style-image: none;
+}
+
+.civicrm-eo-loading
+{
+	display: none;
+	padding: 0.3em 0;
+}
+
+
+
+/* Form styles */
+.civicrm_eo_cde,
+.civicrm_eo_cdp
+{
+	background: #fafafa;
+	border: 1px solid #ccc;
+	padding: 1em;
+	margin: 1em 0;
+}
+
+.civicrm_eo_cde p.description,
+.civicrm_eo_cdp p.description
+{
+	margin-bottom: 0.5em;
+	font-style: italic;
+}
+
+.civicrm_eo_cde > ul,
+.civicrm_eo_cdp > ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+.civicrm_eo_cde li,
+.civicrm_eo_cdp li
+{
+	list-style: none;
+	list-style-image: none;
+	margin: 0 0 0.75em 0;
+}
+
+.civicrm_eo_cdp li
+{
+	display: inline-block;
+	width: 30%;
+}
+
+.civicrm_eo_cde li label,
+.civicrm_eo_cdp li label
+{
+	display: block;
+	margin-bottom: 0.1em;
+}
+
+.civicrm_eo_cde p.submit,
+.civicrm_eo_cdp p.submit
+{
+	margin-bottom: 0.5em;
+}
+
+
+
+/* Widget styles */
+.widget li.civicrm-eo-cde-widget a,
+.widget li.civicrm-eo-cdp-widget a
+{
+	display: block;
+}
+
+.widget li.civicrm-eo-cde-widget a:hover,
+.widget li.civicrm-eo-cdp-widget a:hover
+{
+	color: #213397;
+	background-color: #eee;
+	text-decoration: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+
+
+/* Rendez Vous styles */
+.civicrm-eo-attendance-table
+{
+	overflow-x: scroll;
+	/* position: relative; */
+}
+
+#rendez-vous-single-form.rendez-vous-civicrm-eo-attendance .rendez-vous-item-meta,
+#rendez-vous-single-form.rendez-vous-civicrm-eo-attendance > h4,
+#rendez-vous-single-form.rendez-vous-civicrm-eo-attendance > hr
+{
+	display: none;
+}
+
+body.rendez-vous #rendez-vous-attendees-prefs tr th.rendez-vous-date
+{
+	text-align: center;
+	min-width: 8em;
+}
+
+body.rendez-vous #rendez-vous-attendees-prefs tr th.rendez-vous-date .date,
+body.rendez-vous #rendez-vous-attendees-prefs tr th.rendez-vous-date .time
+{
+	font-weight: normal;
+}
+
+body.rendez-vous table#rendez-vous-attendees-prefs tr td.rendez-vous-date-blank
+{
+	background: transparent;
+}
+
+body.rendez-vous #rendez-vous-attendees-prefs tr td.rendez-vous-date a
+{
+	font-weight: bold;
+}
+
+body.rendez-vous #rendez-vous-attendees-prefs tr td.rendez-vous-date .date,
+body.rendez-vous #rendez-vous-attendees-prefs tr td.rendez-vous-date .time
+{
+	font-weight: normal;
+}
+
+body.rendez-vous #rendez-vous-single-form a.button.bp-secondary-action.last
+{
+	display: none;
+}
+
+body.rendez-vous #rendez-vous-attendees-prefs tr td:first-child
+{
+	min-width: 12em;
+	position: absolute;
+	background: #fff;
+	vertical-align: top;
+}
+
+body.rendez-vous #rendez-vous-attendees-prefs tr th:first-child
+{
+	min-width: 12em;
+}
+
+.civicrm-eo-rendezvous-register-all
+{
+	cursor: pointer;
+}
+
+.civicrm_eo_rvm
+{
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(51, 51, 51, 0.66);
+	z-index: 10000;
+}
+
+.civicrm_eo_rvm ul
+{
+	padding-top: 1em;
+	border-top: 1px solid #eee;
+}
+
+.civicrm_eo_rvm li
+{
+	list-style: none;
+	list-style-image: none;
+	margin-bottom: 1em;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 1em;
+}
+
+.civicrm_eo_rvm label
+{
+	display: inline-block;
+	min-width: 30%;
+}
+
+.civicrm_eo_rvm_inner
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+	-webkit-transform: translate(-50%,-50%);
+	-moz-transform: translate(-50%,-50%);
+	-o-transform: translate(-50%,-50%);
+	width: 50%;
+	height: 80%;
+	margin: 1em auto 0 auto;
+	padding: 1em;
+	background: #fff;
+	overflow-y: scroll;
+}
+
+.civicrm_eo_cde_error,
+.civicrm_eo_rvm_error
+{
+	padding: 0 1em;
+	margin-bottom: 1em;
+	border-left: 5px solid red;
+	background: #eee;
+	line-height: 3;
+}
+
+.civicrm_eo_cde_success,
+.civicrm_eo_rvm_success
+{
+	padding: 0 1em;
+	margin-bottom: 1em;
+	border-left: 5px solid green;
+	background: #eee;
+	line-height: 3;
+}
+
