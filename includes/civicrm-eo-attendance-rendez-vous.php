@@ -1666,6 +1666,15 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$now_obj = new DateTime( 'now', eo_get_blog_timezone() );
 		$now = $now_obj->format( 'Y-m-d H:i:s' );
 
+		// get event details
+		$event_id = $this->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
+		$occurrence_id = $this->db->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
+		$event_title = get_the_title( $event_id );
+		$event_link = get_permalink( $event_id );
+
+		// construct title
+		$linked_title = '<a href="' . esc_url( $event_link ) . '">' . esc_html( $event_title ) . '</a>';
+
 		// handle registrations
 		if ( count( $register_data ) > 0 ) {
 
@@ -1723,6 +1732,26 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 						'result' => $result,
 						'backtrace' => $trace,
 					), true ) );
+
+				} else {
+
+					// set up message
+					$subject = sprintf(
+						__( 'You have been registered for %s', 'civicrm-eo-attendance' ),
+						esc_html( $event_title )
+					);
+
+					// construct message body
+					$message = sprintf(
+						__( 'This is to let you know that you have been registered as attending the event "%1$s" on %2$s at %3$s. If you think this has been done in error, or you have anything else you want to say to the organiser, please follow the link below and reply to this conversation on the Spirit of Football website.', 'civicrm-eo-attendance' ),
+						$linked_title,
+						eo_get_the_start( 'j\/m\/Y', $event_id, $occurrence_id ),
+						eo_get_the_start( 'g:ia', $event_id, $occurrence_id )
+					);
+
+					// send message
+					$this->rv_form_notify_user( $attendee_id, $subject, $message );
+
 
 				}
 
@@ -1791,6 +1820,25 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 						'backtrace' => $trace,
 					), true ) );
 
+				} else {
+
+					// set up message
+					$subject = sprintf(
+						__( 'You have been unregistered from %s', 'civicrm-eo-attendance' ),
+						esc_html( $event_title )
+					);
+
+					// construct message body
+					$message = sprintf(
+						__( 'This is to let you know that your registration for the event "%1$s" on %2$s at %3$s has been cancelled and that you will no longer be attending. If you think this has been done in error, please follow the link below and reply to this conversation on the Spirit of Football website.', 'civicrm-eo-attendance' ),
+						$linked_title,
+						eo_get_the_start( 'j\/m\/Y', $event_id, $occurrence_id ),
+						eo_get_the_start( 'g:ia', $event_id, $occurrence_id )
+					);
+
+					// send message
+					$this->rv_form_notify_user( $attendee_id, $subject, $message );
+
 				}
 
 			}
@@ -1805,6 +1853,44 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// send data to browser
 		$this->send_data( $data );
+
+	}
+
+
+
+	/**
+	 * Notify a user when they have been registered for an event.
+	 *
+	 * @since 0.5.3
+	 *
+	 * @param int $recipient_id The numeric Id of the user the notify.
+	 * @param str $subject The subject of the message.
+	 * @param str $content The content of the message.
+	 */
+	public function rv_form_notify_user( $recipient_id, $subject, $content ) {
+
+		// bail if anything is amiss
+		if ( empty( $recipient_id ) ) return;
+		if ( empty( $subject ) ) return;
+		if ( empty( $content ) ) return;
+
+		// get current user
+		$current_user = wp_get_current_user();
+
+		// don't notify the recipient if they are the current user
+		if ( $recipient_id == $current_user->ID ) return;
+
+		// set up message
+		$msg_args = array(
+			'sender_id'  => $current_user->ID,
+			'thread_id'  => false,
+			'recipients' => array( $recipient_id ), // Can be an array of usernames, user_ids or mixed.
+			'subject'    => $subject,
+			'content'    => $content,
+		);
+
+		// send message
+		messages_new_message( $msg_args );
 
 	}
 
