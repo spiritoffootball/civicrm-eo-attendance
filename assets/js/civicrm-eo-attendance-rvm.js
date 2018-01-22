@@ -310,9 +310,9 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 
 				});
 
-				console.log( 'civi_event_id', civi_event_id );
-				console.log( 'register', register_data );
-				console.log( 'unregister', unregister_data );
+				//console.log( 'civi_event_id', civi_event_id );
+				//console.log( 'register', register_data );
+				//console.log( 'unregister', unregister_data );
 
 				// use jQuery post
 				$.post(
