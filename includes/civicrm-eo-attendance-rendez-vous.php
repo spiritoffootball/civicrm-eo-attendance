@@ -607,7 +607,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// define title
 		$title = sprintf(
 			__( 'Availability for %s', 'civicrm-eo-attendance' ),
-			$datetime->format( 'F Y' )
+			date_i18n( 'F Y', $datetime->getTimestamp() )
 		);
 
 		// events on this month
@@ -888,6 +888,12 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		}
 
+		// define title
+		$title = sprintf(
+			__( 'Availability for %s', 'civicrm-eo-attendance' ),
+			date_i18n( 'F Y', $final->getTimestamp() )
+		);
+
 		/*
 		$e = new Exception;
 		$trace = $e->getTraceAsString();
@@ -895,14 +901,20 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			'method' => __METHOD__,
 			'rendez_vous' => $rendez_vous,
 			'references' => $references,
-			'backtrace' => $trace,
+			'title' => $title,
+			'locale' => get_locale(),
+			'locale-php' => setlocale( LC_ALL, 0 ),
+			'locale-wp' => eo_get_blog_timezone(),
+			'getTimestamp' => $final->getTimestamp(),
+			'date_i18n-wp' => date_i18n( 'F Y', $final->getTimestamp() ),
+			//'backtrace' => $trace,
 		), true ) );
 		*/
 
 		// construct update array
 		$rv_data = array(
 			'id' => $rendez_vous->id,
-			'title' => $rendez_vous->title,
+			'title' => $title,
 			'duration' => '01:00',
 			'venue' => $rendez_vous->venue,
 			'status' => 'publish',
