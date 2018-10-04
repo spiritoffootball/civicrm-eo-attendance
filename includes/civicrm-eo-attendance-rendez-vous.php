@@ -604,10 +604,15 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// get members of group
 		$attendee_ids = $this->rv_attendees_get( $group_id );
 
+		// for the title, we use the 3rd day of the month to avoid daylight-saving
+		// and timezone oddities related to the 1st
+		$title_date = $datetime->format( 'Y-m-03' );
+		$title_datetime = new DateTime( $title_date, eo_get_blog_timezone() );
+
 		// define title
 		$title = sprintf(
 			__( 'Availability for %s', 'civicrm-eo-attendance' ),
-			date_i18n( 'F Y', $datetime->getTimestamp() )
+			date_i18n( 'F Y', $title_datetime->getTimestamp() )
 		);
 
 		// events on this month
