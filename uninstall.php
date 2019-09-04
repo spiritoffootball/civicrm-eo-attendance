@@ -13,28 +13,28 @@ NOTES
 
 
 
-// kick out if uninstall not called from WordPress
+// Kick out if uninstall not called from WordPress.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit();
 
 
 
-// access plugin
+// Access plugin.
 global $civicrm_wp_event_organiser;
 
-// delete custom group and fields for event
+// Delete custom group and fields for event.
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_custom_group_id' );
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_custom_field_ids' );
 
-// delete custom group and fields for participant
+// Delete custom group and fields for participant.
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_participant_custom_group_id' );
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_participant_custom_field_ids' );
 
-// delete default settings for events
+// Delete default settings for events.
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_leader_role' );
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_default_sharing' );
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_default_listing' );
 
-// delete Rendez Vous term ID option
+// Delete Rendez Vous term ID option.
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_rv_term_id' );
 
 

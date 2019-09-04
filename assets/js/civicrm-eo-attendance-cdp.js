@@ -34,7 +34,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 	 */
 	CiviCRM_EO_Attendance_CDP.settings = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions.
 		var me = this;
 
 		/**
@@ -46,15 +46,15 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 */
 		this.init = function() {
 
-			// init localisation
+			// Init localisation.
 			me.init_localisation();
 
-			// init settings
+			// Init settings.
 			me.init_settings();
 
 		};
 
-		// init localisation array
+		// Init localisation array.
 		me.localisation = [];
 
 		/**
@@ -73,14 +73,14 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 *
 		 * @since 0.2.8
 		 *
-		 * @param {String} The identifier for the desired localisation string
-		 * @return {String} The localised string
+		 * @param {String} The identifier for the desired localisation string.
+		 * @return {String} The localised string.
 		 */
 		this.get_localisation = function( identifier ) {
 			return me.localisation[identifier];
 		};
 
-		// init settings array
+		// Init settings array.
 		me.settings = [];
 
 		/**
@@ -99,14 +99,14 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 *
 		 * @since 0.2.2
 		 *
-		 * @param {String} The identifier for the desired setting
-		 * @return The value of the setting
+		 * @param {String} The identifier for the desired setting.
+		 * @return The value of the setting.
 		 */
 		this.get_setting = function( identifier ) {
 			return me.settings[identifier];
 		};
 
-		// init clicked array
+		// Init clicked array.
 		me.clicked = [];
 
 		/**
@@ -114,8 +114,8 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 *
 		 * @since 0.2.1
 		 *
-		 * @param {String} The identifier for the desired item
-		 * @return The value of the item
+		 * @param {String} The identifier for the desired item.
+		 * @return The value of the item.
 		 */
 		this.get_clicked = function( identifier ) {
 			if ( $.inArray( identifier, me.clicked ) !== -1 ) {
@@ -130,7 +130,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 *
 		 * @since 0.2.1
 		 *
-		 * @param {Integer} The value for the item
+		 * @param {Integer} The value for the item.
 		 */
 		this.set_clicked = function( value ) {
 			if ( ! me.get_clicked( value ) ) {
@@ -147,7 +147,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 	 */
 	CiviCRM_EO_Attendance_CDP.form = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions.
 		var me = this;
 
 		/**
@@ -170,7 +170,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 */
 		this.dom_ready = function() {
 
-			// enable listeners
+			// Enable listeners.
 			me.listeners();
 
 		};
@@ -182,23 +182,23 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 */
 		this.listeners = function() {
 
-			// declare vars
+			// Declare vars.
 			var link = $('span.civicrm-eo-custom-data-participant');
 
 			/**
 			 * Add a click event listener to Participant Custom Data forms.
 			 *
-			 * @param {Object} event The event object
+			 * @param {Object} event The event object.
 			 */
 			link.on( 'click', function( event ) {
 
-				// declare vars
+				// Declare vars.
 				var classes, participant_id = 0;
 
-				// grab classes
+				// Grab classes.
 				classes = $(this).prop( 'class' ).split( ' ' );
 
-				// loop to find the one we want
+				// Loop to find the one we want.
 				for (var i = 0, item; item = classes[i++];) {
 					if ( item.match( 'civicrm-eo-cdp-participant-id-' ) ) {
 						participant_id = parseInt( item.split('-')[5] );
@@ -206,22 +206,22 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 					}
 				}
 
-				// if already clicked
+				// If already clicked.
 				if ( CiviCRM_EO_Attendance_CDP.settings.get_clicked( participant_id ) ) {
 
-					// toggle form and bail
+					// Toggle form and bail.
 					$('.civicrm-eo-cdp-participant-id-' + participant_id).next('ul').slideToggle();
 					return;
 
 				}
 
-				// show spinner
+				// Show spinner.
 				$(this).next( '.civicrm-eo-loading' ).show();
 
-				// register click
+				// Register click.
 				CiviCRM_EO_Attendance_CDP.settings.set_clicked( participant_id );
 
-				// request custom data form for this participant
+				// Request custom data form for this participant.
 				me.form_get( participant_id );
 
 			});
@@ -233,38 +233,38 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 *
 		 * @since 0.2.2
 		 *
-		 * @param {Integer} participant_id The numeric ID of the Participant
+		 * @param {Integer} participant_id The numeric ID of the Participant.
 		 */
 		this.form_get = function( participant_id ) {
 
-			// use jQuery post
+			// Use jQuery post.
 			$.post(
 
-				// URL to post to
+				// URL to post to.
 				CiviCRM_EO_Attendance_CDP.settings.get_setting( 'ajax_url' ),
 
 				{
 
-					// token received by WordPress
+					// Token received by WordPress.
 					action: 'participant_custom_data_form_get',
 
-					// send participant ID
+					// Send participant ID.
 					participant_id: participant_id
 
 				},
 
-				// callback
+				// Callback.
 				function( data, textStatus ) {
 
-					// if success
+					// If success.
 					if ( textStatus == 'success' ) {
 
-						// update DOM
+						// Update DOM.
 						me.form_render( data );
 
 					} else {
 
-						// show error
+						// Show error.
 						if ( console.log ) {
 							console.log( textStatus );
 						}
@@ -273,7 +273,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 
 				},
 
-				// expected format
+				// Expected format.
 				'json'
 
 			);
@@ -285,32 +285,32 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 *
 		 * @since 0.2.2
 		 *
-		 * @param {Array} data The data received from the server
+		 * @param {Array} data The data received from the server.
 		 */
 		this.form_render = function( data ) {
 
-			// vars
+			// Vars.
 			var item, processed, list_item;
 
-			// are we still in progress?
+			// Are we still in progress?
 			if ( data.markup != '' ) {
 
-				// find our item
+				// Find our item.
 				item = $('.civicrm-eo-cdp-participant-id-' + data.participant_id);
 
-				// hide spinner
+				// Hide spinner.
 				item.next( '.civicrm-eo-loading' ).hide();
 
-				// process into jQuery object
+				// Process into jQuery object.
 				processed = $( $.parseHTML( data.markup ) );
 
-				// target enclosing item
+				// Target enclosing item.
 				list_item = item.parent();
 
-				// append to link and show
+				// Append to link and show.
 				processed.appendTo( list_item ).hide().slideDown();
 
-				// add listener for form submit button
+				// Add listener for form submit button.
 				me.form_rendered( data.participant_id );
 
 			}
@@ -322,39 +322,39 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 *
 		 * @since 0.2.2
 		 *
-		 * @param {Integer} participant_id The numeric ID of the Participant
+		 * @param {Integer} participant_id The numeric ID of the Participant.
 		 */
 		this.form_rendered = function( participant_id ) {
 
-			// declare vars
+			// Declare vars.
 			var submit_button = $('#civicrm_eo_cdp_submit_' + participant_id);
 
 			/**
 			 * Add a click event listener to the form submit button.
 			 *
-			 * @param {Object} event The event object
+			 * @param {Object} event The event object.
 			 */
 			submit_button.on( 'click', function( event ) {
 
 				var button = $(this);
 
-				// bail if disabled
+				// Bail if disabled.
 				if ( button.prop('disabled') ) {
 					return;
 				}
 
-				// prevent form submission
+				// Prevent form submission.
 				if ( event.preventDefault ) {
 					event.preventDefault();
 				}
 
-				// declare vars
+				// Declare vars.
 				var participant_id = 0;
 
-				// grab participant ID
+				// Grab participant ID.
 				participant_id = parseInt( button.prop('id').split('_')[4] );
 
-				// submit custom data form
+				// Submit custom data form.
 				me.form_submit( participant_id, button );
 
 			});
@@ -366,16 +366,16 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 *
 		 * @since 0.2.2
 		 *
-		 * @param {Integer} participant_id The numeric ID of the Participant
-		 * @param {Object} submit_button The form's submit button jQuery object
+		 * @param {Integer} participant_id The numeric ID of the Participant.
+		 * @param {Object} submit_button The form's submit button jQuery object.
 		 */
 		this.form_submit = function( participant_id, submit_button ) {
 
-			// grab form values
+			// Grab form values.
 			var hours = $('#civicrm_eo_cdp_hours_' + participant_id).val(),
 				minutes = $('#civicrm_eo_cdp_minutes_' + participant_id).val();
 
-			// can't have empty values
+			// Can't have empty values.
 			if ( hours == '' || minutes == '' ) {
 				$('.civicrm_eo_cdp_error_' + participant_id).html(
 					CiviCRM_EO_Attendance_CDP.settings.get_localisation( 'empty' )
@@ -383,7 +383,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 				return;
 			}
 
-			// can't have non-numeric values
+			// Can't have non-numeric values.
 			if ( ! $.isNumeric( hours ) || ! $.isNumeric( minutes ) ) {
 				$('.civicrm_eo_cdp_error_' + participant_id).html(
 					CiviCRM_EO_Attendance_CDP.settings.get_localisation( 'numeric' )
@@ -391,7 +391,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 				return;
 			}
 
-			// can't have non-integer values
+			// Can't have non-integer values.
 			if ( Math.floor( hours ) != hours || Math.floor( minutes ) != minutes ) {
 				$('.civicrm_eo_cdp_error_' + participant_id).html(
 					CiviCRM_EO_Attendance_CDP.settings.get_localisation( 'integer' )
@@ -399,7 +399,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 				return;
 			}
 
-			// can't have negative values
+			// Can't have negative values.
 			if ( parseInt( hours ) < 0 || parseInt( minutes ) < 0 ) {
 				$('.civicrm_eo_cdp_error_' + participant_id).html(
 					CiviCRM_EO_Attendance_CDP.settings.get_localisation( 'negative' )
@@ -407,7 +407,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 				return;
 			}
 
-			// can't be no time at all
+			// Can't be no time at all.
 			if ( parseInt( hours ) === 0 && parseInt( minutes ) === 0 ) {
 				$('.civicrm_eo_cdp_error_' + participant_id).html(
 					CiviCRM_EO_Attendance_CDP.settings.get_localisation( 'zero' )
@@ -415,7 +415,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 				return;
 			}
 
-			// can't have minutes more than 59
+			// Can't have minutes more than 59.
 			if ( parseInt( minutes ) > 59 ) {
 				$('.civicrm_eo_cdp_error_' + participant_id).html(
 					CiviCRM_EO_Attendance_CDP.settings.get_localisation( 'mins' )
@@ -423,40 +423,40 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 				return;
 			}
 
-			// change text
+			// Change text.
 			submit_button.attr( 'value', CiviCRM_EO_Attendance_CDP.settings.get_localisation( 'processing' ) );
 			submit_button.prop( 'disabled', true );
 
-			// use jQuery post
+			// Use jQuery post.
 			$.post(
 
-				// URL to post to
+				// URL to post to.
 				CiviCRM_EO_Attendance_CDP.settings.get_setting( 'ajax_url' ),
 
 				{
 
-					// token received by WordPress
+					// Token received by WordPress.
 					action: 'participant_custom_data_form_process',
 
-					// send form data
+					// Send form data.
 					participant_id: parseInt( participant_id ),
 					civicrm_eo_cdp_hours: parseInt( hours ),
 					civicrm_eo_cdp_minutes: parseInt( minutes )
 
 				},
 
-				// callback
+				// Callback.
 				function( data, textStatus ) {
 
-					// if success
+					// If success.
 					if ( textStatus == 'success' ) {
 
-						// update DOM
+						// Update DOM.
 						me.form_feedback( data );
 
 					} else {
 
-						// show error
+						// Show error.
 						if ( console.log ) {
 							console.log( textStatus );
 						}
@@ -465,7 +465,7 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 
 				},
 
-				// expected format
+				// Expected format.
 				'json'
 
 			);
@@ -477,33 +477,33 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 		 *
 		 * @since 0.2.2
 		 *
-		 * @param {Array} data The data received from the server
+		 * @param {Array} data The data received from the server.
 		 */
 		this.form_feedback = function( data ) {
 
 			/*
-			// trace
+			// Trace.
 			if ( console.log ) {
 				console.log( 'cdp data', data );
 			}
 			*/
 
-			// hide form's enclosing list
+			// Hide form's enclosing list.
 			$('#civicrm_eo_cdp_' + data.participant_id).parent().parent().slideUp( 'fast', function() {
 
-				// after slide
+				// After slide.
 				var processed, list_item;
 
-				// are we still in progress?
+				// Are we still in progress?
 				if ( data.markup != '' ) {
 
-					// process into jQuery object
+					// Process into jQuery object.
 					processed = $( $.parseHTML( data.markup ) );
 
-					// target enclosing item
+					// Target enclosing item.
 					list_item = $('.civicrm-eo-cdp-participant-id-' + data.participant_id).parent();
 
-					// append to link and show
+					// Append to link and show.
 					processed.appendTo( list_item ).hide().slideDown();
 
 				}
@@ -514,10 +514,10 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
 
 	};
 
-	// init settings
+	// Init settings.
 	CiviCRM_EO_Attendance_CDP.settings.init();
 
-	// init list
+	// Init list.
 	CiviCRM_EO_Attendance_CDP.form.init();
 
 } )( jQuery );
@@ -531,10 +531,10 @@ var CiviCRM_EO_Attendance_CDP = CiviCRM_EO_Attendance_CDP || {};
  */
 jQuery(document).ready(function($) {
 
-	// The DOM is loaded now
+	// The DOM is loaded now.
 	CiviCRM_EO_Attendance_CDP.form.dom_ready();
 
-}); // end document.ready()
+}); // End document.ready()
 
 
 

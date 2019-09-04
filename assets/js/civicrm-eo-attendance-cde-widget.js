@@ -34,7 +34,7 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 	 */
 	CiviCRM_EO_Attendance_CDE_Widget.settings = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions.
 		var me = this;
 
 		/**
@@ -46,15 +46,15 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 		 */
 		this.init = function() {
 
-			// init localisation
+			// Init localisation.
 			me.init_localisation();
 
-			// init settings
+			// Init settings.
 			me.init_settings();
 
 		};
 
-		// init localisation array
+		// Init localisation array.
 		me.localisation = [];
 
 		/**
@@ -73,14 +73,14 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 		 *
 		 * @since 0.5.2
 		 *
-		 * @param {String} The identifier for the desired localisation string
-		 * @return {String} The localised string
+		 * @param {String} The identifier for the desired localisation string.
+		 * @return {String} The localised string.
 		 */
 		this.get_localisation = function( identifier ) {
 			return me.localisation[identifier];
 		};
 
-		// init settings array
+		// Init settings array.
 		me.settings = [];
 
 		/**
@@ -99,14 +99,14 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 		 *
 		 * @since 0.5.2
 		 *
-		 * @param {String} The identifier for the desired setting
-		 * @return The value of the setting
+		 * @param {String} The identifier for the desired setting.
+		 * @return The value of the setting.
 		 */
 		this.get_setting = function( identifier ) {
 			return me.settings[identifier];
 		};
 
-		// init clicked array
+		// Init clicked array
 		me.clicked = [];
 
 		/**
@@ -114,8 +114,8 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 		 *
 		 * @since 0.5.2
 		 *
-		 * @param {String} The identifier for the desired item
-		 * @return The value of the item
+		 * @param {String} The identifier for the desired item.
+		 * @return The value of the item.
 		 */
 		this.get_clicked = function( identifier ) {
 			if ( $.inArray( identifier, me.clicked ) !== -1 ) {
@@ -130,7 +130,7 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 		 *
 		 * @since 0.5.2
 		 *
-		 * @param {Integer} The value for the item
+		 * @param {Integer} The value for the item.
 		 */
 		this.set_clicked = function( value ) {
 			if ( ! me.get_clicked( value ) ) {
@@ -147,7 +147,7 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 	 */
 	CiviCRM_EO_Attendance_CDE_Widget.form = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions.
 		var me = this;
 
 		/**
@@ -170,7 +170,7 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 		 */
 		this.dom_ready = function() {
 
-			// enable listeners
+			// Enable listeners.
 			me.listeners();
 
 		};
@@ -182,26 +182,26 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 		 */
 		this.listeners = function() {
 
-			// declare vars
+			// Declare vars
 			var toggle = $('.widget span.civicrm-eo-cde-feedback'),
 				submit_button = $('form.civicrm_eo_cde p.submit input');
 
 			/**
 			 * Add a click event listener to Participant Custom Data forms.
 			 *
-			 * @param {Object} event The event object
+			 * @param {Object} event The event object.
 			 */
 			toggle.on( 'click', function( event ) {
 
-				// grab event ID
+				// Grab event ID.
 				civi_event_id = parseInt( $(this).prop('id').split('-')[4] );
 
-				// bail if already submitted
+				// Bail if already submitted.
 				if ( CiviCRM_EO_Attendance_CDE_Widget.settings.get_clicked( civi_event_id ) ) {
 					return;
 				}
 
-				// toggle form
+				// Toggle form.
 				$(this).next( '.civicrm_eo_cde' ).slideToggle();
 
 			});
@@ -209,29 +209,29 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 			/**
 			 * Add a click event listener to the form submit button.
 			 *
-			 * @param {Object} event The event object
+			 * @param {Object} event The event object.
 			 */
 			submit_button.on( 'click', function( event ) {
 
 				var button = $(this);
 
-				// bail if disabled
+				// Bail if disabled.
 				if ( button.prop('disabled') ) {
 					return;
 				}
 
-				// prevent form submission
+				// Prevent form submission.
 				if ( event.preventDefault ) {
 					event.preventDefault();
 				}
 
-				// declare vars
+				// Declare vars.
 				var civi_event_id = 0;
 
-				// grab event ID
+				// Grab event ID.
 				civi_event_id = parseInt( button.prop('id').split('_')[4] );
 
-				// submit custom data form
+				// Submit custom data form.
 				me.form_submit( civi_event_id, button );
 
 			});
@@ -243,12 +243,12 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 		 *
 		 * @since 0.5.2
 		 *
-		 * @param {Integer} civi_event_id The numeric ID of the CiviEvent
-		 * @param {Object} submit_button The form's submit button jQuery object
+		 * @param {Integer} civi_event_id The numeric ID of the CiviEvent.
+		 * @param {Object} submit_button The form's submit button jQuery object.
 		 */
 		this.form_submit = function( civi_event_id, submit_button ) {
 
-			// grab form values
+			// Grab form values.
 			var total = $('#civicrm_eo_cde_total_' + civi_event_id).val(),
 				boys = $('#civicrm_eo_cde_boys_' + civi_event_id).val(),
 				girls = $('#civicrm_eo_cde_girls_' + civi_event_id).val(),
@@ -256,7 +256,7 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 				high = $('#civicrm_eo_cde_high_' + civi_event_id).val(),
 				totals_sum;
 
-			// can't have empty values
+			// Can't have empty values.
 			if ( total == '' || boys == '' || girls == '' || low == '' || high == '' ) {
 				$('.civicrm_eo_cde_error_' + civi_event_id).html(
 					CiviCRM_EO_Attendance_CDE_Widget.settings.get_localisation( 'empty' )
@@ -264,7 +264,7 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 				return;
 			}
 
-			// can't have negative values
+			// Can't have negative values.
 			if (
 				parseInt( total ) < 0 ||
 				parseInt( boys ) < 0 ||
@@ -278,18 +278,18 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 				return;
 			}
 
-			// basic validation of totals
+			// Basic validation of totals.
 			totals_sum = parseInt( boys ) + parseInt( girls );
 			if ( parseInt( total ) !== totals_sum ) {
-				// these should match
-				//console.log( 'totals should match', parseInt( total ), totals_sum );
+				// These should match.
+				//console.log( 'Totals should match', parseInt( total ), totals_sum );
 				$('.civicrm_eo_cde_error_' + civi_event_id).html(
 					CiviCRM_EO_Attendance_CDE_Widget.settings.get_localisation( 'match' )
 				);
 				return;
 			}
 
-			// can't have zero values for age
+			// Can't have zero values for age.
 			if (
 				parseInt( low ) === 0 ||
 				parseInt( high ) === 0
@@ -300,35 +300,35 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 				return;
 			}
 
-			// check age range
+			// Check age range.
 			if ( parseInt( low ) > parseInt( high ) ) {
-				// this would make no sense
-				//console.log( 'age range is screwy', low, high );
+				// This would make no sense.
+				//console.log( 'Age range is screwy', low, high );
 				$('.civicrm_eo_cde_error_' + civi_event_id).html(
 					CiviCRM_EO_Attendance_CDE_Widget.settings.get_localisation( 'range' )
 				);
 				return;
 			}
 
-			// change text
+			// Change text.
 			submit_button.attr( 'value', CiviCRM_EO_Attendance_CDE_Widget.settings.get_localisation( 'processing' ) );
 			submit_button.prop( 'disabled', true );
 
-			// register click
+			// Register click.
 			CiviCRM_EO_Attendance_CDE_Widget.settings.set_clicked( civi_event_id );
 
-			// use jQuery post
+			// Use jQuery post.
 			$.post(
 
-				// URL to post to
+				// URL to post to.
 				CiviCRM_EO_Attendance_CDE_Widget.settings.get_setting( 'ajax_url' ),
 
 				{
 
-					// token received by WordPress
+					// Token received by WordPress.
 					action: 'event_custom_data_form_process',
 
-					// send form data
+					// Send form data.
 					civi_event_id: parseInt( civi_event_id ),
 					civicrm_eo_cde_total: parseInt( total ),
 					civicrm_eo_cde_boys: parseInt( boys ),
@@ -338,18 +338,18 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 
 				},
 
-				// callback
+				// Callback.
 				function( data, textStatus ) {
 
-					// if success
+					// If success.
 					if ( textStatus == 'success' ) {
 
-						// update DOM
+						// Update DOM.
 						me.form_feedback( data );
 
 					} else {
 
-						// show error
+						// Show error.
 						if ( console.log ) {
 							console.log( textStatus );
 						}
@@ -358,7 +358,7 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 
 				},
 
-				// expected format
+				// Expected format.
 				'json'
 
 			);
@@ -370,51 +370,51 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 		 *
 		 * @since 0.5.2
 		 *
-		 * @param {Array} data The data received from the server
+		 * @param {Array} data The data received from the server.
 		 */
 		this.form_feedback = function( data ) {
 
 			/*
-			// trace
+			// Trace.
 			if ( console.log ) {
 				console.log( 'cde data', data );
 			}
 			*/
 
-			// hide form
+			// Hide form.
 			$('#civicrm_eo_cde_' + data.civi_event_id).slideUp( 'fast', function() {
 
-				// after slide
+				// After slide.
 				var processed, list_item;
 
-				// do we have markup?
+				// Do we have markup?
 				if ( data.markup != '' ) {
 
-					// hide toggle
+					// Hide toggle.
 					$('#civicrm-eo-cde-feedback-' + data.civi_event_id).hide();
 
-					// process into jQuery object
+					// Process into jQuery object.
 					processed = $( $.parseHTML( data.markup ) );
 
-					// target parent item
+					// Target parent item.
 					list_item = $(this).parent();
 
-					// append to link and show
+					// Append to link and show.
 					processed.appendTo( list_item ).hide().slideDown();
 
-					// hide the whole item
+					// Hide the whole item.
 					setTimeout(function () {
 						list_item.slideUp( 'fast', function() {
 
-							// get remaining list items before removal
+							// Get remaining list items before removal.
 							var enclosing = list_item.parent(),
 								remaining = list_item.parent().children(),
 								feedback = '';
 
-							// remove this one
+							// Remove this one.
 							list_item.remove();
 
-							// add feedback if there are none remaining
+							// Add feedback if there are none remaining.
 							if ( remaining.length == 1 ) {
 								feedback = $( $.parseHTML(
 									'<li class="civicrm-eo-cde-widget cde-up-to-date">' +
@@ -435,10 +435,10 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
 
 	};
 
-	// init settings
+	// Init settings.
 	CiviCRM_EO_Attendance_CDE_Widget.settings.init();
 
-	// init list
+	// Init list.
 	CiviCRM_EO_Attendance_CDE_Widget.form.init();
 
 } )( jQuery );
@@ -452,10 +452,10 @@ var CiviCRM_EO_Attendance_CDE_Widget = CiviCRM_EO_Attendance_CDE_Widget || {};
  */
 jQuery(document).ready(function($) {
 
-	// The DOM is loaded now
+	// The DOM is loaded now.
 	CiviCRM_EO_Attendance_CDE_Widget.form.dom_ready();
 
-}); // end document.ready()
+}); // End document.ready()
 
 
 

@@ -16,16 +16,16 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 	 */
 	public function __construct() {
 
-		// init parent
+		// Init parent.
 		parent::__construct(
 
-			// base ID
+			// Base ID.
 			'civicrm_eo_participant_feedback_widget',
 
-			// name
+			// Name.
 			__( 'Participant Feedback', 'civicrm-eo-attendance' ),
 
-			// args
+			// Args.
 			array(
 				'description' => __( 'Use this widget to show a list of feedback for participants.', 'civicrm-eo-attendance' ),
 			)
@@ -41,54 +41,54 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 	 *
 	 * @since 0.4.6
 	 *
-	 * @param array $args An array of standard parameters for widgets in this theme
-	 * @param array $instance An array of settings for this widget instance
+	 * @param array $args An array of standard parameters for widgets in this theme.
+	 * @param array $instance An array of settings for this widget instance.
 	 */
 	public function widget( $args, $instance ) {
 
-		// get filtered title
+		// Get filtered title.
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
-		// show widget prefix
+		// Show widget prefix.
 		echo ( isset( $args['before_widget'] ) ? $args['before_widget'] : '' );
 
-		// show title if there is one
+		// Show title if there is one.
 		if ( ! empty( $title ) ) {
 			echo ( isset( $args['before_title'] ) ? $args['before_title'] : '' );
 			echo $title;
 			echo ( isset( $args['after_title'] ) ? $args['after_title'] : '' );
 		}
 
-		// set default max items if absent
+		// Set default max items if absent.
 		if ( empty( $instance['max_items'] ) OR ! is_numeric( $instance['max_items'] ) ) {
 			$instance['max_items'] = 5;
 		}
 
-		// get list
+		// Get list.
 		$links = $this->list_populate();
 
-		// show them if we have any
+		// Show them if we have any.
 		if ( ! empty( $links ) ) {
 
-			// combine into list
+			// Combine into list.
 			$list = implode( '</li>' . "\n" . '<li class="civicrm-eo-cdp-widget">', $links );
 
-			// top and tail
+			// Top and tail.
 			$list = '<li class="civicrm-eo-cdp-widget">' . $list . '</li>' . "\n";
 
 		} else {
 
-			// show something
+			// Show something.
 			$list = '<li class="civicrm-eo-cdp-widget cdp-up-to-date">' .
 						__( 'You are up-to-date with your feedback.', 'civicrm-eo-attendance' ) .
 					'</li>' . "\n";
 
 		}
 
-		// wrap in unordered list
+		// Wrap in unordered list.
 		echo '<ul class="civicrm-eo-cdp-widget">' . $list . '</ul>';
 
-		// show widget suffix
+		// Show widget suffix.
 		echo ( isset( $args['after_widget'] ) ? $args['after_widget'] : '' );
 
 	}
@@ -105,14 +105,14 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		// get title
+		// Get title.
 		if ( isset( $instance['title'] ) ) {
 			$title = strip_tags( $instance['title'] );
 		} else {
 			$title = __( 'Participant Feedback Required', 'civicrm-eo-attendance' );
 		}
 
-		// get max items
+		// Get max items.
 		if ( isset( $instance['max_items'] ) ) {
 			$max_items = strip_tags( $instance['max_items'] );
 		} else {
@@ -148,7 +148,7 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 
-		// never lose a value
+		// Never lose a value.
 		$instance = wp_parse_args( $new_instance, $old_instance );
 
 		// --<
@@ -167,34 +167,34 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 	 */
 	public function list_populate() {
 
-		// access plugins
+		// Access plugins.
 		global $civicrm_wp_event_organiser, $civicrm_eo_attendance;
 
-		// let's alias the CDP object
+		// Let's alias the CDP object.
 		$cdp = $civicrm_eo_attendance->custom_data_participant;
 
-		// init return
+		// Init return.
 		$links = array();
 
-		// bail if no CiviCRM init function
+		// Bail if no CiviCRM init function.
 		if ( ! function_exists( 'civi_wp' ) ) return $links;
 
-		// try and init CiviCRM
+		// Try and init CiviCRM.
 		if ( ! civi_wp()->initialize() ) return $links;
 
-		// get current user
+		// Get current user.
 		$current_user = wp_get_current_user();
 
-		// get user matching file
+		// Get user matching file.
 		require_once 'CRM/Core/BAO/UFMatch.php';
 
-		// get the CiviCRM contact ID
+		// Get the CiviCRM contact ID.
 		$contact_id = CRM_Core_BAO_UFMatch::getContactId( $current_user->ID );
 
-		// get all participant custom data for this contact
+		// Get all participant custom data for this contact.
 		$participants = $cdp->participants_get( $contact_id );
 
-		// bail if we didn't get any
+		// Bail if we didn't get any.
 		if ( empty( $participants ) ) return $links;
 
 		/*
@@ -207,13 +207,13 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 		), true ) );
 		*/
 
-		// loop through them
+		// Loop through them.
 		foreach( $participants AS $participant ) {
 
-			// skip to next if it is not a past event
+			// Skip to next if it is not a past event.
 			if ( ! $this->is_past( $participant['event_end_date'] ) ) continue;
 
-			// skip if this participant already has data
+			// Skip if this participant already has data.
 			if ( $cdp->participant_has_data( $participant ) ) continue;
 
 			/*
@@ -226,13 +226,13 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 			), true ) );
 			*/
 
-			// alias event ID
+			// Alias event ID.
 			$event_id = $participant['event_id'];
 
-			// get EO post ID
+			// Get EO post ID.
 			$post_id = $civicrm_wp_event_organiser->db->get_eo_event_id_by_civi_event_id( $event_id );
 
-			// get occurrence ID for this CiviEvent
+			// Get occurrence ID for this CiviEvent.
 			$occurrence_id = $civicrm_wp_event_organiser->db->get_eo_occurrence_id_by_civi_event_id( $event_id );
 
 			/*
@@ -247,13 +247,13 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 			 * CiviEvent itself.
 			 */
 
-			// get EO event
+			// Get EO event.
 			$eo_event = get_post( $post_id );
 
-			// if it's not there
+			// If it's not there.
 			if ( ! ( $eo_event instanceof WP_Post ) ) {
 
-				// write to log file
+				// Write to log file.
 				$e = new Exception;
 				$trace = $e->getTraceAsString();
 				error_log( print_r( array(
@@ -266,31 +266,31 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 					'backtrace' => $trace,
 				), true ) );
 
-				// skip to next
+				// Skip to next.
 				continue;
 
 			}
 
-			// let's have a title
+			// Let's have a title.
 			$text = '<span class="civicrm-eo-cdp-widget-event-title">' . $participant['event_title'] . '</span>';
 			$text .= '<br>';
 			$text .= eo_format_event_occurrence( $post_id, $occurrence_id );
 
-			// construct custom class name
+			// Construct custom class name.
 			$class = 'civicrm-eo-cdp-widget-participant-id-' . $participant['id'];
 
-			// construct span if we get one
+			// Construct span if we get one.
 			$span = '<span class="civicrm-eo-cdp-widget ' . $class . '">' . $text . '</span>';
 
-			// wrap in link
+			// Wrap in link.
 			$span = '<a href="' . get_permalink( $post_id ) . '">' . $span . '</a>';
 
-			// add form toggle
+			// Add form toggle.
 			$span .= '<span id="civicrm-eo-cdp-feedback-' . $participant['id'] . '" class="civicrm-eo-feedback civicrm-eo-cdp-feedback">' .
 				__( 'Leave feedback', 'civicrm-eo-attendance' ) .
 			'</span>';
 
-			// add form
+			// Add form.
 			$span .= $this->get_form( $participant );
 
 			/**
@@ -298,15 +298,15 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 			 *
 			 * @since 0.4.6
 			 *
-			 * @param string $span The HTML element
-			 * @param string $text The text content of the element
-			 * @param int $post_id The numeric ID of the WP post
+			 * @param string $span The HTML element.
+			 * @param string $text The text content of the element.
+			 * @param int $post_id The numeric ID of the WP post.
 			 */
 			$links[] = apply_filters( 'civicrm_event_organiser_cdp_widget_element', $span, $text, $post_id );
 
 		}
 
-		// enqueue Javascript
+		// Enqueue Javascript.
 		$this->enqueue_scripts();
 
 		// --<
@@ -321,15 +321,15 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 	 *
 	 * @since 0.4.6
 	 *
-	 * @param str $end_date The end date string for a CiviEvent
-	 * @return bool $past_event True if the event is past, false otherwise
+	 * @param str $end_date The end date string for a CiviEvent.
+	 * @return bool $past_event True if the event is past, false otherwise.
 	 */
 	public function is_past( $end_date ) {
 
-		// init past event flag
+		// Init past event flag.
 		$past_event = false;
 
-		// override if it's a past event
+		// Override if it's a past event.
 		$now = new DateTime( 'now', eo_get_blog_timezone() );
 		$end = new DateTime( $end_date, eo_get_blog_timezone() );
 		if ( $end < $now ) {
@@ -364,26 +364,26 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 	 */
 	public function get_form( $participant ) {
 
-		// populate template vars
+		// Populate template vars.
 		$participant_id = $participant['id'];
 
-		// find elapsed time
+		// Find elapsed time.
 		$start = new DateTime( $participant['event_start_date'], eo_get_blog_timezone() );
 		$end = new DateTime( $participant['event_end_date'], eo_get_blog_timezone() );
 		$interval = $start->diff( $end );
 		$elapsed = $interval->format( '%h:%i' );
 
-		// grab hours and minutes
+		// Grab hours and minutes.
 		$elements = explode( ':', $elapsed );
 		$hours = isset( $elements[0] ) ? absint( $elements[0] ) : 0;
 		$minutes = isset( $elements[1] ) ? absint( $elements[1] ) : 0;
 
-		// format hours when zero
+		// Format hours when zero.
 		if ( $hours === 0 ) {
 			$hours = '0';
 		}
 
-		// format minutes when zero
+		// Format minutes when zero.
 		if ( $minutes === 0 ) {
 			$minutes = '00';
 		}
@@ -402,13 +402,13 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 		), true ) );
 		*/
 
-		// start buffering
+		// Start buffering.
 		ob_start();
 
-		// include template file
+		// Include template file.
 		include( CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/custom-data-participant/event-form.php' );
 
-		// save the output and flush the buffer
+		// Save the output and flush the buffer.
 		$form = ob_get_clean();
 
 		// --<
@@ -425,16 +425,16 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 	 */
 	public function enqueue_scripts() {
 
-		// add script to footer
+		// Add script to footer.
 		wp_enqueue_script(
 			'civicrm-eo-attendance-cdp-widget',
 			CIVICRM_EO_ATTENDANCE_URL . 'assets/js/civicrm-eo-attendance-cdp-widget.js',
 			array( 'jquery' ),
 			CIVICRM_EO_ATTENDANCE_VERSION,
-			true // in footer
+			true // In footer.
 		);
 
-		// translations
+		// Translations.
 		$localisation = array(
 			'processing' => __( 'Processing...', 'civicrm-eo-attendance' ),
 			'empty' => __( 'You must enter values for each field.', 'civicrm-eo-attendance' ),
@@ -446,18 +446,18 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 			'complete' => __( 'You are up-to-date with your feedback.', 'civicrm-eo-attendance' ),
 		);
 
-		// define settings
+		// Define settings.
 		$settings = array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
 		);
 
-		// localisation array
+		// Localisation array.
 		$vars = array(
 			'localisation' => $localisation,
 			'settings' => $settings,
 		);
 
-		// localise the WordPress way
+		// Localise the WordPress way.
 		wp_localize_script(
 			'civicrm-eo-attendance-cdp-widget',
 			'CiviCRM_EO_Attendance_CDP_Widget_Settings',
@@ -468,7 +468,7 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 
 
 
-} // ends class CiviCRM_EO_Attendance_CDP_Widget
+} // Ends class CiviCRM_EO_Attendance_CDP_Widget.
 
 
 

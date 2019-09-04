@@ -34,7 +34,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 	 */
 	CiviCRM_EO_Attendance_RVM.settings = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions.
 		var me = this;
 
 		/**
@@ -46,15 +46,15 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 		 */
 		this.init = function() {
 
-			// init localisation
+			// Init localisation.
 			me.init_localisation();
 
-			// init settings
+			// Init settings.
 			me.init_settings();
 
 		};
 
-		// init localisation array
+		// Init localisation array.
 		me.localisation = [];
 
 		/**
@@ -73,14 +73,14 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 		 *
 		 * @since 0.2.8
 		 *
-		 * @param {String} The identifier for the desired localisation string
-		 * @return {String} The localised string
+		 * @param {String} The identifier for the desired localisation string.
+		 * @return {String} The localised string.
 		 */
 		this.get_localisation = function( identifier ) {
 			return me.localisation[identifier];
 		};
 
-		// init settings array
+		// Init settings array.
 		me.settings = [];
 
 		/**
@@ -99,8 +99,8 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 		 *
 		 * @since 0.2.2
 		 *
-		 * @param {String} The identifier for the desired setting
-		 * @return The value of the setting
+		 * @param {String} The identifier for the desired setting.
+		 * @return The value of the setting.
 		 */
 		this.get_setting = function( identifier ) {
 			return me.settings[identifier];
@@ -115,7 +115,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 	 */
 	CiviCRM_EO_Attendance_RVM.form = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions.
 		var me = this;
 
 		/**
@@ -138,7 +138,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 		 */
 		this.dom_ready = function() {
 
-			// enable listeners
+			// Enable listeners.
 			me.listeners();
 
 		};
@@ -150,7 +150,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 		 */
 		this.listeners = function() {
 
-			// declare vars
+			// Declare vars.
 			var link = $('span.civicrm-eo-rendezvous-register-all'),
 				cancel = $('.civicrm_eo_rvm_cancel'),
 				submit = $('.civicrm_eo_rvm_submit');
@@ -158,20 +158,20 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 			/**
 			 * Add a click event listener to Register links.
 			 *
-			 * @param {Object} event The event object
+			 * @param {Object} event The event object.
 			 */
 			link.on( 'click', function( event ) {
 
-				// declare vars
+				// Declare vars.
 				var classes,
 					civi_event_id = 0,
 					attendee_ids_raw = '',
 					attendee_ids;
 
-				// grab classes
+				// Grab classes.
 				classes = $(this).prop( 'class' ).split( ' ' );
 
-				// get event ID
+				// Get event ID.
 				for (var i = 0, item; item = classes[i++];) {
 					if ( item.match( 'civicrm-eo-rv-event-id-' ) ) {
 						civi_event_id = parseInt( item.split('-')[5] );
@@ -179,7 +179,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 					}
 				}
 
-				// get attendee IDs
+				// Get attendee IDs.
 				for (var j = 0, item; item = classes[j++];) {
 					if ( item.match( 'civicrm-eo-rv-ids-' ) ) {
 						attendee_ids_raw = item.split('civicrm-eo-rv-ids-')[1];
@@ -188,7 +188,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 					}
 				}
 
-				// show div
+				// Show div.
 				$('#civicrm_eo_rvm_' + civi_event_id).show();
 
 			});
@@ -196,20 +196,20 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 			/**
 			 * Add a click event listener to Cancel buttons.
 			 *
-			 * @param {Object} event The event object
+			 * @param {Object} event The event object.
 			 */
 			cancel.on( 'click', function( event ) {
 
-				// declare vars
+				// Declare vars.
 				var id = $(this).prop( 'id' ),
 					civi_event_id = 0;
 
-				// get event ID
+				// Get event ID.
 				if ( id.match( 'civicrm_eo_rvm_cancel_' ) ) {
 					civi_event_id = parseInt( id.split('_')[4] );
 				}
 
-				// hide div
+				// Hide div.
 				$('#civicrm_eo_rvm_' + civi_event_id).hide();
 
 			});
@@ -217,11 +217,11 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 			/**
 			 * Add a click event listener to the submit button.
 			 *
-			 * @param {Object} event The event object
+			 * @param {Object} event The event object.
 			 */
 			submit.on( 'click', function( event ) {
 
-				// declare vars
+				// Declare vars.
 				var button = $(this),
 					id = $(this).prop( 'id' ),
 					civi_event_id = 0,
@@ -230,17 +230,17 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 					register_data = {},
 					unregister_data = {};
 
-				// bail if disabled
+				// Bail if disabled.
 				if ( button.prop('disabled') ) {
 					return;
 				}
 
-				// get event ID
+				// Get event ID.
 				if ( id.match( 'civicrm_eo_rvm_submit_' ) ) {
 					civi_event_id = parseInt( id.split('_')[4] );
 				}
 
-				// get event leader ID
+				// Get event leader ID.
 				event_leader = parseInt( $( '#civicrm_eo_rvm_' + civi_event_id + '_leader' ).val() );
 
 				/**
@@ -250,17 +250,17 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 				 */
 				$('#civicrm_eo_rvm_' + civi_event_id + ' select').each( function(i) {
 
-					// grab value
+					// Grab value.
 					var role = parseInt( $(this).val() );
 
-					// do we have one?
+					// Do we have one?
 					if ( role === event_leader ) {
 						event_leader_exists = 1;
 					}
 
 				});
 
-				// bail if we have no event leader
+				// Bail if we have no event leader.
 				if ( event_leader_exists === 0 ) {
 					$('#civicrm_eo_rvm_error_' + civi_event_id).html(
 						CiviCRM_EO_Attendance_RVM.settings.get_localisation( 'leader' )
@@ -268,10 +268,10 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 					return;
 				}
 
-				// clear error
+				// Clear error.
 				$('#civicrm_eo_rvm_error_' + civi_event_id).html( '' );
 
-				// change text
+				// Change text.
 				button.html( CiviCRM_EO_Attendance_RVM.settings.get_localisation( 'processing' ) );
 				button.prop( 'disabled', true );
 
@@ -282,28 +282,28 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 				 */
 				$('#civicrm_eo_rvm_' + civi_event_id + ' li').each( function(i) {
 
-					// get class
+					// Get class.
 					var attendee_id = 0,
 						attendee_role = 0;
 
-					// get attendee ID
+					// Get attendee ID.
 					attendee_id = parseInt( $(this).prop( 'class' ).split('_')[4] );
 
-					// get checked/unchecked
+					// Get checked/unchecked.
 					checked = $('#civicrm_eo_rvm_event_' + civi_event_id + '_attendee_' + attendee_id).prop( 'checked' );
 
-					// construct data arrays based on checked status
+					// Construct data arrays based on checked status.
 					if ( checked ) {
 
-						// get role
+						// Get role.
 						attendee_role = parseInt(
 							$('#civicrm_eo_rvm_role_event_' + civi_event_id + '_attendee_' + attendee_id).val()
 						);
 
-						// register
+						// Register.
 						register_data[attendee_id] = attendee_role;
 
-					// otherwise unregister
+					// Otherwise unregister.
 					} else {
 						unregister_data[attendee_id] = 0;
 					}
@@ -314,36 +314,36 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 				//console.log( 'register', register_data );
 				//console.log( 'unregister', unregister_data );
 
-				// use jQuery post
+				// Use jQuery post
 				$.post(
 
-					// URL to post to
+					// URL to post to.
 					CiviCRM_EO_Attendance_RVM.settings.get_setting( 'ajax_url' ),
 
 					{
 
-						// token received by WordPress
+						// Token received by WordPress.
 						action: 'event_attendance_form_process',
 
-						// send form data
+						// Send form data.
 						civi_event_id: parseInt( civi_event_id ),
 						register: register_data,
 						unregister: unregister_data
 
 					},
 
-					// callback
+					// Callback.
 					function( data, textStatus ) {
 
-						// if success
+						// If success.
 						if ( textStatus == 'success' ) {
 
-							// update DOM
+							// Update DOM.
 							me.form_feedback( data, button );
 
 						} else {
 
-							// show error
+							// Show error.
 							if ( console.log ) {
 								console.log( textStatus );
 							}
@@ -352,7 +352,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 
 					},
 
-					// expected format
+					// Expected format.
 					'json'
 
 				);
@@ -366,27 +366,27 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 		 *
 		 * @since 0.2.2
 		 *
-		 * @param {Array} data The data received from the server
+		 * @param {Array} data The data received from the server.
 		 */
 		this.form_feedback = function( data, button ) {
 
 			/*
-			// trace
+			// Trace.
 			if ( console.log ) {
 				console.log( 'rvm data', data );
 			}
 			*/
 
-			// did we get an error?
+			// Did we get an error?
 			if ( data.error != '0' ) {
 
-				// keep as submit
+				// Keep as submit.
 				button.html( CiviCRM_EO_Attendance_RVM.settings.get_localisation( 'submit' ) );
 
-				// enable button
+				// Enable button.
 				button.prop( 'disabled', false );
 
-				// show error
+				// Show error.
 				$('#civicrm_eo_rvm_error_' + data.civi_event_id).html(
 					data.markup
 				);
@@ -394,24 +394,24 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 				return;
 			}
 
-			// change to update button
+			// Change to update button.
 			button.html( CiviCRM_EO_Attendance_RVM.settings.get_localisation( 'update' ) );
 
-			// show markup
+			// Show markup.
 			$('#civicrm_eo_rvm_success_' + data.civi_event_id).html(
 				data.markup
 			);
 
-			// pause for a bit
+			// Pause for a bit.
 			setTimeout( function() {
 
-				// hide div
+				// Hide div.
 				$('#civicrm_eo_rvm_' + data.civi_event_id).hide();
 
-				// enable button
+				// Enable button.
 				button.prop( 'disabled', false );
 
-				// clear markup
+				// Clear markup.
 				$('#civicrm_eo_rvm_success_' + data.civi_event_id).html( '' );
 
 			}, 1500 );
@@ -420,10 +420,10 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 
 	};
 
-	// init settings
+	// Init settings.
 	CiviCRM_EO_Attendance_RVM.settings.init();
 
-	// init list
+	// Init list.
 	CiviCRM_EO_Attendance_RVM.form.init();
 
 } )( jQuery );
@@ -437,10 +437,10 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
  */
 jQuery(document).ready(function($) {
 
-	// The DOM is loaded now
+	// The DOM is loaded now.
 	CiviCRM_EO_Attendance_RVM.form.dom_ready();
 
-}); // end document.ready()
+}); // End document.ready()
 
 
 

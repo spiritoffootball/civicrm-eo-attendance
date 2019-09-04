@@ -34,7 +34,7 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 	 */
 	CiviCRM_EO_Attendance_PL.settings = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions.
 		var me = this;
 
 		/**
@@ -46,12 +46,12 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 		 */
 		this.init = function() {
 
-			// init settings
+			// Init settings.
 			me.init_settings();
 
 		};
 
-		// init settings array
+		// Init settings array.
 		me.settings = [];
 
 		/**
@@ -70,14 +70,14 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 		 *
 		 * @since 0.2.1
 		 *
-		 * @param {String} The identifier for the desired setting
-		 * @return The value of the setting
+		 * @param {String} The identifier for the desired setting.
+		 * @return The value of the setting.
 		 */
 		this.get_setting = function( identifier ) {
 			return me.settings[identifier];
 		};
 
-		// init clicked array
+		// Init clicked array.
 		me.clicked = [];
 
 		/**
@@ -85,8 +85,8 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 		 *
 		 * @since 0.2.1
 		 *
-		 * @param {String} The identifier for the desired item
-		 * @return The value of the item
+		 * @param {String} The identifier for the desired item.
+		 * @return The value of the item.
 		 */
 		this.get_clicked = function( identifier ) {
 			if ( $.inArray( identifier, me.clicked ) !== -1 ) {
@@ -101,7 +101,7 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 		 *
 		 * @since 0.2.1
 		 *
-		 * @param {Integer} The value for the item
+		 * @param {Integer} The value for the item.
 		 */
 		this.set_clicked = function( value ) {
 			if ( ! me.get_clicked( value ) ) {
@@ -118,7 +118,7 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 	 */
 	CiviCRM_EO_Attendance_PL.list = new function() {
 
-		// prevent reference collisions
+		// Prevent reference collisions
 		var me = this;
 
 		/**
@@ -141,7 +141,7 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 		 */
 		this.dom_ready = function() {
 
-			// enable listeners
+			// Enable listeners
 			me.listeners();
 
 		};
@@ -153,28 +153,28 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 		 */
 		this.listeners = function() {
 
-			// declare vars
+			// Declare vars.
 			var link = $('a.civicrm-eo-participant-link');
 
 			/**
 			 * Add a click event listener to Participant Listing Page links.
 			 *
-			 * @param {Object} event The event object
+			 * @param {Object} event The event object.
 			 */
 			link.on( 'click', function( event ) {
 
-				// declare vars
+				// Declare vars.
 				var classes, civi_event_id = 0;
 
-				// prevent form submission
+				// Prevent form submission.
 				if ( event.preventDefault ) {
 					event.preventDefault();
 				}
 
-				// grab classes
+				// Grab classes.
 				classes = $(this).prop( 'class' ).split( ' ' );
 
-				// loop to find the one we want
+				// Loop to find the one we want.
 				for (var i = 0, item; item = classes[i++];) {
 					if ( item.match( 'civicrm-eo-pl-event-id-' ) ) {
 						civi_event_id = parseInt( item.split('-')[5] );
@@ -182,22 +182,22 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 					}
 				}
 
-				// bail if already clicked
+				// Bail if already clicked.
 				if ( CiviCRM_EO_Attendance_PL.settings.get_clicked( civi_event_id ) ) {
 
-					// toggle list and bail
+					// Toggle list and bail.
 					$('.civicrm-eo-pl-event-id-' + civi_event_id).next('ul').slideToggle();
 					return;
 
 				}
 
-				// show spinner
+				// Show spinner.
 				$(this).next( '.civicrm-eo-loading' ).show();
 
-				// register click
+				// Register click.
 				CiviCRM_EO_Attendance_PL.settings.set_clicked( civi_event_id );
 
-				// request participants
+				// Request participants.
 				me.send( civi_event_id );
 
 			});
@@ -209,38 +209,38 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 		 *
 		 * @since 0.2.1
 		 *
-		 * @param {Integer} civi_event_id The numeric ID of the CiviEvent
+		 * @param {Integer} civi_event_id The numeric ID of the CiviEvent.
 		 */
 		this.send = function( civi_event_id ) {
 
-			// use jQuery post
+			// Use jQuery post.
 			$.post(
 
-				// URL to post to
+				// URL to post to.
 				CiviCRM_EO_Attendance_PL.settings.get_setting( 'ajax_url' ),
 
 				{
 
-					// token received by WordPress
+					// Token received by WordPress.
 					action: 'participants_list_get',
 
-					// send event ID
+					// Send event ID.
 					civi_event_id: civi_event_id
 
 				},
 
-				// callback
+				// Callback.
 				function( data, textStatus ) {
 
-					// if success
+					// If success.
 					if ( textStatus == 'success' ) {
 
-						// update progress bar
+						// Update progress bar.
 						me.update( data );
 
 					} else {
 
-						// show error
+						// Show error.
 						if ( console.log ) {
 							console.log( textStatus );
 						}
@@ -249,7 +249,7 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 
 				},
 
-				// expected format
+				// Expected format.
 				'json'
 
 			);
@@ -261,29 +261,29 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 		 *
 		 * @since 0.2.1
 		 *
-		 * @param {Array} data The data received from the server
+		 * @param {Array} data The data received from the server.
 		 */
 		this.update = function( data ) {
 
-			// vars
+			// Vars.
 			var item, processed, list_item;
 
-			// are we still in progress?
+			// Are we still in progress?
 			if ( data.markup != '' ) {
 
-				// find our item
+				// Find our item.
 				item = $('.civicrm-eo-pl-event-id-' + data.civi_event_id);
 
-				// hide spinner
+				// Hide spinner.
 				item.next( '.civicrm-eo-loading' ).hide();
 
-				// process into jQuery object
+				// Process into jQuery object.
 				processed = $( $.parseHTML( data.markup ) );
 
-				// target enclosing list item
+				// Target enclosing list item.
 				list_item = item.parent();
 
-				// append to link and show
+				// Append to link and show.
 				processed.appendTo( list_item ).hide().slideDown();
 
 			}
@@ -292,10 +292,10 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 
 	};
 
-	// init settings
+	// Init settings.
 	CiviCRM_EO_Attendance_PL.settings.init();
 
-	// init list
+	// Init list.
 	CiviCRM_EO_Attendance_PL.list.init();
 
 } )( jQuery );
@@ -309,10 +309,10 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
  */
 jQuery(document).ready(function($) {
 
-	// The DOM is loaded now
+	// The DOM is loaded now.
 	CiviCRM_EO_Attendance_PL.list.dom_ready();
 
-}); // end document.ready()
+}); // End document.ready()
 
 
 
