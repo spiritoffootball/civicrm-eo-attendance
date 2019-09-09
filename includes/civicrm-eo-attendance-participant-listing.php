@@ -677,9 +677,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 */
 	public function list_render( $post_id = null ) {
 
-		// Always deny to anonymous users.
-		if ( ! is_user_logged_in() ) return;
-
 		// Deny to users who aren't a member of a group that has Attendance enabled.
 
 		/**
