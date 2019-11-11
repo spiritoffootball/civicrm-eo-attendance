@@ -52,7 +52,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5
 	 * @access public
-	 * @var str $reference_meta_key The Rendez Vous "Month" meta key name.
+	 * @var str $reference_meta_key The Rendez Vous "Reference Array" meta key name.
 	 */
 	public $reference_meta_key = '_rendez_vous_reference';
 
@@ -1110,21 +1110,32 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 					// Is attendance enabled for this group?
 					if ( $this->group_get_option( $group_id, $this->group_meta_key ) ) {
 
-						// Build the URL we want.
-						$current_url = home_url( add_query_arg( array() ) );
-						$url = add_query_arg( 'action', 'refresh_all', $current_url );
+						// Get the organizer ID from group meta.
+						$organizer_id = groups_get_groupmeta( $group_id, $this->organizer_meta_key );
 
-						// Construct link.
-						$link = '<a href="' . esc_url( $url ) . '">' .
-									__( 'Refresh All', 'civicrm-eo-attendance' ) .
-								'</a>';
+						// Get current user.
+						$current_user = wp_get_current_user();
 
-						// Add in our button.
-						$contents = str_replace(
-							'</div>',
-							'</div><div class="generic-button civicrm-eo-generic-button">' . $link . '</div>',
-							$contents
-						);
+						// Is this the organizer?
+						if ( $organizer_id == $current_user->ID OR is_super_admin() ) {
+
+							// Build the URL we want.
+							$current_url = home_url( add_query_arg( array() ) );
+							$url = add_query_arg( 'action', 'refresh_all', $current_url );
+
+							// Construct link.
+							$link = '<a href="' . esc_url( $url ) . '">' .
+										__( 'Refresh All', 'civicrm-eo-attendance' ) .
+									'</a>';
+
+							// Add in our button.
+							$contents = str_replace(
+								'</div>',
+								'</div><div class="generic-button civicrm-eo-generic-button">' . $link . '</div>',
+								$contents
+							);
+
+						}
 
 					}
 
