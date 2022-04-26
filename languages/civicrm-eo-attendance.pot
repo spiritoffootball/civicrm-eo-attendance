@@ -1,396 +1,296 @@
-# Copyright (C) 2017 CiviCRM Event Organiser Attendance
-# This file is distributed under the same license as the CiviCRM Event Organiser Attendance package.
+# Copyright (C) 2022 Christian Wach
+# This file is distributed under the same license as the CiviCRM Event Organiser Attendance plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: CiviCRM Event Organiser Attendance 0.5.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/civicrm-eo-attendance\n"
-"POT-Creation-Date: 2017-12-19 09:40:27+00:00\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-
-#: assets/templates/custom-data-event/event-form.php:6
-msgid "Please fill out some figures for this event."
-msgstr ""
-
-#: assets/templates/custom-data-event/event-form.php:11
-#: includes/civicrm-eo-attendance-custom-data-event.php:148
-msgid "Number of Attendees"
-msgstr ""
-
-#: assets/templates/custom-data-event/event-form.php:16
-#: includes/civicrm-eo-attendance-custom-data-event.php:149
-msgid "Number of Boys"
-msgstr ""
-
-#: assets/templates/custom-data-event/event-form.php:21
-#: includes/civicrm-eo-attendance-custom-data-event.php:150
-msgid "Number of Girls"
-msgstr ""
-
-#: assets/templates/custom-data-event/event-form.php:26
-#: includes/civicrm-eo-attendance-custom-data-event.php:151
-msgid "Age (Youngest)"
-msgstr ""
-
-#: assets/templates/custom-data-event/event-form.php:31
-#: includes/civicrm-eo-attendance-custom-data-event.php:152
-msgid "Age (Oldest)"
-msgstr ""
-
-#: assets/templates/custom-data-event/event-form.php:40
-#: assets/templates/custom-data-participant/event-form.php:25
-#: includes/civicrm-eo-attendance-rendez-vous.php:280
-#: includes/civicrm-eo-attendance-rendez-vous.php:1480
-msgid "Submit"
-msgstr ""
-
-#: assets/templates/custom-data-participant/event-form.php:6
-msgid "How much time did you spend working on this event?"
-msgstr ""
-
-#: assets/templates/custom-data-participant/event-form.php:11
-msgid "Hours"
-msgstr ""
-
-#: assets/templates/custom-data-participant/event-form.php:16
-msgid "Minutes"
-msgstr ""
-
-#: assets/templates/event-attendance/attendance-form.php:7
-msgid "The following people have indicated that they are available for this event. Choose which people to register for the event and select their role."
-msgstr ""
-
-#: assets/templates/event-attendance/attendance-form.php:30
-msgid "Close"
-msgstr ""
-
-#: assets/templates/event-leader/setting-admin.php:3
-msgid "Default Event Leader Role"
-msgstr ""
-
-#: assets/templates/event-leader/setting-admin.php:8
-msgid "The event leader role is responsible for providing feedback on an event."
-msgstr ""
-
-#: assets/templates/event-leader/setting-metabox.php:5
-msgid "Event Leader Role:"
-msgstr ""
-
-#: assets/templates/event-leader/setting-metabox.php:11
-msgid "The event leader role is responsible for providing feedback for this event."
-msgstr ""
-
-#: assets/templates/event-paid/setting-admin.php:3
-msgid "Are Events to be Paid Events by default?"
-msgstr ""
-
-#: assets/templates/event-paid/setting-admin.php:6
-msgid "Check the box if you want events to be paid events. If most events are not paid, leave the box unchecked."
-msgstr ""
-
-#: assets/templates/event-paid/setting-metabox.php:5
-msgid "Paid Event:"
-msgstr ""
-
-#: assets/templates/event-sharing/setting-admin.php:3
-msgid "Default CiviEvent Sharing Panel visibility"
-msgstr ""
-
-#: assets/templates/event-sharing/setting-metabox.php:5
-msgid "Display Sharing Panel:"
-msgstr ""
-
-#: assets/templates/participant-listing/setting-admin.php:3
-msgid "Default CiviCRM Participant Listing Profile"
-msgstr ""
-
-#: assets/templates/participant-listing/setting-admin.php:8
-msgid "Select \"Disabled\" if you prefer to set the visibility of Participant Listings manually on a per-CiviEvent basis."
-msgstr ""
-
-#: assets/templates/participant-listing/setting-metabox.php:5
-msgid "Participant Listing Profile:"
-msgstr ""
-
-#: assets/templates/participant-listing/setting-metabox.php:11
-msgid "The profile shown on the Participant Listing page. Select \"Disabled\" if you do not want participants to be shown."
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:26
-#: includes/civicrm-eo-attendance-custom-data-event.php:450
-#: includes/civicrm-eo-attendance-custom-data-event.php:612
-msgid "Event Feedback"
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:30
-msgid "Use this widget to show a list of feedback for events."
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:83
-#: assets/widgets/custom-data-event-widget.php:514
-#: assets/widgets/custom-data-participant-widget.php:83
-#: assets/widgets/custom-data-participant-widget.php:446
-msgid "You are up-to-date with your feedback."
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:113
-msgid "Event Feedback Required"
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:126
-#: assets/widgets/custom-data-participant-widget.php:125
-msgid "Title:"
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:130
-#: assets/widgets/custom-data-participant-widget.php:129
-msgid "Max number to show:"
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:327
-#: assets/widgets/custom-data-participant-widget.php:290
-msgid "Leave feedback"
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:508
-#: assets/widgets/custom-data-participant-widget.php:439
-#: includes/civicrm-eo-attendance-custom-data-event.php:492
-#: includes/civicrm-eo-attendance-custom-data-participant.php:694
-#: includes/civicrm-eo-attendance-rendez-vous.php:282
-msgid "Processing..."
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:509
-#: includes/civicrm-eo-attendance-custom-data-event.php:493
-msgid "You must enter values for each field"
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:510
-#: includes/civicrm-eo-attendance-custom-data-event.php:494
-msgid "You must enter positive values for each field"
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:511
-#: includes/civicrm-eo-attendance-custom-data-event.php:496
-msgid "Number of attendees must be the sum of boys and girls"
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:512
-#: includes/civicrm-eo-attendance-custom-data-event.php:497
-msgid "Youngest must be younger than oldest"
-msgstr ""
-
-#: assets/widgets/custom-data-event-widget.php:513
-#: includes/civicrm-eo-attendance-custom-data-event.php:495
-msgid "You must enter positive values for ages"
-msgstr ""
-
-#: assets/widgets/custom-data-participant-widget.php:26
-#: includes/civicrm-eo-attendance-custom-data-participant.php:652
-#: includes/civicrm-eo-attendance-custom-data-participant.php:828
-msgid "Participant Feedback"
-msgstr ""
-
-#: assets/widgets/custom-data-participant-widget.php:30
-msgid "Use this widget to show a list of feedback for participants."
-msgstr ""
-
-#: assets/widgets/custom-data-participant-widget.php:112
-msgid "Participant Feedback Required"
-msgstr ""
-
-#: assets/widgets/custom-data-participant-widget.php:440
-#: includes/civicrm-eo-attendance-custom-data-participant.php:695
-msgid "You must enter values for each field."
-msgstr ""
-
-#: assets/widgets/custom-data-participant-widget.php:441
-#: includes/civicrm-eo-attendance-custom-data-participant.php:696
-msgid "You must enter numeric values for each field."
-msgstr ""
-
-#: assets/widgets/custom-data-participant-widget.php:442
-#: includes/civicrm-eo-attendance-custom-data-participant.php:697
-msgid "You must enter whole numbers in each field."
-msgstr ""
-
-#: assets/widgets/custom-data-participant-widget.php:443
-#: includes/civicrm-eo-attendance-custom-data-participant.php:698
-msgid "You must enter positive values for each field."
-msgstr ""
-
-#: assets/widgets/custom-data-participant-widget.php:444
-#: includes/civicrm-eo-attendance-custom-data-participant.php:699
-msgid "Really? You worked no time at all?"
-msgstr ""
-
-#: assets/widgets/custom-data-participant-widget.php:445
-#: includes/civicrm-eo-attendance-custom-data-participant.php:700
-msgid "The number of minutes must be less than 60."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-event.php:138
-msgid "Event Statistics"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-event.php:607
-#: includes/civicrm-eo-attendance-custom-data-participant.php:823
-msgid "Feedback for %s"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-event.php:732
-#: includes/civicrm-eo-attendance-custom-data-participant.php:985
-#: includes/civicrm-eo-attendance-rendez-vous.php:1616
-msgid "Oops! Something went wrong."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-event.php:819
-#: includes/civicrm-eo-attendance-custom-data-participant.php:1070
-#: includes/civicrm-eo-attendance-rendez-vous.php:1801
-msgid "Thanks!"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-participant.php:138
-msgid "Participant Statistics"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-participant.php:148
-msgid "Hours Worked"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-custom-data-participant.php:149
-msgid "Minutes Worked"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-participant-listing.php:350
-msgid "Disabled"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-participant-listing.php:746
-#: includes/civicrm-eo-attendance-participant-listing.php:907
-msgid "Participants and Registration"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-participant-listing.php:902
-msgid "Participants for %s"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-participant-listing.php:1096
-msgid "No participants for this event"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-participant-listing.php:1154
-msgid "Register for this event"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-participant-listing.php:1169
-msgid "Registration is closed"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:224
-msgid "Attendance"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:281
-#: includes/civicrm-eo-attendance-rendez-vous.php:1478
-msgid "Update"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:283
-msgid "You must choose someone to be the event leader."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:359
-msgid "Refreshing this Rendez-vous failed."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:361
-msgid "Rendez-vous successfully refreshed."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:495
-msgid "Refreshing all Rendez-vous failed."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:497
-msgid "All Rendez-vous successfully refreshed."
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:609
-msgid "Availability for %s"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:690
-msgid "Erfurt"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:1102
-msgid "Refresh All"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:1160
-msgid "Edit"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:1165
-msgid "Refresh"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:1284
-msgid "I am not available this month"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:1338
-msgid "Registration"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:1381
-msgid "Register"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:1689
-msgid "Registration via Rendez Vous"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:1999
-msgid "Enable Attendance"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:2016
-msgid "Select an Organiser"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:2068
-msgid "Choose who is responsible for Attendance"
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:2400
-msgid "%1$s cannot attend \"%2$s\""
-msgstr ""
-
-#: includes/civicrm-eo-attendance-rendez-vous.php:2411
-msgid "Unfortunately %1$s can no longer attend \"%2$s\" on %3$s at %4$s and their registration for this event has been cancelled. Please visit the \"%5$s\" to review registrations for this event."
-msgstr ""
-#. Plugin Name of the plugin/theme
+"POT-Creation-Date: 2022-04-26T17:27:34+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.6.0\n"
+"X-Domain: civicrm-eo-attendance\n"
+
+#. Plugin Name of the plugin
 msgid "CiviCRM Event Organiser Attendance"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
+#. Plugin URI of the plugin
 msgid "https://github.com/christianwach/civicrm-eo-attendance"
 msgstr ""
 
-#. Description of the plugin/theme
+#. Description of the plugin
 msgid "Attendance functionality for CiviCRM Event Organiser plugin."
 msgstr ""
 
-#. Author of the plugin/theme
+#. Author of the plugin
 msgid "Christian Wach"
 msgstr ""
 
-#. Author URI of the plugin/theme
+#. Author URI of the plugin
 msgid "http://haystack.co.uk"
+msgstr ""
+
+msgid "Please fill out some figures for this event."
+msgstr ""
+
+msgid "Number of Attendees"
+msgstr ""
+
+msgid "Number of Boys"
+msgstr ""
+
+msgid "Number of Girls"
+msgstr ""
+
+msgid "Age (Youngest)"
+msgstr ""
+
+msgid "Age (Oldest)"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "How much time did you spend working on this event?"
+msgstr ""
+
+msgid "Hours"
+msgstr ""
+
+msgid "Minutes"
+msgstr ""
+
+msgid "The following people have indicated that they are available for this event. Choose which people to register for the event and select their role."
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Default Event Leader Role"
+msgstr ""
+
+msgid "The event leader role is responsible for providing feedback on an event."
+msgstr ""
+
+msgid "Event Leader Role:"
+msgstr ""
+
+msgid "The event leader role is responsible for providing feedback for this event."
+msgstr ""
+
+msgid "Are Events to be Paid Events by default?"
+msgstr ""
+
+msgid "Check the box if you want events to be paid events. If most events are not paid, leave the box unchecked."
+msgstr ""
+
+msgid "Paid Event:"
+msgstr ""
+
+msgid "Check this box if this is a paid event."
+msgstr ""
+
+msgid "Default CiviEvent Sharing Panel visibility"
+msgstr ""
+
+msgid "Display Sharing Panel:"
+msgstr ""
+
+msgid "Check this to allow CiviCRM to show the CiviEvent Sharing Panel."
+msgstr ""
+
+msgid "Default CiviCRM Participant Listing Profile"
+msgstr ""
+
+msgid "Select \"Disabled\" if you prefer to set the visibility of Participant Listings manually on a per-CiviEvent basis."
+msgstr ""
+
+msgid "Participant Listing Profile:"
+msgstr ""
+
+msgid "The profile shown on the Participant Listing page. Select \"Disabled\" if you do not want participants to be shown."
+msgstr ""
+
+msgid "Event Feedback"
+msgstr ""
+
+msgid "Use this Widget to show a list of feedback for events."
+msgstr ""
+
+msgid "You are up-to-date with your feedback."
+msgstr ""
+
+msgid "Event Feedback Required"
+msgstr ""
+
+msgid "Title:"
+msgstr ""
+
+msgid "Max number to show:"
+msgstr ""
+
+msgid "Leave feedback"
+msgstr ""
+
+msgid "Processing..."
+msgstr ""
+
+msgid "You must enter values for each field"
+msgstr ""
+
+msgid "You must enter positive values for each field"
+msgstr ""
+
+msgid "Number of attendees must be the sum of boys and girls"
+msgstr ""
+
+msgid "Youngest must be younger than oldest"
+msgstr ""
+
+msgid "You must enter positive values for ages"
+msgstr ""
+
+msgid "Participant Feedback"
+msgstr ""
+
+msgid "Use this widget to show a list of feedback for participants."
+msgstr ""
+
+msgid "Participant Feedback Required"
+msgstr ""
+
+msgid "You must enter values for each field."
+msgstr ""
+
+msgid "You must enter numeric values for each field."
+msgstr ""
+
+msgid "You must enter whole numbers in each field."
+msgstr ""
+
+msgid "You must enter positive values for each field."
+msgstr ""
+
+msgid "Really? You worked no time at all?"
+msgstr ""
+
+msgid "The number of minutes must be less than 60."
+msgstr ""
+
+msgid "Event Statistics"
+msgstr ""
+
+msgid "Feedback for %s"
+msgstr ""
+
+msgid "Oops! Something went wrong."
+msgstr ""
+
+msgid "Thanks!"
+msgstr ""
+
+msgid "Participant Statistics"
+msgstr ""
+
+msgid "Hours Worked"
+msgstr ""
+
+msgid "Minutes Worked"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Participants and Registration"
+msgstr ""
+
+msgid "Participants for %s"
+msgstr ""
+
+msgid "No participants for this event"
+msgstr ""
+
+msgid "Register for this event"
+msgstr ""
+
+msgid "Registration is closed"
+msgstr ""
+
+msgid "Attendance"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "You must choose someone to be the event leader."
+msgstr ""
+
+msgid "Refreshing this Rendez-vous failed."
+msgstr ""
+
+msgid "Rendez-vous successfully refreshed."
+msgstr ""
+
+msgid "Refreshing all Rendez-vous failed."
+msgstr ""
+
+msgid "All Rendez-vous successfully refreshed."
+msgstr ""
+
+msgid "Availability for %s"
+msgstr ""
+
+msgid "Erfurt"
+msgstr ""
+
+msgid "Refresh All"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "I am not available this month"
+msgstr ""
+
+msgid "Registration"
+msgstr ""
+
+msgid "Register"
+msgstr ""
+
+msgid "Registration via Rendez Vous"
+msgstr ""
+
+msgid "You have been registered for %s"
+msgstr ""
+
+msgid "This is to let you know that you have been registered as attending the event \"%1$s\" on %2$s at %3$s. If you think this has been done in error, or you have anything else you want to say to the organiser, please follow the link below and reply to this conversation on the Spirit of Football website."
+msgstr ""
+
+msgid "You have been unregistered from %s"
+msgstr ""
+
+msgid "This is to let you know that your registration for the event \"%1$s\" on %2$s at %3$s has been cancelled and that you will no longer be attending. If you think this has been done in error, please follow the link below and reply to this conversation on the Spirit of Football website."
+msgstr ""
+
+msgid "Enable Attendance"
+msgstr ""
+
+msgid "Select an Organiser"
+msgstr ""
+
+msgid "Choose who is responsible for Attendance"
+msgstr ""
+
+msgid "%1$s cannot attend \"%2$s\""
+msgstr ""
+
+msgid "Unfortunately %1$s can no longer attend \"%2$s\" on %3$s at %4$s and their registration for this event has been cancelled. Please visit the \"%5$s\" to review registrations for this event."
 msgstr ""
