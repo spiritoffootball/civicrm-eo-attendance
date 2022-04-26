@@ -1,9 +1,20 @@
 <?php
+/**
+ * Event Paid Class.
+ *
+ * Handles Paid Event functionality.
+ *
+ * @since 0.3.1
+ * @package CiviCRM_Event_Organiser_Attendance
+ */
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
 /**
- * CiviCRM Event Organiser Attendance Event Paid Class.
+ * Event Paid Class.
  *
- * A class that encapsulates SOF Paid Event functionality.
+ * A class that encapsulates Paid Event functionality.
  *
  * @since 0.3.1
  */
@@ -36,8 +47,6 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 */
 	public $meta_name = '_civi_paid';
 
-
-
 	/**
 	 * Initialises this object.
 	 *
@@ -49,8 +58,6 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$this->register_hooks();
 
 	}
-
-
 
 	/**
 	 * Set references to other objects.
@@ -66,8 +73,6 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-
-
 	/**
 	 * Register hooks on plugin init.
 	 *
@@ -76,35 +81,31 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	public function register_hooks() {
 
 		// Add our settings to the settings table.
-		add_action( 'civicrm_event_organiser_settings_table_last_row', array( $this, 'settings_table' ) );
+		add_action( 'civicrm_event_organiser_settings_table_last_row', [ $this, 'settings_table' ] );
 
 		// Save our settings on plugin settings save.
-		add_action( 'civicrm_event_organiser_settings_updated', array( $this, 'settings_update' ) );
+		add_action( 'civicrm_event_organiser_settings_updated', [ $this, 'settings_update' ] );
 
 		// Add our components to the event metabox.
-		add_action( 'civicrm_event_organiser_event_meta_box_after', array( $this, 'components_metabox' ) );
+		add_action( 'civicrm_event_organiser_event_meta_box_after', [ $this, 'components_metabox' ] );
 
 		// Save our event components on event components save.
-		add_action( 'civicrm_event_organiser_event_components_updated', array( $this, 'components_update' ) );
+		add_action( 'civicrm_event_organiser_event_components_updated', [ $this, 'components_update' ] );
 
 		// Filter events for Rendez Vous to include only paid events.
-		add_action( 'civicrm_event_organiser_rendez_vous_event_args', array( $this, 'paid_filter' ), 10, 1 );
+		add_action( 'civicrm_event_organiser_rendez_vous_event_args', [ $this, 'paid_filter' ], 10, 1 );
 
 		// Filter access to custom elements on events.
-		add_filter( 'civicrm_eo_cde_access', array( $this, 'paid_permissions' ), 10, 2 );
-		add_filter( 'civicrm_eo_cdp_access', array( $this, 'paid_permissions' ), 10, 2 );
-		add_filter( 'civicrm_eo_pl_access', array( $this, 'paid_permissions' ), 10, 2 );
+		add_filter( 'civicrm_eo_cde_access', [ $this, 'paid_permissions' ], 10, 2 );
+		add_filter( 'civicrm_eo_cdp_access', [ $this, 'paid_permissions' ], 10, 2 );
+		add_filter( 'civicrm_eo_pl_access', [ $this, 'paid_permissions' ], 10, 2 );
 
 		// Listen to "access denied" on Participant Listings.
-		add_filter( 'civicrm_eo_pl_access_denied', array( $this, 'paid_permission_denied' ), 10, 1 );
+		add_filter( 'civicrm_eo_pl_access_denied', [ $this, 'paid_permission_denied' ], 10, 1 );
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Add our settings to the settings table.
@@ -123,11 +124,9 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		}
 
 		// Include template file.
-		include( CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-paid/setting-admin.php' );
+		include CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-paid/setting-admin.php';
 
 	}
-
-
 
 	/**
 	 * Update our settings when the settings are updated.
@@ -137,14 +136,12 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	public function settings_update() {
 
 		// Set value based on whether the checkbox is ticked.
-		$value = ( isset( $_POST[$this->option_name] ) ) ? 1 : 0;
+		$value = ( isset( $_POST[ $this->option_name ] ) ) ? 1 : 0;
 
 		// Save option.
 		$this->plugin->civicrm_eo->db->option_save( $this->option_name, $value );
 
 	}
-
-
 
 	/**
 	 * Add our components to the event metabox.
@@ -165,11 +162,9 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		}
 
 		// Include template file.
-		include( CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-paid/setting-metabox.php' );
+		include CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-paid/setting-metabox.php';
 
 	}
-
-
 
 	/**
 	 * Update our components when the components are updated.
@@ -185,11 +180,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Get the default Event Paid value for a post.
@@ -211,18 +202,18 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
 
 		// Override with default if we get one.
-		if ( $default !== '' AND is_numeric( $default ) ) {
+		if ( $default !== '' && is_numeric( $default ) ) {
 			$existing_id = absint( $default );
 		}
 
 		// If we have a post.
-		if ( isset( $post ) AND is_object( $post ) ) {
+		if ( isset( $post ) && is_object( $post ) ) {
 
 			// Get stored value.
 			$stored_id = $this->paid_get( $post->ID, $existing_id );
 
 			// Override with stored value if we have one.
-			if ( $stored_id !== '' AND is_numeric( $stored_id ) ) {
+			if ( $stored_id !== '' && is_numeric( $stored_id ) ) {
 				$existing_id = absint( $stored_id );
 			}
 
@@ -233,11 +224,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Update event paid value.
@@ -253,7 +240,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		if ( is_null( $value ) ) {
 
 			// Set value based on whether the checkbox is ticked.
-			$value = ( isset( $_POST[$this->option_name] ) ) ? 1 : 0;
+			$value = ( isset( $_POST[ $this->option_name ] ) ) ? 1 : 0;
 
 		}
 
@@ -261,8 +248,6 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$this->paid_set( $event_id, $value );
 
 	}
-
-
 
 	/**
 	 * Get event paid value.
@@ -279,14 +264,14 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$value = get_post_meta( $post_id, $this->meta_name, true );
 
 		// Empty string if not yet set, so override with default.
-		if ( $value === '' ) { $value = $default_value; }
+		if ( $value === '' ) {
+			$value = $default_value;
+		}
 
 		// --<
 		return absint( $value );
 
 	}
-
-
 
 	/**
 	 * Set event paid value.
@@ -303,8 +288,6 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-
-
 	/**
 	 * Delete event paid value for an event.
 	 *
@@ -319,8 +302,6 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-
-
 	/**
 	 * Filter event query to include only paid events.
 	 *
@@ -331,17 +312,17 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	public function paid_filter( $query_args ) {
 
 		// Find only events with our meta value.
-		$meta_query = array(
-			array(
+		$meta_query = [
+			[
 				'key'     => '_civi_paid',
 				'value'   => 1,
 				'compare' => '=',
-			),
-		);
+			],
+		];
 
 		// Amend query args.
 		if ( empty( $query_args['meta_query'] ) ) {
-			$query_args['meta_query'] = array( $meta_query );
+			$query_args['meta_query'] = [ $meta_query ];
 		} else {
 			$query_args['meta_query'][] = $meta_query;
 		}
@@ -350,8 +331,6 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		return $query_args;
 
 	}
-
-
 
 	/**
 	 * Filter access to Participant Listings.
@@ -381,8 +360,6 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-
-
 	/**
 	 * When access to Participant Listings is denied, check if event is paid and
 	 * if so, remove the standard Registration Links.
@@ -402,17 +379,6 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		// Get event paid status.
 		$paid = $this->paid_default_get( $post );
 
-		/*
-		$e = new Exception;
-		$trace = $e->getTraceAsString();
-		error_log( print_r( array(
-			'method' => __METHOD__,
-			'post_id' => $post_id,
-			'paid' => $paid,
-			//'backtrace' => $trace,
-		), true ) );
-		*/
-
 		// If this is a paid event.
 		if ( $paid != 0 ) {
 
@@ -423,9 +389,4 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-
-
-} // Class ends.
-
-
-
+}

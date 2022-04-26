@@ -1,7 +1,18 @@
 <?php
+/**
+ * Event Sharing Class.
+ *
+ * Handles Event Sharing functionality.
+ *
+ * @since 0.2.2
+ * @package CiviCRM_Event_Organiser_Attendance
+ */
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
 /**
- * CiviCRM Event Organiser Attendance Event Sharing Class.
+ * Event Sharing Class.
  *
  * A class that encapsulates Event Sharing functionality.
  *
@@ -36,8 +47,6 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 */
 	public $meta_name = '_civi_sharing';
 
-
-
 	/**
 	 * Initialises this object.
 	 *
@@ -49,8 +58,6 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$this->register_hooks();
 
 	}
-
-
 
 	/**
 	 * Set references to other objects.
@@ -66,8 +73,6 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-
-
 	/**
 	 * Register hooks on plugin init.
 	 *
@@ -76,30 +81,26 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	public function register_hooks() {
 
 		// Apply changes to CiviEvent when an EO event is synced to CiviCRM.
-		add_filter( 'civicrm_event_organiser_prepared_civi_event', array( $this, 'prepare_civi_event' ), 10, 2 );
+		add_filter( 'civicrm_event_organiser_prepared_civi_event', [ $this, 'prepare_civi_event' ], 10, 2 );
 
 		// Post-process an EO event when a CiviEvent is synced to WordPress.
-		add_action( 'civicrm_event_organiser_eo_event_updated', array( $this, 'process_eo_event' ), 10, 2 );
+		add_action( 'civicrm_event_organiser_eo_event_updated', [ $this, 'process_eo_event' ], 10, 2 );
 
 		// Add our settings to the settings table.
-		add_action( 'civicrm_event_organiser_settings_table_last_row', array( $this, 'settings_table' ) );
+		add_action( 'civicrm_event_organiser_settings_table_last_row', [ $this, 'settings_table' ] );
 
 		// Save our settings on plugin settings save.
-		add_action( 'civicrm_event_organiser_settings_updated', array( $this, 'settings_update' ) );
+		add_action( 'civicrm_event_organiser_settings_updated', [ $this, 'settings_update' ] );
 
 		// Add our components to the event metabox.
-		add_action( 'civicrm_event_organiser_event_meta_box_after', array( $this, 'components_metabox' ) );
+		add_action( 'civicrm_event_organiser_event_meta_box_after', [ $this, 'components_metabox' ] );
 
 		// Save our event components on event components save.
-		add_action( 'civicrm_event_organiser_event_components_updated', array( $this, 'components_update' ) );
+		add_action( 'civicrm_event_organiser_event_components_updated', [ $this, 'components_update' ] );
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Update a CiviEvent when an EO event is synced to CiviCRM.
@@ -123,8 +124,6 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-
-
 	/**
 	 * Update an EO event when a CiviEvent is synced to WordPress.
 	 *
@@ -136,10 +135,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	public function process_eo_event( $event_id, $civi_event ) {
 
 		// If the event has a participant listing profile specified.
-		if (
-			isset( $civi_event['is_share'] ) AND
-			! empty( $civi_event['is_share'] )
-		) {
+		if ( ! empty( $civi_event['is_share'] ) ) {
 
 			// Save specified event sharing.
 			$this->sharing_set( $event_id, absint( $civi_event['is_share'] ) );
@@ -153,11 +149,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Add our settings to the settings table.
@@ -176,11 +168,9 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		}
 
 		// Include template file.
-		include( CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-sharing/setting-admin.php' );
+		include CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-sharing/setting-admin.php';
 
 	}
-
-
 
 	/**
 	 * Update our settings when the settings are updated.
@@ -190,14 +180,12 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	public function settings_update() {
 
 		// Set value based on whether the checkbox is ticked.
-		$value = ( isset( $_POST[$this->option_name] ) ) ? 1 : 0;
+		$value = ( isset( $_POST[ $this->option_name ] ) ) ? 1 : 0;
 
 		// Save option.
 		$this->plugin->civicrm_eo->db->option_save( $this->option_name, $value );
 
 	}
-
-
 
 	/**
 	 * Add our components to the event metabox.
@@ -218,11 +206,9 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		}
 
 		// Include template file.
-		include( CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-sharing/setting-metabox.php' );
+		include CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-sharing/setting-metabox.php';
 
 	}
-
-
 
 	/**
 	 * Update our components when the components are updated.
@@ -238,11 +224,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Get the default CiviEvent sharing value for a post.
@@ -264,18 +246,18 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
 
 		// Override with default if we get one.
-		if ( $default !== '' AND is_numeric( $default ) ) {
+		if ( $default !== '' && is_numeric( $default ) ) {
 			$existing_id = absint( $default );
 		}
 
 		// If we have a post.
-		if ( isset( $post ) AND is_object( $post ) ) {
+		if ( isset( $post ) && is_object( $post ) ) {
 
 			// Get stored value.
 			$stored_id = $this->sharing_get( $post->ID );
 
 			// Override with stored value if we have one.
-			if ( $stored_id !== '' AND is_numeric( $stored_id ) ) {
+			if ( $stored_id !== '' && is_numeric( $stored_id ) ) {
 				$existing_id = absint( $stored_id );
 			}
 
@@ -286,11 +268,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Update event sharing value.
@@ -306,7 +284,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		if ( is_null( $value ) ) {
 
 			// Set value based on whether the checkbox is ticked.
-			$value = ( isset( $_POST[$this->option_name] ) ) ? 1 : 0;
+			$value = ( isset( $_POST[ $this->option_name ] ) ) ? 1 : 0;
 
 		}
 
@@ -314,8 +292,6 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$this->sharing_set( $event_id, $value );
 
 	}
-
-
 
 	/**
 	 * Get event sharing value.
@@ -331,14 +307,14 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$value = get_post_meta( $post_id, $this->meta_name, true );
 
 		// If it's not yet set it will be an empty string, so cast as boolean.
-		if ( $value === '' ) { $value = 0; }
+		if ( $value === '' ) {
+			$value = 0;
+		}
 
 		// --<
 		return absint( $value );
 
 	}
-
-
 
 	/**
 	 * Set event sharing value.
@@ -351,11 +327,9 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	public function sharing_set( $post_id, $value = 0 ) {
 
 		// Update event meta.
-		update_post_meta( $post_id,  $this->meta_name, $value );
+		update_post_meta( $post_id, $this->meta_name, $value );
 
 	}
-
-
 
 	/**
 	 * Delete event sharing value for a CiviEvent.
@@ -371,9 +345,4 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-
-
-} // Class ends.
-
-
-
+}

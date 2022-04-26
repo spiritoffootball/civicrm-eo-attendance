@@ -1,7 +1,18 @@
 <?php
+/**
+ * Event Leader Class.
+ *
+ * Handles Event Leader functionality.
+ *
+ * @since 0.3
+ * @package CiviCRM_Event_Organiser_Attendance
+ */
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
 /**
- * CiviCRM Event Organiser Attendance Event Leader Class.
+ * Event Leader Class.
  *
  * A class that encapsulates Event Leader functionality.
  *
@@ -36,8 +47,6 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	 */
 	public $meta_name = '_civi_leader_role';
 
-
-
 	/**
 	 * Initialises this object.
 	 *
@@ -49,8 +58,6 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$this->register_hooks();
 
 	}
-
-
 
 	/**
 	 * Set references to other objects.
@@ -66,8 +73,6 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-
-
 	/**
 	 * Register hooks on plugin init.
 	 *
@@ -76,24 +81,20 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	public function register_hooks() {
 
 		// Add our settings to the settings table.
-		add_action( 'civicrm_event_organiser_settings_table_last_row', array( $this, 'settings_table' ) );
+		add_action( 'civicrm_event_organiser_settings_table_last_row', [ $this, 'settings_table' ] );
 
 		// Save our settings on plugin settings save.
-		add_action( 'civicrm_event_organiser_settings_updated', array( $this, 'settings_update' ) );
+		add_action( 'civicrm_event_organiser_settings_updated', [ $this, 'settings_update' ] );
 
 		// Add our components to the event metabox.
-		add_action( 'civicrm_event_organiser_event_meta_box_after', array( $this, 'components_metabox' ) );
+		add_action( 'civicrm_event_organiser_event_meta_box_after', [ $this, 'components_metabox' ] );
 
 		// Save our event components on event components save.
-		add_action( 'civicrm_event_organiser_event_components_updated', array( $this, 'components_update' ) );
+		add_action( 'civicrm_event_organiser_event_components_updated', [ $this, 'components_update' ] );
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Add our settings to the settings table.
@@ -106,14 +107,14 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$roles = $this->role_select_get();
 
 		// Bail if there aren't any.
-		if ( empty( $roles ) ) return;
+		if ( empty( $roles ) ) {
+			return;
+		}
 
 		// Include template file.
-		include( CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-leader/setting-admin.php' );
+		include CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-leader/setting-admin.php';
 
 	}
-
-
 
 	/**
 	 * Update our settings when the settings are updated.
@@ -136,8 +137,6 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-
-
 	/**
 	 * Add our components to the event metabox.
 	 *
@@ -151,14 +150,14 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$roles = $this->role_select_get( $event );
 
 		// Bail if there aren't any.
-		if ( empty( $roles ) ) return;
+		if ( empty( $roles ) ) {
+			return;
+		}
 
 		// Include template file.
-		include( CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-leader/setting-metabox.php' );
+		include CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/event-leader/setting-metabox.php';
 
 	}
-
-
 
 	/**
 	 * Update our components when the components are updated.
@@ -174,11 +173,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Check if the current user was the leader of an event.
@@ -194,13 +189,17 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$is_leader = false;
 
 		// Not if they're not logged in.
-		if ( ! is_user_logged_in() ) return $is_leader;
+		if ( ! is_user_logged_in() ) {
+			return $is_leader;
+		}
 
 		// Get current user.
 		$current_user = wp_get_current_user();
 
 		// Not if there's no CiviCRM.
-		if ( ! civi_wp()->initialize() ) return $is_leader;
+		if ( ! civi_wp()->initialize() ) {
+			return $is_leader;
+		}
 
 		// Get user matching file.
 		require_once 'CRM/Core/BAO/UFMatch.php';
@@ -209,30 +208,32 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$contact_id = CRM_Core_BAO_UFMatch::getContactId( $current_user->ID );
 
 		// Not if there's no matching contact.
-		if ( is_null( $contact_id ) ) return $is_leader;
+		if ( is_null( $contact_id ) ) {
+			return $is_leader;
+		}
 
 		// Get participant role for this user.
-		$params = array(
+		$params = [
 			'version' => 3,
 			'contact_id' => $contact_id,
 			'event_id' => $civi_event_id,
-		);
+		];
 
 		// Query via API.
 		$result = civicrm_api( 'participant', 'get', $params );
 
 		// Log failures and bail.
-		if ( isset( $result['is_error'] ) AND $result['is_error'] == '1' ) {
+		if ( isset( $result['is_error'] ) && $result['is_error'] == '1' ) {
 
 			// Log error.
-			$e = new Exception;
+			$e = new Exception();
 			$trace = $e->getTraceAsString();
-			error_log( print_r( array(
+			error_log( print_r( [
 				'method' => __METHOD__,
 				'message' => $result['error_message'],
 				'civi_event_id' => $civi_event_id,
 				'backtrace' => $trace,
-			), true ) );
+			], true ) );
 
 			// Return false.
 			return $is_leader;
@@ -241,8 +242,8 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 		// Sanity check.
 		if (
-			! isset( $result['values'] ) OR
-			! is_array( $result['values'] ) OR
+			! isset( $result['values'] ) ||
+			! is_array( $result['values'] ) ||
 			count( $result['values'] ) == 0
 		) {
 
@@ -261,7 +262,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$leader_role = $this->role_default_get( $post );
 
 		// Loop through results.
-		foreach( $result['values'] AS $participant_id => $data ) {
+		foreach ( $result['values'] as $participant_id => $data ) {
 
 			// Get role from participant data.
 			$role = isset( $data['participant_role_id'] ) ? absint( $data['participant_role_id'] ) : 0;
@@ -281,11 +282,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Builds a form element for Event Leader Roles.
@@ -301,25 +298,27 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$html = '';
 
 		// Init CiviCRM or bail.
-		if ( ! civi_wp()->initialize() ) return $html;
+		if ( ! civi_wp()->initialize() ) {
+			return $html;
+		}
 
 		// First, get all participant_roles.
 		$all_roles = $this->plugin->civicrm_eo->civi->get_participant_roles();
 
 		// Did we get any?
-		if ( $all_roles['is_error'] == '0' AND count( $all_roles['values'] ) > 0 ) {
+		if ( $all_roles['is_error'] == '0' && count( $all_roles['values'] ) > 0 ) {
 
 			// Get the values array.
 			$roles = $all_roles['values'];
 
 			// Init options.
-			$options = array();
+			$options = [];
 
 			// Get existing role ID.
 			$existing_id = $this->role_default_get( $post );
 
 			// Loop.
-			foreach( $roles AS $key => $role ) {
+			foreach ( $roles as $key => $role ) {
 
 				// Get role.
 				$role_id = absint( $role['value'] );
@@ -347,8 +346,6 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-
-
 	/**
 	 * Get the existing Event Leader role for a post, but fall back to the default
 	 * as set on the admin screen. Fall back to false otherwise.
@@ -367,18 +364,18 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
 
 		// Override with default value if we get one.
-		if ( $default !== '' AND is_numeric( $default ) ) {
+		if ( $default !== '' && is_numeric( $default ) ) {
 			$existing_id = absint( $default );
 		}
 
 		// If we have a post.
-		if ( isset( $post ) AND is_object( $post ) ) {
+		if ( isset( $post ) && is_object( $post ) ) {
 
 			// Get stored value.
 			$stored_id = $this->role_event_get( $post->ID );
 
 			// Override with stored value if we get one.
-			if ( $stored_id !== '' AND is_numeric( $stored_id ) AND $stored_id > 0 ) {
+			if ( $stored_id !== '' && is_numeric( $stored_id ) && $stored_id > 0 ) {
 				$existing_id = absint( $stored_id );
 			}
 
@@ -389,11 +386,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Update event leader role value.
@@ -405,17 +398,17 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	public function role_event_update( $event_id ) {
 
 		// Kick out if not set.
-		if ( ! isset( $_POST[$this->option_name] ) ) return;
+		if ( ! isset( $_POST[ $this->option_name ] ) ) {
+			return;
+		}
 
 		// Retrieve meta value.
-		$value = absint( $_POST[$this->option_name] );
+		$value = absint( $_POST[ $this->option_name ] );
 
 		// Update event meta.
 		$this->role_event_set( $event_id, $value );
 
 	}
-
-
 
 	/**
 	 * Update event leader role value.
@@ -434,18 +427,16 @@ class CiviCRM_EO_Attendance_Event_Leader {
 			$default = $this->plugin->db->option_get( $this->option_name );
 
 			// Override with default value if we get one.
-			if ( $default !== '' AND is_numeric( $default ) ) {
+			if ( $default !== '' && is_numeric( $default ) ) {
 				$value = absint( $default );
 			}
 
 		}
 
 		// Update event meta.
-		update_post_meta( $event_id,  $this->meta_name, $value );
+		update_post_meta( $event_id, $this->meta_name, $value );
 
 	}
-
-
 
 	/**
 	 * Get event leader role value.
@@ -461,14 +452,14 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$civi_role = get_post_meta( $post_id, $this->meta_name, true );
 
 		// If it's not yet set it will be an empty string, so cast as number.
-		if ( $civi_role === '' ) { $civi_role = 0; }
+		if ( $civi_role === '' ) {
+			$civi_role = 0;
+		}
 
 		// --<
 		return absint( $civi_role );
 
 	}
-
-
 
 	/**
 	 * Delete event leader role value for a CiviEvent.
@@ -484,9 +475,4 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-
-
-} // Class ends.
-
-
-
+}

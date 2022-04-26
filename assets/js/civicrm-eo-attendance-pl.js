@@ -16,8 +16,6 @@
  */
 var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 
-
-
 /**
  * Pass the jQuery shortcut in.
  *
@@ -300,8 +298,6 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 
 } )( jQuery );
 
-
-
 /**
  * Trigger dom_ready methods where necessary.
  *
@@ -313,6 +309,3 @@ jQuery(document).ready(function($) {
 	CiviCRM_EO_Attendance_PL.list.dom_ready();
 
 }); // End document.ready()
-
-
-

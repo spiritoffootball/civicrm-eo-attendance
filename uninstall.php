@@ -1,22 +1,15 @@
-<?php /*
-================================================================================
-CiviCRM Event Organiser Attendance Uninstaller
-================================================================================
-AUTHOR: Christian Wach <needle@haystack.co.uk>
---------------------------------------------------------------------------------
-NOTES
-=====
-
-
---------------------------------------------------------------------------------
-*/
-
-
+<?php
+/**
+ * Uninstaller.
+ *
+ * @since 0.1
+ * @package CiviCRM_Event_Organiser_Attendance
+ */
 
 // Kick out if uninstall not called from WordPress.
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit();
-
-
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+	exit();
+}
 
 // Access plugin.
 global $civicrm_wp_event_organiser;
@@ -37,8 +30,6 @@ $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_default_listin
 // Delete Rendez Vous term ID option.
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_rv_term_id' );
 
-
-
 /**
  * This procedure leaves the CiviCRM custom fields intact.
  *
@@ -53,6 +44,3 @@ $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_rv_term_id' );
  *
  * Hmm.
  */
-
-
-

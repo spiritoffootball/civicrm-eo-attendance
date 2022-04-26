@@ -1,12 +1,10 @@
 /**
- * CiviCRM Event Organiser Attendance Stylesheet.
+ * Stylesheet.
  *
  * Implements styles on EO Event pages.
  *
  * @package CiviCRM_Event_Organiser_Attendance
  */
-
-
 
 /* List styles */
 span.civicrm-eo-custom-data-event,
@@ -245,4 +243,3 @@ body.rendez-vous #rendez-vous-attendees-prefs tr th:first-child
 	background: #eee;
 	line-height: 3;
 }
-

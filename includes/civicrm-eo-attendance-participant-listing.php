@@ -1,7 +1,18 @@
 <?php
+/**
+ * Participant Listing Class.
+ *
+ * Handles Participant Listing functionality.
+ *
+ * @since 0.1
+ * @package CiviCRM_Event_Organiser_Attendance
+ */
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
 /**
- * CiviCRM Event Organiser Attendance Participant Listing Class.
+ * Participant Listing Class.
  *
  * A class that encapsulates Participant Listing functionality.
  *
@@ -36,8 +47,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 */
 	public $meta_name = '_civi_participant_listing_profile';
 
-
-
 	/**
 	 * Initialises this object.
 	 *
@@ -49,8 +58,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$this->register_hooks();
 
 	}
-
-
 
 	/**
 	 * Set references to other objects.
@@ -66,8 +73,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	/**
 	 * Register hooks on plugin init.
 	 *
@@ -76,36 +81,32 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	public function register_hooks() {
 
 		// Apply changes to CiviEvent when an EO event is synced to CiviCRM.
-		add_filter( 'civicrm_event_organiser_prepared_civi_event', array( $this, 'prepare_civi_event' ), 10, 2 );
+		add_filter( 'civicrm_event_organiser_prepared_civi_event', [ $this, 'prepare_civi_event' ], 10, 2 );
 
 		// Post-process an EO event when a CiviEvent is synced to WordPress.
-		add_action( 'civicrm_event_organiser_eo_event_updated', array( $this, 'process_eo_event' ), 10, 2 );
+		add_action( 'civicrm_event_organiser_eo_event_updated', [ $this, 'process_eo_event' ], 10, 2 );
 
 		// Add our settings to the settings table.
-		add_action( 'civicrm_event_organiser_settings_table_last_row', array( $this, 'settings_table' ) );
+		add_action( 'civicrm_event_organiser_settings_table_last_row', [ $this, 'settings_table' ] );
 
 		// Save our settings on plugin settings save.
-		add_action( 'civicrm_event_organiser_settings_updated', array( $this, 'settings_update' ) );
+		add_action( 'civicrm_event_organiser_settings_updated', [ $this, 'settings_update' ] );
 
 		// Add our components to the event metabox.
-		add_action( 'civicrm_event_organiser_event_meta_box_after', array( $this, 'components_metabox' ) );
+		add_action( 'civicrm_event_organiser_event_meta_box_after', [ $this, 'components_metabox' ] );
 
 		// Save our event components on event components save.
-		add_action( 'civicrm_event_organiser_event_components_updated', array( $this, 'components_update' ) );
+		add_action( 'civicrm_event_organiser_event_components_updated', [ $this, 'components_update' ] );
 
 		// Show links in EO event template.
-		add_action( 'eventorganiser_additional_event_meta', array( $this, 'list_render' ), 9 );
+		add_action( 'eventorganiser_additional_event_meta', [ $this, 'list_render' ], 9 );
 
 		// Add AJAX handler.
-		add_action( 'wp_ajax_participants_list_get', array( $this, 'participants_list_get' ) );
+		add_action( 'wp_ajax_participants_list_get', [ $this, 'participants_list_get' ] );
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Update a CiviEvent when an EO event is synced to CiviCRM.
@@ -122,7 +123,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$existing_id = $this->get_default_value( $post );
 
 		// Did we get one?
-		if ( $existing_id !== false AND is_numeric( $existing_id ) AND $existing_id != 0 ) {
+		if ( $existing_id !== false && is_numeric( $existing_id ) && $existing_id != 0 ) {
 
 			// Add to our params.
 			$civi_event['participant_listing_id'] = $existing_id;
@@ -133,8 +134,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		return $civi_event;
 
 	}
-
-
 
 	/**
 	 * Update an EO event when a CiviEvent is synced to WordPress.
@@ -148,8 +147,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 		// If the event has a participant listing profile specified.
 		if (
-			isset( $civi_event['participant_listing_id'] ) AND
-			! empty( $civi_event['participant_listing_id'] ) AND
+			! empty( $civi_event['participant_listing_id'] ) &&
 			is_numeric( $civi_event['participant_listing_id'] )
 		) {
 
@@ -165,11 +163,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Add our settings to the settings table.
@@ -182,14 +176,14 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$profiles = $this->get_select();
 
 		// Bail if there aren't any.
-		if ( empty( $profiles ) ) return;
+		if ( empty( $profiles ) ) {
+			return;
+		}
 
 		// Include template file.
-		include( CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/participant-listing/setting-admin.php' );
+		include CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/participant-listing/setting-admin.php';
 
 	}
-
-
 
 	/**
 	 * Update our settings when the settings are updated.
@@ -212,8 +206,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	/**
 	 * Add our components to the event metabox.
 	 *
@@ -227,14 +219,14 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$profiles = $this->get_select( $event );
 
 		// Bail if there aren't any.
-		if ( empty( $profiles ) ) return;
+		if ( empty( $profiles ) ) {
+			return;
+		}
 
 		// Include template file.
-		include( CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/participant-listing/setting-metabox.php' );
+		include CIVICRM_EO_ATTENDANCE_PATH . 'assets/templates/participant-listing/setting-metabox.php';
 
 	}
-
-
 
 	/**
 	 * Update our components when the components are updated.
@@ -250,11 +242,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Get all CiviEvent participant listing profiles.
@@ -266,22 +254,26 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	public function get_profiles() {
 
 		// Bail if we fail to init CiviCRM.
-		if ( ! $this->plugin->civicrm_eo->civi->is_active() ) return false;
+		if ( ! $this->plugin->civicrm_eo->civi->is_active() ) {
+			return false;
+		}
 
 		// Get option group ID.
 		$opt_group_id = $this->get_optgroup_id();
 
 		// Error check.
-		if ( $opt_group_id === false ) return false;
+		if ( $opt_group_id === false ) {
+			return false;
+		}
 
 		// Define params to get items sorted by weight.
-		$params = array(
+		$params = [
 			'option_group_id' => $opt_group_id,
 			'version' => 3,
-			'options' => array(
+			'options' => [
 				'sort' => 'weight ASC',
-			),
-		);
+			],
+		];
 
 		// Get them (descriptions will be present if not null).
 		$profiles = civicrm_api( 'option_value', 'get', $params );
@@ -290,15 +282,15 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		if ( $profiles['is_error'] == '1' ) {
 
 			// Log and bail.
-			$e = new Exception;
+			$e = new Exception();
 			$trace = $e->getTraceAsString();
-			error_log( print_r( array(
+			error_log( print_r( [
 				'method' => __METHOD__,
 				'message' => $profiles['error_message'],
 				'params' => $params,
 				'profiles' => $profiles,
 				'backtrace' => $trace,
-			), true ) );
+			], true ) );
 
 			// --<
 			return false;
@@ -309,8 +301,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		return $profiles;
 
 	}
-
-
 
 	/**
 	 * Get all CiviEvent participant listing profiles formatted as a dropdown list.
@@ -329,15 +319,17 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$html = '';
 
 		// Init CiviCRM or die.
-		if ( ! $this->plugin->civicrm_eo->civi->is_active() ) return $html;
+		if ( ! $this->plugin->civicrm_eo->civi->is_active() ) {
+			return $html;
+		}
 
 		// Get all participant listing profiles.
 		$result = $this->get_profiles();
 
 		// Did we get any?
 		if (
-			$result !== false AND
-			$result['is_error'] == '0' AND
+			$result !== false &&
+			$result['is_error'] == '0' &&
 			count( $result['values'] ) > 0
 		) {
 
@@ -345,19 +337,19 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			$profiles = $result['values'];
 
 			// Prepend a "disabled" item.
-			array_unshift( $profiles, array(
+			array_unshift( $profiles, [
 				'value' => 0,
 				'label' => __( 'Disabled', 'civicrm-eo-attendance' ),
-			) );
+			] );
 
 			// Init options.
-			$options = array();
+			$options = [];
 
 			// Get existing profile value for the post (if defined).
 			$existing_value = $this->get_default_value( $post );
 
 			// Loop.
-			foreach( $profiles AS $key => $profile ) {
+			foreach ( $profiles as $key => $profile ) {
 
 				// Get profile value.
 				$value = absint( $profile['value'] );
@@ -385,8 +377,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	/**
 	 * Get the default participant listing profile value for a post.
 	 *
@@ -407,7 +397,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
 
 		// Did we get one?
-		if ( $default !== '' AND is_numeric( $default ) ) {
+		if ( $default !== '' && is_numeric( $default ) ) {
 
 			// Override with default value.
 			$existing_value = absint( $default );
@@ -415,13 +405,13 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		}
 
 		// If we have a post.
-		if ( isset( $post ) AND is_object( $post ) ) {
+		if ( isset( $post ) && is_object( $post ) ) {
 
 			// Get stored value.
 			$stored_id = $this->profile_get( $post->ID );
 
 			// Did we get one?
-			if ( $stored_id !== '' AND is_numeric( $stored_id ) AND $stored_id > 0 ) {
+			if ( $stored_id !== '' && is_numeric( $stored_id ) && $stored_id > 0 ) {
 
 				// Override with stored value.
 				$existing_value = absint( $stored_id );
@@ -435,8 +425,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	/**
 	 * Get a CiviEvent participant listing profile by ID.
 	 *
@@ -448,20 +436,24 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	public function get_by_id( $profile_id ) {
 
 		// Bail if we fail to init CiviCRM.
-		if ( ! $this->plugin->civicrm_eo->civi->is_active() ) return false;
+		if ( ! $this->plugin->civicrm_eo->civi->is_active() ) {
+			return false;
+		}
 
 		// Get option group ID.
 		$opt_group_id = $this->get_optgroup_id();
 
 		// Error check.
-		if ( $opt_group_id === false ) return false;
+		if ( $opt_group_id === false ) {
+			return false;
+		}
 
 		// Define params to get item.
-		$params = array(
+		$params = [
 			'version' => 3,
 			'option_group_id' => $opt_group_id,
 			'id' => $profile_id,
-		);
+		];
 
 		// Get them (descriptions will be present if not null).
 		$profile = civicrm_api( 'option_value', 'getsingle', $params );
@@ -470,8 +462,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		return $profile;
 
 	}
-
-
 
 	/**
 	 * Get a CiviEvent participant listing profile by "value" pseudo-ID.
@@ -484,20 +474,24 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	public function get_by_value( $value ) {
 
 		// Bail if we fail to init CiviCRM.
-		if ( ! $this->plugin->civicrm_eo->civi->is_active() ) return false;
+		if ( ! $this->plugin->civicrm_eo->civi->is_active() ) {
+			return false;
+		}
 
 		// Get option group ID.
 		$opt_group_id = $this->get_optgroup_id();
 
 		// Error check.
-		if ( $opt_group_id === false ) return false;
+		if ( $opt_group_id === false ) {
+			return false;
+		}
 
 		// Define params to get item.
-		$params = array(
+		$params = [
 			'version' => 3,
 			'option_group_id' => $opt_group_id,
 			'value' => $value,
-		);
+		];
 
 		// Get them (descriptions will be present if not null).
 		$profile = civicrm_api( 'option_value', 'getsingle', $params );
@@ -506,8 +500,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		return $profile;
 
 	}
-
-
 
 	/**
 	 * Get the CiviEvent participant_listing option group ID.
@@ -538,16 +530,16 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			}
 
 			// Define params to get participant listing profile option group.
-			$params = array(
+			$params = [
 				'version' => 3,
 				'name' => 'participant_listing',
-			);
+			];
 
 			// Get it via API.
 			$opt_group = civicrm_api( 'option_group', 'getsingle', $params );
 
 			// Error check.
-			if ( isset( $opt_group['id'] ) AND is_numeric( $opt_group['id'] ) AND $opt_group['id'] > 0 ) {
+			if ( isset( $opt_group['id'] ) && is_numeric( $opt_group['id'] ) && $opt_group['id'] > 0 ) {
 
 				// Set flag to found ID for future reference.
 				$optgroup_id = $opt_group['id'];
@@ -564,11 +556,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Update participant listing profile value for an event.
@@ -580,17 +568,17 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	public function profile_update( $event_id ) {
 
 		// Kick out if not set.
-		if ( ! isset( $_POST['civicrm_eo_event_listing'] ) ) return;
+		if ( ! isset( $_POST['civicrm_eo_event_listing'] ) ) {
+			return;
+		}
 
 		// Retrieve meta value.
 		$profile_id = absint( $_POST['civicrm_eo_event_listing'] );
 
 		// Update event meta.
-		update_post_meta( $event_id,  $this->meta_name, $profile_id );
+		update_post_meta( $event_id, $this->meta_name, $profile_id );
 
 	}
-
-
 
 	/**
 	 * Update participant listing profile value for an event.
@@ -609,7 +597,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
 
 			// Did we get one?
-			if ( $default !== '' AND is_numeric( $default ) ) {
+			if ( $default !== '' && is_numeric( $default ) ) {
 
 				// Override with default value.
 				$profile_id = absint( $default );
@@ -619,11 +607,9 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		}
 
 		// Update event meta.
-		update_post_meta( $event_id,  $this->meta_name, $profile_id );
+		update_post_meta( $event_id, $this->meta_name, $profile_id );
 
 	}
-
-
 
 	/**
 	 * Get participant listing profile value for an event.
@@ -639,14 +625,14 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$profile_id = get_post_meta( $post_id, $this->meta_name, true );
 
 		// If it's not yet set it will be an empty string, so cast as number.
-		if ( $profile_id === '' ) { $profile_id = 0; }
+		if ( $profile_id === '' ) {
+			$profile_id = 0;
+		}
 
 		// --<
 		return absint( $profile_id );
 
 	}
-
-
 
 	/**
 	 * Delete participant listing profile value for an event.
@@ -662,11 +648,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Add a list of Participant links for an event to the EO event meta list.
@@ -762,8 +744,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	/**
 	 * Add our Javascript to the EO event meta list.
 	 *
@@ -775,24 +755,24 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		wp_enqueue_script(
 			'civicrm-eo-attendance-pl',
 			CIVICRM_EO_ATTENDANCE_URL . 'assets/js/civicrm-eo-attendance-pl.js',
-			array( 'jquery' ),
+			[ 'jquery' ],
 			CIVICRM_EO_ATTENDANCE_VERSION,
 			true // In footer.
 		);
 
 		// Translations.
-		$localisation = array();
+		$localisation = [];
 
 		// Define settings.
-		$settings = array(
+		$settings = [
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
-		);
+		];
 
 		// Localisation array.
-		$vars = array(
+		$vars = [
 			'localisation' => $localisation,
 			'settings' => $settings,
-		);
+		];
 
 		// Localise the WordPress way.
 		wp_localize_script(
@@ -802,8 +782,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		);
 
 	}
-
-
 
 	/**
 	 * Get the Participant Listing page links for an EO Event.
@@ -816,34 +794,42 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	public function list_populate( $post_id = null ) {
 
 		// Init return.
-		$links = array();
+		$links = [];
 
 		// Bail if no CiviCRM init function.
-		if ( ! function_exists( 'civi_wp' ) ) return $links;
+		if ( ! function_exists( 'civi_wp' ) ) {
+			return $links;
+		}
 
 		// Try and init CiviCRM.
-		if ( ! civi_wp()->initialize() ) return $links;
+		if ( ! civi_wp()->initialize() ) {
+			return $links;
+		}
 
 		// Need the post ID.
 		$post_id = absint( empty( $post_id ) ? get_the_ID() : $post_id );
 
 		// Bail if not present.
-		if( empty( $post_id ) ) return $links;
+		if ( empty( $post_id ) ) {
+			return $links;
+		}
 
 		// Get CiviEvents.
 		$civi_events = $this->plugin->civicrm_eo->db->get_civi_event_ids_by_eo_event_id( $post_id );
 
 		// Sanity check.
-		if ( empty( $civi_events ) ) return $links;
+		if ( empty( $civi_events ) ) {
+			return $links;
+		}
 
 		// Did we get more than one?
 		$multiple = ( count( $civi_events ) > 1 ) ? true : false;
 
 		// Escalate permissions to view participants.
-		add_action( 'civicrm_permission_check', array( $this, 'permissions_escalate' ), 10, 2 );
+		add_action( 'civicrm_permission_check', [ $this, 'permissions_escalate' ], 10, 2 );
 
 		// Loop through them.
-		foreach( $civi_events AS $civi_event_id ) {
+		foreach ( $civi_events as $civi_event_id ) {
 
 			// Get the full CiviEvent.
 			$civi_event = $this->plugin->civicrm_eo->civi->get_event_by_id( $civi_event_id );
@@ -866,16 +852,20 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			 * @param bool $past_event True if the event is past, false otherwise.
 			 * @return bool $past_event True if the event is past, false otherwise.
 			 */
-			$skip_past_events = apply_filters(  'civicrm_event_organiser_participant_list_past', $past_event );
+			$skip_past_events = apply_filters( 'civicrm_event_organiser_participant_list_past', $past_event );
 
 			// Maybe skip past events.
-			if ( $skip_past_events ) continue;
+			if ( $skip_past_events ) {
+				continue;
+			}
 
 			// Get link for the participants page.
 			$url = $this->page_link_get( $civi_event );
 
 			// Skip to next if empty.
-			if ( empty( $url ) ) continue;
+			if ( empty( $url ) ) {
+				continue;
+			}
 
 			/**
 			 * Filter participant URL.
@@ -925,14 +915,12 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		}
 
 		// Remove permission to view participants.
-		remove_action( 'civicrm_permission_check', array( $this, 'permissions_escalate' ), 10 );
+		remove_action( 'civicrm_permission_check', [ $this, 'permissions_escalate' ], 10 );
 
 		// --<
 		return $links;
 
 	}
-
-
 
 	/**
 	 * Get a CiviEvent's Participants link.
@@ -954,21 +942,23 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 		// If this event has participant listings enabled.
 		if (
-			isset( $civi_event['participant_listing_id'] ) AND
-			is_numeric( $civi_event['participant_listing_id'] ) AND
+			isset( $civi_event['participant_listing_id'] ) &&
+			is_numeric( $civi_event['participant_listing_id'] ) &&
 			absint( $civi_event['participant_listing_id'] ) > 0
 		) {
 
 			// Init CiviCRM or bail.
-			if ( ! $this->plugin->civicrm_eo->civi->is_active() ) return $link;
+			if ( ! $this->plugin->civicrm_eo->civi->is_active() ) {
+				return $link;
+			}
 
 			// Use CiviCRM to construct link.
 			$link = CRM_Utils_System::url(
 				'civicrm/event/participant', 'reset=1&id=' . $civi_event['id'],
-				TRUE,
-				NULL,
-				FALSE,
-				TRUE
+				true,
+				null,
+				false,
+				true
 			);
 
 		}
@@ -978,11 +968,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	//##########################################################################
-
-
 
 	/**
 	 * Get a CiviEvent's Participants.
@@ -995,47 +981,51 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	public function participants_get( $civi_event_id ) {
 
 		// Bail if no CiviCRM init function.
-		if ( ! function_exists( 'civi_wp' ) ) return array();
+		if ( ! function_exists( 'civi_wp' ) ) {
+			return [];
+		}
 
 		// Try and init CiviCRM.
-		if ( ! civi_wp()->initialize() ) return array();
+		if ( ! civi_wp()->initialize() ) {
+			return [];
+		}
 
 		// Define query params.
-		$params = array(
+		$params = [
 			'version' => 3,
 			'event_id' => $civi_event_id,
-		);
+		];
 
 		// Query via API.
 		$result = civicrm_api( 'participant', 'get', $params );
 
 		// Log failures and bail.
-		if ( isset( $result['is_error'] ) AND $result['is_error'] == '1' ) {
+		if ( isset( $result['is_error'] ) && $result['is_error'] == '1' ) {
 
 			// Log error.
-			$e = new Exception;
+			$e = new Exception();
 			$trace = $e->getTraceAsString();
-			error_log( print_r( array(
+			error_log( print_r( [
 				'method' => __METHOD__,
 				'message' => $result['error_message'],
 				'civi_event_id' => $civi_event_id,
 				'backtrace' => $trace,
-			), true ) );
+			], true ) );
 
 			// Return empty array.
-			return array();
+			return [];
 
 		}
 
 		// Return empty array if not set for some reason.
-		if ( ! isset( $result['values'] ) ) return array();
+		if ( ! isset( $result['values'] ) ) {
+			return [];
+		}
 
 		// --<
 		return $result['values'];
 
 	}
-
-
 
 	/**
 	 * Get a list of Participants for an event.
@@ -1051,35 +1041,35 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$civi_event_id = absint( trim( $civi_event_id ) );
 
 		// Init data.
-		$data = array(
+		$data = [
 			'count' => 0,
 			'civi_event_id' => $civi_event_id,
 			'markup' => '',
-		);
+		];
 
 		// Check we got something.
 		if ( ! empty( $civi_event_id ) ) {
 
 			// Init contact IDs.
-			$contact_ids = array();
+			$contact_ids = [];
 
 			// Escalate permissions to view participants.
-			add_action( 'civicrm_permission_check', array( $this, 'permissions_escalate' ), 10, 2 );
+			add_action( 'civicrm_permission_check', [ $this, 'permissions_escalate' ], 10, 2 );
 
 			// Get participants array.
 			$participants = $this->participants_get( $civi_event_id );
 
 			// Remove permission to view participants.
-			remove_action( 'civicrm_permission_check', array( $this, 'permissions_escalate' ), 10 );
+			remove_action( 'civicrm_permission_check', [ $this, 'permissions_escalate' ], 10 );
 
 			// Show them if we have any.
 			if ( ! empty( $participants ) ) {
 
 				// Init arrays.
-				$names = array();
+				$names = [];
 
 				// Grab all participant names and contact IDs.
-				foreach( $participants AS $participant ) {
+				foreach ( $participants as $participant ) {
 					$names[] = $participant['display_name'];
 					$contact_ids[] = $participant['contact_id'];
 				}
@@ -1090,7 +1080,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			} else {
 
 				// Init names.
-				$names = array( __( 'No participants for this event', 'civicrm-eo-attendance' ) );
+				$names = [ __( 'No participants for this event', 'civicrm-eo-attendance' ) ];
 
 			}
 
@@ -1111,19 +1101,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 				// Do not show link if user is already registered.
 				$show_link = in_array( $contact_id, $contact_ids ) ? false : true;
-
-				/*
-				$e = new Exception;
-				$trace = $e->getTraceAsString();
-				error_log( print_r( array(
-					'method' => __METHOD__,
-					'participants' => $participants,
-					'civi_event' => $civi_event,
-					'contact_ids' => $contact_ids,
-					'contact_id' => $contact_id,
-					'backtrace' => $trace,
-				), true ) );
-				*/
 
 				/**
 				 * Override the decision to show the registration link.
@@ -1197,8 +1174,6 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-
-
 	/**
 	 * Send JSON data to the browser.
 	 *
@@ -1209,24 +1184,22 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	private function send_data( $data ) {
 
 		// Is this an AJAX request?
-		if ( defined( 'DOING_AJAX' ) AND DOING_AJAX ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 
 			// Set reasonable headers.
-			header('Content-type: text/plain');
-			header("Cache-Control: no-cache");
-			header("Expires: -1");
+			header( 'Content-type: text/plain' );
+			header( 'Cache-Control: no-cache' );
+			header( 'Expires: -1' );
 
 			// Echo.
 			echo json_encode( $data );
 
-			// Die
+			// Die.
 			exit();
 
 		}
 
 	}
-
-
 
 	/**
 	 * Grant the permissions necessary for participant listing functionality.
@@ -1240,9 +1213,9 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 		// Allow the relevant ones.
 		if (
-			$permission == 'access CiviCRM' OR
-			$permission == 'access CiviEvent' OR
-			$permission == 'view event info' OR
+			$permission == 'access CiviCRM' ||
+			$permission == 'access CiviEvent' ||
+			$permission == 'view event info' ||
 			$permission == 'view event participants'
 		) {
 			$granted = 1;
@@ -1250,7 +1223,4 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-} // Class ends.
-
-
-
+}

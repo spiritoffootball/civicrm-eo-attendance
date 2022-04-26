@@ -1,17 +1,19 @@
-<?php /*
---------------------------------------------------------------------------------
-Plugin Name: CiviCRM Event Organiser Attendance
-Description: Attendance functionality for CiviCRM Event Organiser plugin.
-Version: 0.5.3
-Author: Christian Wach
-Author URI: http://haystack.co.uk
-Plugin URI: https://github.com/christianwach/civicrm-eo-attendance
-Text Domain: civicrm-eo-attendance
-Domain Path: /languages
---------------------------------------------------------------------------------
-*/
+<?php
+/**
+ * Plugin Name: CiviCRM Event Organiser Attendance
+ * Description: Attendance functionality for CiviCRM Event Organiser plugin.
+ * Version: 0.5.3
+ * Author: Christian Wach
+ * Author URI: http://haystack.co.uk
+ * Plugin URI: https://github.com/christianwach/civicrm-eo-attendance
+ * Text Domain: civicrm-eo-attendance
+ * Domain Path: /languages
+ *
+ * @package CiviCRM_Event_Organiser_Attendance
+ */
 
-
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
 
 // Set our version here.
 define( 'CIVICRM_EO_ATTENDANCE_VERSION', '0.5.3' );
@@ -30,8 +32,6 @@ if ( ! defined( 'CIVICRM_EO_ATTENDANCE_URL' ) ) {
 if ( ! defined( 'CIVICRM_EO_ATTENDANCE_PATH' ) ) {
 	define( 'CIVICRM_EO_ATTENDANCE_PATH', plugin_dir_path( CIVICRM_EO_ATTENDANCE_FILE ) );
 }
-
-
 
 /**
  * CiviCRM Event Organiser Attendance Class.
@@ -114,8 +114,6 @@ class CiviCRM_Event_Organiser_Attendance {
 	 */
 	public $rendez_vous;
 
-
-
 	/**
 	 * Initialises this object.
 	 *
@@ -127,14 +125,12 @@ class CiviCRM_Event_Organiser_Attendance {
 		$this->initialise();
 
 		// Translation.
-		add_action( 'plugins_loaded', array( $this, 'enable_translation' ) );
+		add_action( 'plugins_loaded', [ $this, 'enable_translation' ] );
 
 		// External references.
-		add_action( 'plugins_loaded', array( $this, 'setup_objects' ), 20 );
+		add_action( 'plugins_loaded', [ $this, 'setup_objects' ], 20 );
 
 	}
-
-
 
 	/**
 	 * Do stuff on plugin activation.
@@ -153,8 +149,6 @@ class CiviCRM_Event_Organiser_Attendance {
 
 	}
 
-
-
 	/**
 	 * Do stuff on plugin deactivation.
 	 *
@@ -166,8 +160,6 @@ class CiviCRM_Event_Organiser_Attendance {
 		$this->rendez_vous->deactivate();
 
 	}
-
-
 
 	/**
 	 * Do stuff on plugin init.
@@ -184,8 +176,6 @@ class CiviCRM_Event_Organiser_Attendance {
 
 	}
 
-
-
 	/**
 	 * Include files.
 	 *
@@ -194,29 +184,27 @@ class CiviCRM_Event_Organiser_Attendance {
 	public function include_files() {
 
 		// Load our Participant Listing class.
-		require( CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-participant-listing.php' );
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-participant-listing.php';
 
 		// Load our Event Leader class.
-		require( CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-leader.php' );
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-leader.php';
 
 		// Load our Event Paid class.
-		require( CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-paid.php' );
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-paid.php';
 
 		// Load our Participant Custom Data class.
-		require( CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-custom-data-participant.php' );
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-custom-data-participant.php';
 
 		// Load our Event Custom Data class.
-		require( CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-custom-data-event.php' );
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-custom-data-event.php';
 
 		// Load our Event Sharing class.
-		require( CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-sharing.php' );
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-sharing.php';
 
 		// Load our Rendez Vous class.
-		require( CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-rendez-vous.php' );
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-rendez-vous.php';
 
 	}
-
-
 
 	/**
 	 * Register hooks.
@@ -225,24 +213,24 @@ class CiviCRM_Event_Organiser_Attendance {
 	 */
 	public function register_hooks() {
 
+		/*
 		// Test for basepage CiviEvent info requests so we can redirect to the
-		// Relevant Event Organiser post
-		//add_action( 'civicrm_initialized', array( $this, 'maybe_redirect_to_eo' ) );
+		// relevant Event Organiser post.
+		add_action( 'civicrm_initialized', array( $this, 'maybe_redirect_to_eo' ) );
+		*/
 
 		// Front end hooks.
 		if ( ! is_admin() ) {
 
 			// Change urls on front end.
-			add_action( 'civicrm_alterContent', array( $this, 'content_parse' ), 10, 4 );
+			add_action( 'civicrm_alterContent', [ $this, 'content_parse' ], 10, 4 );
 
 			// Register any public styles.
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 20 );
+			add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_styles' ], 20 );
 
 		}
 
 	}
-
-
 
 	/**
 	 * Set up this plugin's objects.
@@ -252,25 +240,29 @@ class CiviCRM_Event_Organiser_Attendance {
 	public function setup_objects() {
 
 		// Bail if CiviCRM Event Organiser plugin is not persent.
-		if ( ! function_exists( 'civicrm_eo' ) ) return;
+		if ( ! function_exists( 'civicrm_eo' ) ) {
+			return;
+		}
 
 		// Init flag.
 		static $done;
 
 		// Only do this once.
-		if ( isset( $done ) AND $done === true ) return;
+		if ( isset( $done ) && $done === true ) {
+			return;
+		}
 
 		// Store reference to CiviCRM Event Organiser.
 		$this->civicrm_eo = civicrm_eo();
 
 		// Init objects.
-		$this->participant_listing = new CiviCRM_EO_Attendance_Participant_Listing;
-		$this->event_leader = new CiviCRM_EO_Attendance_Event_Leader;
-		$this->event_paid = new CiviCRM_EO_Attendance_Event_Paid;
-		$this->custom_data_participant = new CiviCRM_EO_Attendance_Custom_Data_Participant;
-		$this->custom_data_event = new CiviCRM_EO_Attendance_Custom_Data_Event;
-		$this->event_sharing = new CiviCRM_EO_Attendance_Event_Sharing;
-		$this->rendez_vous = new CiviCRM_EO_Attendance_Rendez_Vous;
+		$this->participant_listing = new CiviCRM_EO_Attendance_Participant_Listing();
+		$this->event_leader = new CiviCRM_EO_Attendance_Event_Leader();
+		$this->event_paid = new CiviCRM_EO_Attendance_Event_Paid();
+		$this->custom_data_participant = new CiviCRM_EO_Attendance_Custom_Data_Participant();
+		$this->custom_data_event = new CiviCRM_EO_Attendance_Custom_Data_Event();
+		$this->event_sharing = new CiviCRM_EO_Attendance_Event_Sharing();
+		$this->rendez_vous = new CiviCRM_EO_Attendance_Rendez_Vous();
 
 		// Store references.
 		$this->participant_listing->set_references( $this );
@@ -286,8 +278,6 @@ class CiviCRM_Event_Organiser_Attendance {
 
 	}
 
-
-
 	/**
 	 * Load translation files.
 	 *
@@ -299,6 +289,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	public function enable_translation() {
 
 		// Load translations.
+		// phpcs:ignore WordPress.WP.DeprecatedParameters.Load_plugin_textdomainParam2Found
 		load_plugin_textdomain(
 			'civicrm-eo-attendance', // Unique name.
 			false, // Deprecated argument.
@@ -306,8 +297,6 @@ class CiviCRM_Event_Organiser_Attendance {
 		);
 
 	}
-
-
 
 	/**
 	 * Add our front-end stylesheets.
@@ -327,23 +316,21 @@ class CiviCRM_Event_Organiser_Attendance {
 
 	}
 
-
-
 	/**
 	 * Alter generated page content for a CiviEvent.
 	 *
 	 * @since 0.3.4
 	 *
-	 * @param $content Previously generated content.
-	 * @param $context Context of content - page or form.
-	 * @param $tplName The file name of the tpl.
-	 * @param $object A reference to the page or form object.
+	 * @param str $content Previously generated content.
+	 * @param str $context Context of content - page or form.
+	 * @param str $tplName The file name of the tpl.
+	 * @param object $object A reference to the page or form object.
 	 */
-	public function content_parse( &$content, $context, $tplName, &$object ) {
+	public function content_parse( $content, $context, $tplName, $object ) {
 
 		// Bail if not one of the forms we want.
 		if (
-			$tplName != 'CRM/Event/Form/Registration/ThankYou.tpl' AND
+			$tplName != 'CRM/Event/Form/Registration/ThankYou.tpl' &&
 			$tplName != 'CRM/Event/Page/EventInfo.tpl'
 		) {
 			return;
@@ -353,7 +340,9 @@ class CiviCRM_Event_Organiser_Attendance {
 		if ( $tplName == 'CRM/Event/Form/Registration/ThankYou.tpl' ) {
 
 			// Do we have a CiviEvent ID?
-			if ( ! isset( $object->_values['event']['id'] ) ) return;
+			if ( ! isset( $object->_values['event']['id'] ) ) {
+				return;
+			}
 
 			// Get CiviEvent ID.
 			$civi_event_id = absint( $object->_values['event']['id'] );
@@ -364,37 +353,25 @@ class CiviCRM_Event_Organiser_Attendance {
 		if ( $tplName == 'CRM/Event/Page/EventInfo.tpl' ) {
 
 			// Do we have a CiviEvent ID?
-			if ( ! isset( $object->_id ) ) return;
+			if ( ! isset( $object->_id ) ) {
+				return;
+			}
 
 			// Get CiviEvent ID.
 			$civi_event_id = absint( $object->_id );
 
 		}
 
-		/*
-		$e = new Exception;
-		$trace = $e->getTraceAsString();
-		error_log( print_r( array(
-			'method' => __METHOD__,
-			//'content' => $content,
-			'context' => $context,
-			'tplName' => $tplName,
-			'civi_event_id' => $civi_event_id,
-			//'object' => $object,
-			'backtrace' => $trace,
-		), true ) );
-		*/
-
 		// Init links.
-		$links = array();
+		$links = [];
 
 		// Use CiviCRM to construct link.
 		$link = CRM_Utils_System::url(
 			'civicrm/event/info', 'reset=1&id=' . $civi_event_id,
-			TRUE,
-			NULL,
-			FALSE,
-			TRUE
+			true,
+			null,
+			false,
+			true
 		);
 
 		// Add this and its processed variant.
@@ -404,10 +381,10 @@ class CiviCRM_Event_Organiser_Attendance {
 		// Use CiviCRM to construct alternative link.
 		$link = CRM_Utils_System::url(
 			'civicrm/event/info', 'id=' . $civi_event_id . '&reset=1',
-			TRUE,
-			NULL,
-			FALSE,
-			TRUE
+			true,
+			null,
+			false,
+			true
 		);
 
 		// Add this and its processed variant.
@@ -418,7 +395,9 @@ class CiviCRM_Event_Organiser_Attendance {
 		$event_id = $this->civicrm_eo->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Bail if we didn't get one.
-		if ( $event_id === false ) return;
+		if ( $event_id === false ) {
+			return;
+		}
 
 		// Get target permalink.
 		$event_url = get_permalink( $event_id );
@@ -428,71 +407,69 @@ class CiviCRM_Event_Organiser_Attendance {
 
 	}
 
-
-
 	/**
 	 * Redirect to an Event Organiser post when viewing a CiviEvent info page.
 	 *
 	 * @since 0.3.4
-	 *
-	 * @param object $parent The parent object.
 	 */
 	public function maybe_redirect_to_eo() {
 
 		// Only fire once.
-		remove_action( 'civicrm_initialized', array( $this, 'maybe_redirect_to_eo' ) );
+		remove_action( 'civicrm_initialized', [ $this, 'maybe_redirect_to_eo' ] );
 
 		// Bail if no CiviCRM.
-		if ( ! function_exists( 'civi_wp' ) ) return;
+		if ( ! function_exists( 'civi_wp' ) ) {
+			return;
+		}
 
 		// Bail if not on CiviCRM's basepage.
-		if ( 'basepage' != civi_wp()->civicrm_context_get() ) return;
+		if ( 'basepage' != civi_wp()->civicrm_context_get() ) {
+			return;
+		}
 
 		// Get CiviCRM's arguments.
 		$args = civi_wp()->get_request_args();
 
 		// Bail if we don't have any.
-		if ( is_null( $args['argString'] ) ) return;
+		if ( is_null( $args['argString'] ) ) {
+			return;
+		}
 
 		// Init path.
-		$path = array();
+		$path = [];
 
 		// Check for event.
-		if ( isset( $args['args'][0] ) AND $args['args'][0] == 'civicrm' ) {
+		if ( isset( $args['args'][0] ) && $args['args'][0] == 'civicrm' ) {
 			$path[] = $args['args'][0];
 		}
 
 		// Check for event.
-		if ( isset( $args['args'][1] ) AND $args['args'][1] == 'event' ) {
+		if ( isset( $args['args'][1] ) && $args['args'][1] == 'event' ) {
 			$path[] = $args['args'][1];
 		}
 
 		// Check for info page.
-		if ( isset( $args['args'][2] ) AND $args['args'][2] == 'info' ) {
+		if ( isset( $args['args'][2] ) && $args['args'][2] == 'info' ) {
 			$path[] = $args['args'][2];
 		}
 
-		/*
-		$e = new Exception;
-		$trace = $e->getTraceAsString();
-		error_log( print_r( array(
-			'method' => __METHOD__,
-			'args' => $args,
-			'path' => $path,
-			'implode' => implode( '/', $path ),
-			'backtrace' => $trace,
-		), true ) );
-		*/
-
 		// Bail if not on a CiviEvent info page.
-		if ( 'civicrm/event/info' !== implode( '/', $path ) ) return;
+		if ( 'civicrm/event/info' !== implode( '/', $path ) ) {
+			return;
+		}
 
 		// Bail if this is itself a redirect to an info page.
-		if ( isset( $_GET['noFullMsg'] ) AND $_GET['noFullMsg'] == 'true' ) return;
+		if ( isset( $_GET['noFullMsg'] ) && $_GET['noFullMsg'] == 'true' ) {
+			return;
+		}
 
 		// Bail if no ID.
-		if ( ! isset( $_GET['id'] ) ) return;
-		if ( ! is_numeric( trim( $_GET['id'] ) ) ) return;
+		if ( ! isset( $_GET['id'] ) ) {
+			return;
+		}
+		if ( ! is_numeric( trim( $_GET['id'] ) ) ) {
+			return;
+		}
 
 		// Get the ID of the CiviEvent.
 		$civi_event_id = absint( trim( $_GET['id'] ) );
@@ -501,7 +478,9 @@ class CiviCRM_Event_Organiser_Attendance {
 		$event_id = $this->civicrm_eo->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Bail if we didn't get one.
-		if ( $event_id === false ) return;
+		if ( $event_id === false ) {
+			return;
+		}
 
 		// Get target permalink.
 		$event_url = get_permalink( $event_id );
@@ -512,41 +491,34 @@ class CiviCRM_Event_Organiser_Attendance {
 
 	}
 
-
-
-} // Class ends.
-
-
-
-// Declare as global.
-global $civicrm_eo_attendance;
-
-// Init plugin.
-$civicrm_eo_attendance = new CiviCRM_Event_Organiser_Attendance;
-
-// Activation.
-register_activation_hook( __FILE__, array( $civicrm_eo_attendance, 'activate' ) );
-
-// Deactivation.
-register_deactivation_hook( __FILE__, array( $civicrm_eo_attendance, 'deactivate' ) );
-
-
-
+}
 
 /**
  * Utility to get a reference to this plugin.
  *
  * @since 0.1
  *
- * @return object $civicrm_eo_attendance The plugin reference.
+ * @return object $plugin The plugin reference.
  */
 function civicrm_eo_attendance() {
 
-	// Return instance.
-	global $civicrm_eo_attendance;
-	return $civicrm_eo_attendance;
+	static $plugin;
+
+	// Instantiate if not yet done.
+	if ( ! isset( $plugin ) ) {
+		$plugin = new CiviCRM_Event_Organiser_Attendance();
+	}
+
+	// --<
+	return $plugin;
 
 }
 
+// Declare as global.
+civicrm_eo_attendance();
 
+// Activation.
+register_activation_hook( __FILE__, [ civicrm_eo_attendance(), 'activate' ] );
 
+// Deactivation.
+register_deactivation_hook( __FILE__, [ civicrm_eo_attendance(), 'deactivate' ] );

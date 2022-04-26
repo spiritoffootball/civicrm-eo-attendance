@@ -16,8 +16,6 @@
  */
 var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 
-
-
 /**
  * Pass the jQuery shortcut in.
  *
@@ -428,8 +426,6 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 
 } )( jQuery );
 
-
-
 /**
  * Trigger dom_ready methods where necessary.
  *
@@ -441,6 +437,3 @@ jQuery(document).ready(function($) {
 	CiviCRM_EO_Attendance_RVM.form.dom_ready();
 
 }); // End document.ready()
-
-
-
