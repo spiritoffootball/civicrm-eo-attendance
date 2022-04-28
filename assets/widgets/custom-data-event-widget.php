@@ -163,9 +163,6 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 	 */
 	public function list_populate() {
 
-		// Access plugins.
-		global $civicrm_wp_event_organiser;
-
 		// Let's alias the CDE object.
 		$cde = civicrm_eo_attendance()->custom_data_event;
 
@@ -252,10 +249,10 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			}
 
 			// Get EO Event ID.
-			$post_id = $civicrm_wp_event_organiser->mapping->get_eo_event_id_by_civi_event_id( $event_id );
+			$post_id = civicrm_eo()->mapping->get_eo_event_id_by_civi_event_id( $event_id );
 
 			// Get Occurrence ID for this CiviEvent.
-			$occurrence_id = $civicrm_wp_event_organiser->mapping->get_eo_occurrence_id_by_civi_event_id( $event_id );
+			$occurrence_id = civicrm_eo()->mapping->get_eo_occurrence_id_by_civi_event_id( $event_id );
 
 			/*
 			 * If there are CiviEvents for which the EO Event has been deleted
@@ -376,14 +373,11 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 	 */
 	public function is_leader( $civi_event_id, $participant_role_id ) {
 
-		// Access plugins.
-		global $civicrm_wp_event_organiser;
-
 		// Init return.
 		$is_leader = false;
 
 		// Get EO Event ID.
-		$post_id = $civicrm_wp_event_organiser->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
+		$post_id = civicrm_eo()->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Get the Event.
 		$event = get_post( $post_id );

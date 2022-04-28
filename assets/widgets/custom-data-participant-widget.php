@@ -162,9 +162,6 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 	 */
 	public function list_populate() {
 
-		// Access plugins.
-		global $civicrm_wp_event_organiser;
-
 		// Let's alias the CDP object.
 		$cdp = civicrm_eo_attendance()->custom_data_participant;
 
@@ -215,10 +212,10 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 			$event_id = $participant['event_id'];
 
 			// Get EO Event ID.
-			$post_id = $civicrm_wp_event_organiser->mapping->get_eo_event_id_by_civi_event_id( $event_id );
+			$post_id = civicrm_eo()->mapping->get_eo_event_id_by_civi_event_id( $event_id );
 
 			// Get Occurrence ID for this CiviEvent.
-			$occurrence_id = $civicrm_wp_event_organiser->mapping->get_eo_occurrence_id_by_civi_event_id( $event_id );
+			$occurrence_id = civicrm_eo()->mapping->get_eo_occurrence_id_by_civi_event_id( $event_id );
 
 			/*
 			 * If there are CiviEvents for which the EO Event has been deleted

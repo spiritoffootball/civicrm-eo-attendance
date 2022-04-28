@@ -11,24 +11,21 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 }
 
-// Access plugin.
-global $civicrm_wp_event_organiser;
-
 // Delete Custom Group and Custom Fields for Event.
-$civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_custom_group_id' );
-$civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_custom_field_ids' );
+civicrm_eo()->db->option_delete( 'civicrm_eo_event_custom_group_id' );
+civicrm_eo()->db->option_delete( 'civicrm_eo_event_custom_field_ids' );
 
 // Delete Custom Group and Custom Fields for Participant.
-$civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_participant_custom_group_id' );
-$civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_participant_custom_field_ids' );
+civicrm_eo()->db->option_delete( 'civicrm_eo_participant_custom_group_id' );
+civicrm_eo()->db->option_delete( 'civicrm_eo_participant_custom_field_ids' );
 
 // Delete default settings for Events.
-$civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_leader_role' );
-$civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_default_sharing' );
-$civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_default_listing' );
+civicrm_eo()->db->option_delete( 'civicrm_eo_event_leader_role' );
+civicrm_eo()->db->option_delete( 'civicrm_eo_event_default_sharing' );
+civicrm_eo()->db->option_delete( 'civicrm_eo_event_default_listing' );
 
 // Delete Rendez Vous Term ID option.
-$civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_rv_term_id' );
+civicrm_eo()->db->option_delete( 'civicrm_eo_event_rv_term_id' );
 
 /**
  * This procedure leaves the CiviCRM Custom Fields intact.
