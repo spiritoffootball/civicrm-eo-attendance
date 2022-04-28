@@ -874,7 +874,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 * @since 0.4.7
 	 *
 	 * @param array $args The array of params for the Rendez Vous.
-	 * @return int|bool $rendez_vous_id The numeric ID of the Rendez Vous post, or false on failure.
+	 * @return int|bool $rendez_vous_id The numeric ID of the Rendez Vous Post, or false on failure.
 	 */
 	public function rv_save( $args ) {
 
@@ -909,7 +909,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.4.7
 	 *
-	 * @param int $rendez_vous_id The numeric ID of the Rendez Vous post.
+	 * @param int $rendez_vous_id The numeric ID of the Rendez Vous Post.
 	 * @param array $days The array of dates for the Rendez Vous.
 	 */
 	public function rv_days_update( $rendez_vous_id, $days ) {
@@ -1308,7 +1308,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @param int $civi_event_id The numeric ID of the CiviEvent.
 	 * @param array $attendee_ids The numeric IDs of the attendees.
-	 * @param object $post A bare-bones post object with the EO Event ID.
+	 * @param object $post A bare-bones Post object with the EO Event ID.
 	 * @return str $markup The rendered registration form.
 	 */
 	public function rv_form_registration_render( $civi_event_id, $attendee_ids, $post ) {
@@ -1571,7 +1571,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				}
 
 				// Use CiviCRM API to create Participant.
-				$result = civicrm_api( 'participant', 'create', $params );
+				$result = civicrm_api( 'Participant', 'create', $params );
 
 				// Error check.
 				if ( isset( $result['is_error'] ) && $result['is_error'] == '1' ) {
@@ -1643,7 +1643,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				];
 
 				// Use CiviCRM API to delete Participant.
-				$result = civicrm_api( 'participant', 'delete', $params );
+				$result = civicrm_api( 'Participant', 'delete', $params );
 
 				// Error check.
 				if ( isset( $result['is_error'] ) && $result['is_error'] == '1' ) {
@@ -2193,7 +2193,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			];
 
 			// Get Participant instances.
-			$participants = civicrm_api( 'participant', 'get', $params );
+			$participants = civicrm_api( 'Participant', 'get', $params );
 
 			// Error check.
 			if ( isset( $participants['is_error'] ) && $participants['is_error'] == '1' ) {
@@ -2227,7 +2227,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			];
 
 			// Use CiviCRM API to delete Participant.
-			$result = civicrm_api( 'participant', 'delete', $params );
+			$result = civicrm_api( 'Participant', 'delete', $params );
 
 			// Error check.
 			if ( isset( $result['is_error'] ) && $result['is_error'] == '1' ) {

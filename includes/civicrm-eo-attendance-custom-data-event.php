@@ -204,7 +204,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 		];
 
 		// Let's go.
-		$result = civicrm_api( 'custom_group', 'create', $params );
+		$result = civicrm_api( 'CustomGroup', 'create', $params );
 
 		// If error.
 		if ( $result['is_error'] == 1 ) {
@@ -264,7 +264,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 		];
 
 		// Let's go.
-		$result = civicrm_api( 'custom_field', 'create', $params );
+		$result = civicrm_api( 'CustomField', 'create', $params );
 
 		// If error.
 		if ( $result['is_error'] == 1 ) {
@@ -331,7 +331,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 		];
 
 		// Get Fields for this Grouping.
-		$event = civicrm_api( 'event', 'getsingle', $params );
+		$event = civicrm_api( 'Event', 'getsingle', $params );
 
 		// Error check.
 		if ( isset( $event['is_error'] ) && $event['is_error'] == '1' ) {
@@ -397,7 +397,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 */
 	public function list_render( $post_id = null ) {
 
@@ -506,7 +506,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 * @return array $links The HTML links to the CiviCRM Participant pages.
 	 */
 	public function list_populate( $post_id = null ) {
@@ -520,7 +520,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 		 * @since 0.5.1
 		 *
 		 * @param bool $granted False by default - assume access not granted.
-		 * @param int $post_id The numeric ID of the WordPress post.
+		 * @param int $post_id The numeric ID of the WordPress Post.
 		 * @return bool $granted True if access granted, false otherwise.
 		 */
 		if ( false === apply_filters( 'civicrm_eo_cde_access', false, $post_id ) ) {
@@ -551,7 +551,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 			return $links;
 		}
 
-		// Need the post ID.
+		// Need the Post ID.
 		$post_id = absint( empty( $post_id ) ? get_the_ID() : $post_id );
 
 		// Bail if not present.
@@ -626,7 +626,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 			 *
 			 * @param string $span The HTML element.
 			 * @param string $text The text content of the element.
-			 * @param int $post_id The numeric ID of the WordPress post.
+			 * @param int $post_id The numeric ID of the WordPress Post.
 			 */
 			$links[] = apply_filters( 'civicrm_event_organiser_custom_data_event_element', $span, $text, $post_id );
 
@@ -759,7 +759,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 		}
 
 		// Update Fields for this Event.
-		$events = civicrm_api( 'event', 'create', $params );
+		$events = civicrm_api( 'Event', 'create', $params );
 
 		// Error check.
 		if ( $events['is_error'] == '1' ) {

@@ -215,7 +215,7 @@ class CiviCRM_Event_Organiser_Attendance {
 
 		/*
 		// Test for basepage CiviEvent info requests so we can redirect to the
-		// relevant Event Organiser post.
+		// relevant Event Organiser Event.
 		add_action( 'civicrm_initialized', array( $this, 'maybe_redirect_to_eo' ) );
 		*/
 
@@ -408,7 +408,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	}
 
 	/**
-	 * Redirect to an Event Organiser post when viewing a CiviEvent info page.
+	 * Redirect to an Event Organiser Event when viewing a CiviEvent info page.
 	 *
 	 * @since 0.3.4
 	 */

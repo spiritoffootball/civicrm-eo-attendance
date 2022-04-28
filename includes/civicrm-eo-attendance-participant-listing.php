@@ -43,7 +43,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $meta_name The post meta name.
+	 * @var str $meta_name The Post meta name.
 	 */
 	public $meta_name = '_civi_participant_listing_profile';
 
@@ -114,7 +114,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 * @since 0.1
 	 *
 	 * @param array $civi_event The array of data for the CiviEvent.
-	 * @param object $post The WordPress post object.
+	 * @param object $post The WordPress Post object.
 	 * @return array $civi_event The modified array of data for the CiviEvent.
 	 */
 	public function prepare_civi_event( $civi_event, $post ) {
@@ -276,7 +276,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		];
 
 		// Get them (descriptions will be present if not null).
-		$profiles = civicrm_api( 'option_value', 'get', $params );
+		$profiles = civicrm_api( 'OptionValue', 'get', $params );
 
 		// Error check.
 		if ( $profiles['is_error'] == '1' ) {
@@ -345,7 +345,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			// Init options.
 			$options = [];
 
-			// Get existing profile value for the post (if defined).
+			// Get existing profile value for the Post (if defined).
 			$existing_value = $this->get_default_value( $post );
 
 			// Loop.
@@ -357,7 +357,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 				// Init selected.
 				$selected = '';
 
-				// Override selected if this value is the same as in the post.
+				// Override selected if this value is the same as in the Post.
 				if ( $existing_value === $value ) {
 					$selected = ' selected="selected"';
 				}
@@ -378,7 +378,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	}
 
 	/**
-	 * Get the default Participant Listing Profile value for a post.
+	 * Get the default Participant Listing Profile value for an Event.
 	 *
 	 * Falls back to the default as set on the plugin Settings screen.
 	 * Falls back to zero (disabled) otherwise.
@@ -404,7 +404,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 		}
 
-		// If we have a post.
+		// If we have a Post.
 		if ( isset( $post ) && is_object( $post ) ) {
 
 			// Get stored value.
@@ -456,7 +456,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		];
 
 		// Get them (descriptions will be present if not null).
-		$profile = civicrm_api( 'option_value', 'getsingle', $params );
+		$profile = civicrm_api( 'OptionValue', 'getsingle', $params );
 
 		// --<
 		return $profile;
@@ -494,7 +494,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		];
 
 		// Get them (descriptions will be present if not null).
-		$profile = civicrm_api( 'option_value', 'getsingle', $params );
+		$profile = civicrm_api( 'OptionValue', 'getsingle', $params );
 
 		// --<
 		return $profile;
@@ -536,7 +536,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			];
 
 			// Get it via API.
-			$opt_group = civicrm_api( 'option_group', 'getsingle', $params );
+			$opt_group = civicrm_api( 'OptionGroup', 'getsingle', $params );
 
 			// Error check.
 			if ( isset( $opt_group['id'] ) && is_numeric( $opt_group['id'] ) && $opt_group['id'] > 0 ) {
@@ -616,7 +616,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 *
 	 * @since 0.1
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 * @return int $profile_id The Participant Listing Profile ID for the CiviEvent.
 	 */
 	public function profile_get( $post_id ) {
@@ -639,7 +639,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 *
 	 * @since 0.1
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 */
 	public function profile_clear( $post_id ) {
 
@@ -655,7 +655,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 *
 	 * @since 0.2
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 */
 	public function list_render( $post_id = null ) {
 
@@ -667,7 +667,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		 * @since 0.5.1
 		 *
 		 * @param bool $granted False by default - assume access not granted.
-		 * @param int $post_id The numeric ID of the WordPress post.
+		 * @param int $post_id The numeric ID of the WordPress Post.
 		 * @return bool $granted True if access granted, false otherwise.
 		 */
 		if ( false === apply_filters( 'civicrm_eo_pl_access', false, $post_id ) ) {
@@ -683,7 +683,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			 *
 			 * @since 0.5.1
 			 *
-			 * @param int $post_id The numeric ID of the WordPress post.
+			 * @param int $post_id The numeric ID of the WordPress Post.
 			 */
 			do_action( 'civicrm_eo_pl_access_denied', $post_id );
 
@@ -788,7 +788,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 *
 	 * @since 0.2
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 * @return array $links The HTML links to the CiviCRM Participant pages.
 	 */
 	public function list_populate( $post_id = null ) {
@@ -806,7 +806,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			return $links;
 		}
 
-		// Need the post ID.
+		// Need the Post ID.
 		$post_id = absint( empty( $post_id ) ? get_the_ID() : $post_id );
 
 		// Bail if not present.
@@ -874,7 +874,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			 *
 			 * @param string $url The raw URL to the CiviCRM Registration page.
 			 * @param array $civi_event The array of data that represents a CiviEvent.
-			 * @param int $post_id The numeric ID of the WordPress post.
+			 * @param int $post_id The numeric ID of the WordPress Post.
 			 */
 			$url = apply_filters( 'civicrm_event_organiser_participant_url', $url, $civi_event, $post_id );
 
@@ -909,7 +909,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			 * @param string $link The HTML link to the CiviCRM Participant page.
 			 * @param string $url The raw URL to the CiviCRM Participant page.
 			 * @param string $text The text content of the link.
-			 * @param int $post_id The numeric ID of the WordPress post.
+			 * @param int $post_id The numeric ID of the WordPress Post.
 			 */
 			$links[] = apply_filters( 'civicrm_event_organiser_participant_link', $link, $url, $text, $post_id );
 
@@ -998,7 +998,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		];
 
 		// Query via API.
-		$result = civicrm_api( 'participant', 'get', $params );
+		$result = civicrm_api( 'Participant', 'get', $params );
 
 		// Log failures and bail.
 		if ( isset( $result['is_error'] ) && $result['is_error'] == '1' ) {

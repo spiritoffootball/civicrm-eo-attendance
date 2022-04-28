@@ -43,7 +43,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $meta_name The post meta name.
+	 * @var str $meta_name The Post meta name.
 	 */
 	public $meta_name = '_civi_sharing';
 
@@ -108,7 +108,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 * @since 0.2.2
 	 *
 	 * @param array $civi_event The array of data for the CiviEvent.
-	 * @param object $post The WordPress post object.
+	 * @param object $post The WordPress Post object.
 	 * @return array $civi_event The modified array of data for the CiviEvent.
 	 */
 	public function prepare_civi_event( $civi_event, $post ) {
@@ -227,7 +227,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Get the default CiviEvent sharing value for a post.
+	 * Get the default CiviEvent sharing value for an Event.
 	 *
 	 * Falls back to the default as set on the plugin Settings screen.
 	 * Falls back to zero (disabled) otherwise.
@@ -250,7 +250,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 			$existing_id = absint( $default );
 		}
 
-		// If we have a post.
+		// If we have a Post.
 		if ( isset( $post ) && is_object( $post ) ) {
 
 			// Get stored value.
@@ -298,7 +298,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 * @return bool $value The Event sharing value for the CiviEvent.
 	 */
 	public function sharing_get( $post_id ) {
@@ -321,7 +321,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 * @param bool $value Whether sharing is enabled or not.
 	 */
 	public function sharing_set( $post_id, $value = 0 ) {
@@ -336,7 +336,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 */
 	public function sharing_clear( $post_id ) {
 

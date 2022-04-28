@@ -43,7 +43,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $meta_name The post meta name.
+	 * @var str $meta_name The Post meta name.
 	 */
 	public $meta_name = '_civi_paid';
 
@@ -184,7 +184,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Get the default Event Paid value for a post.
+	 * Get the default Event Paid value for an Event.
 	 *
 	 * Falls back to the default as set on the plugin Settings screen.
 	 * Falls back to zero (disabled) otherwise.
@@ -207,7 +207,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 			$existing_id = absint( $default );
 		}
 
-		// If we have a post.
+		// If we have a Post.
 		if ( isset( $post ) && is_object( $post ) ) {
 
 			// Get stored value.
@@ -256,7 +256,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 * @param int $default_value The default value at the plugin level.
 	 * @return int $value The Event paid value for the CiviEvent.
 	 */
@@ -280,7 +280,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 * @param int $value Whether paid is enabled or not (1 or 0).
 	 */
 	public function paid_set( $post_id, $value = 0 ) {
@@ -295,7 +295,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 */
 	public function paid_clear( $post_id ) {
 
@@ -340,15 +340,15 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 * @since 0.5.1
 	 *
 	 * @param bool $granted False by default - assumes access not granted.
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 * @return bool $granted True if access granted, false otherwise.
 	 */
 	public function paid_permissions( $granted, $post_id = null ) {
 
-		// Need the post ID.
+		// Need the Post ID.
 		$post_id = absint( empty( $post_id ) ? get_the_ID() : $post_id );
 
-		// Get post.
+		// Get Post.
 		$post = get_post( $post_id );
 
 		// Get Event paid status.
@@ -368,14 +368,14 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 *
 	 * @since 0.5.1
 	 *
-	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @param int $post_id The numeric ID of the WordPress Post.
 	 */
 	public function paid_permission_denied( $post_id = null ) {
 
-		// Need the post ID.
+		// Need the Post ID.
 		$post_id = absint( empty( $post_id ) ? get_the_ID() : $post_id );
 
-		// Get post.
+		// Get Post.
 		$post = get_post( $post_id );
 
 		// Get Event paid status.

@@ -206,7 +206,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		];
 
 		// Get Participant entries for this Contact.
-		$participants = civicrm_api( 'participant', 'get', $params );
+		$participants = civicrm_api( 'Participant', 'get', $params );
 
 		// Error check.
 		if ( isset( $participants['is_error'] ) && $participants['is_error'] == '1' ) {
@@ -251,7 +251,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 				continue;
 			}
 
-			// Get EO post ID.
+			// Get EO Event ID.
 			$post_id = $civicrm_wp_event_organiser->db->get_eo_event_id_by_civi_event_id( $event_id );
 
 			// Get Occurrence ID for this CiviEvent.
@@ -322,7 +322,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			 *
 			 * @param string $span The HTML element.
 			 * @param string $text The text content of the element.
-			 * @param int $post_id The numeric ID of the WordPress post.
+			 * @param int $post_id The numeric ID of the WordPress Post.
 			 */
 			$links[] = apply_filters( 'civicrm_event_organiser_cde_widget_element', $span, $text, $post_id );
 
@@ -382,14 +382,14 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		// Init return.
 		$is_leader = false;
 
-		// Get EO post ID.
+		// Get EO Event ID.
 		$post_id = $civicrm_wp_event_organiser->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
-		// Get the post.
-		$post = get_post( $post_id );
+		// Get the Event.
+		$event = get_post( $post_id );
 
-		// Get Event Leader Role ID for this post.
-		$default_role_id = $civicrm_eo_attendance->event_leader->role_default_get( $post );
+		// Get Event Leader Role ID for this Event.
+		$default_role_id = $civicrm_eo_attendance->event_leader->role_default_get( $event );
 
 		// Override if Event Leader.
 		if ( $default_role_id == $participant_role_id ) {

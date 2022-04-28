@@ -214,7 +214,7 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 			// Alias Event ID.
 			$event_id = $participant['event_id'];
 
-			// Get EO post ID.
+			// Get EO Event ID.
 			$post_id = $civicrm_wp_event_organiser->db->get_eo_event_id_by_civi_event_id( $event_id );
 
 			// Get Occurrence ID for this CiviEvent.
@@ -285,7 +285,7 @@ class CiviCRM_EO_Attendance_CDP_Widget extends WP_Widget {
 			 *
 			 * @param string $span The HTML element.
 			 * @param string $text The text content of the element.
-			 * @param int $post_id The numeric ID of the WordPress post.
+			 * @param int $post_id The numeric ID of the WordPress Post.
 			 */
 			$links[] = apply_filters( 'civicrm_event_organiser_cdp_widget_element', $span, $text, $post_id );
 
