@@ -254,7 +254,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		}
 
 		// Get EO Event ID.
-		$post_id = $this->plugin->civicrm_eo->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
+		$post_id = $this->plugin->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Get the Event.
 		$post = get_post( $post_id );
@@ -304,7 +304,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		}
 
 		// First, get all Participant Roles.
-		$all_roles = $this->plugin->civicrm_eo->civi->get_participant_roles();
+		$all_roles = $this->plugin->civicrm_eo->civi->registration->get_participant_roles();
 
 		// Did we get any?
 		if ( $all_roles['is_error'] == '0' && count( $all_roles['values'] ) > 0 ) {

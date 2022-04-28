@@ -392,7 +392,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		$links[] = htmlentities( $link );
 
 		// Get EO Event ID.
-		$event_id = $this->civicrm_eo->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
+		$event_id = $this->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Bail if we didn't get one.
 		if ( $event_id === false ) {
@@ -475,7 +475,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		$civi_event_id = absint( trim( wp_unslash( $_GET['id'] ) ) );
 
 		// Get EO Event ID.
-		$event_id = $this->civicrm_eo->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
+		$event_id = $this->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Bail if we didn't get one.
 		if ( $event_id === false ) {

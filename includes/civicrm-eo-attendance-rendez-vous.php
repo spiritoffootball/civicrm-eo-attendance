@@ -122,7 +122,6 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Store.
 		$this->plugin = $parent;
-		$this->db = $parent->civicrm_eo->db;
 
 	}
 
@@ -213,7 +212,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	public function entities_create() {
 
 		// Bail if we've already done this.
-		if ( 'fgffgs' !== $this->db->option_get( $this->term_option, 'fgffgs' ) ) {
+		if ( 'fgffgs' !== $this->plugin->civicrm_eo->db->option_get( $this->term_option, 'fgffgs' ) ) {
 			return;
 		}
 
@@ -238,7 +237,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		}
 
 		// Store as plugin option.
-		$this->db->option_save( $this->term_option, $new_term['term_id'] );
+		$this->plugin->civicrm_eo->db->option_save( $this->term_option, $new_term['term_id'] );
 
 	}
 
@@ -592,7 +591,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			foreach ( $events as $event ) {
 
 				// Get CiviEvent ID.
-				$civi_event_id = $this->db->get_civi_event_id_by_eo_occurrence_id( $event->ID, $event->occurrence_id );
+				$civi_event_id = $this->plugin->civicrm_eo->mapping->get_civi_event_id_by_eo_occurrence_id( $event->ID, $event->occurrence_id );
 
 				// Skip unless we have a CiviEvent.
 				if ( $civi_event_id === false ) {
@@ -738,7 +737,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			foreach ( $events as $event ) {
 
 				// Get CiviEvent ID.
-				$civi_event_id = $this->db->get_civi_event_id_by_eo_occurrence_id( $event->ID, $event->occurrence_id );
+				$civi_event_id = $this->plugin->civicrm_eo->mapping->get_civi_event_id_by_eo_occurrence_id( $event->ID, $event->occurrence_id );
 
 				// Skip unless we have a CiviEvent.
 				if ( $civi_event_id === false ) {
@@ -1164,10 +1163,10 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			$civi_event_id = isset( $this->item_meta[ $date ] ) ? $this->item_meta[ $date ] : 0;
 
 			// Get Event ID.
-			$event_id = $this->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
+			$event_id = $this->plugin->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 			// Get occurrence ID.
-			$occurrence_id = $this->db->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
+			$occurrence_id = $this->plugin->civicrm_eo->mapping->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
 
 			// Get Event title.
 			$event_title = get_the_title( $event_id );
@@ -1278,7 +1277,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 				// Create dummy Event object.
 				$post = new stdClass();
-				$post->ID = $this->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
+				$post->ID = $this->plugin->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 				// Add form.
 				$this->form .= $this->rv_form_registration_render( $civi_event_id, $attendee_ids, $post );
@@ -1419,7 +1418,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// First, get all Participant Roles.
 		if ( ! isset( $this->all_roles ) ) {
-			$this->all_roles = $this->plugin->civicrm_eo->civi->get_participant_roles();
+			$this->all_roles = $this->plugin->civicrm_eo->civi->registration->get_participant_roles();
 		}
 
 		// Did we get any?
@@ -1529,8 +1528,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$now = $now_obj->format( 'Y-m-d H:i:s' );
 
 		// Get Event details.
-		$event_id = $this->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
-		$occurrence_id = $this->db->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
+		$event_id = $this->plugin->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
+		$occurrence_id = $this->plugin->civicrm_eo->mapping->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
 		$event_title = get_the_title( $event_id );
 		$event_link = get_permalink( $event_id );
 
@@ -1791,7 +1790,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			foreach ( $item->type as $type ) {
 
 				// Is this our Term?
-				if ( $type->term_id == $this->db->option_get( $this->term_option ) ) {
+				if ( $type->term_id == $this->plugin->civicrm_eo->db->option_get( $this->term_option ) ) {
 					return true;
 				}
 

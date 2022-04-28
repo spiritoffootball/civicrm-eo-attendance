@@ -560,7 +560,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 		}
 
 		// Get CiviEvents.
-		$civi_event_ids = $this->plugin->civicrm_eo->db->get_civi_event_ids_by_eo_event_id( $post_id );
+		$civi_event_ids = $this->plugin->civicrm_eo->mapping->get_civi_event_ids_by_eo_event_id( $post_id );
 
 		// Sanity check.
 		if ( empty( $civi_event_ids ) ) {
@@ -600,7 +600,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 			if ( $multiple ) {
 
 				// Get Occurrence ID for this CiviEvent.
-				$occurrence_id = $this->plugin->civicrm_eo->db->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
+				$occurrence_id = $this->plugin->civicrm_eo->mapping->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
 
 				// Define text.
 				$text = sprintf(

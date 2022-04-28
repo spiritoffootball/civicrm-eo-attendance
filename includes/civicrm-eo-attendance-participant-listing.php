@@ -815,7 +815,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		}
 
 		// Get CiviEvents.
-		$civi_events = $this->plugin->civicrm_eo->db->get_civi_event_ids_by_eo_event_id( $post_id );
+		$civi_events = $this->plugin->civicrm_eo->mapping->get_civi_event_ids_by_eo_event_id( $post_id );
 
 		// Sanity check.
 		if ( empty( $civi_events ) ) {
@@ -832,7 +832,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		foreach ( $civi_events as $civi_event_id ) {
 
 			// Get the full CiviEvent.
-			$civi_event = $this->plugin->civicrm_eo->civi->get_event_by_id( $civi_event_id );
+			$civi_event = $this->plugin->civicrm_eo->civi->event->get_event_by_id( $civi_event_id );
 
 			// Init past Event flag.
 			$past_event = false;
@@ -882,7 +882,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			if ( $multiple ) {
 
 				// Get Occurrence ID for this CiviEvent.
-				$occurrence_id = $this->plugin->civicrm_eo->db->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
+				$occurrence_id = $this->plugin->civicrm_eo->mapping->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
 
 				// Define text.
 				$text = sprintf(
@@ -1086,10 +1086,10 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 			}
 
 			// Get the full CiviEvent.
-			$civi_event = $this->plugin->civicrm_eo->civi->get_event_by_id( $civi_event_id );
+			$civi_event = $this->plugin->civicrm_eo->civi->event->get_event_by_id( $civi_event_id );
 
 			// Show link if registration is not closed.
-			if ( ! $this->plugin->civicrm_eo->civi->is_registration_closed( $civi_event ) ) {
+			if ( ! $this->plugin->civicrm_eo->civi->registration->is_registration_closed( $civi_event ) ) {
 
 				// Get current User.
 				$current_user = wp_get_current_user();
@@ -1123,7 +1123,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 				if ( $show_link === true ) {
 
 					// Get url for the registration page.
-					$url = $this->plugin->civicrm_eo->civi->get_registration_link( $civi_event );
+					$url = $this->plugin->civicrm_eo->civi->registration->get_registration_link( $civi_event );
 
 					// Link text.
 					$text = __( 'Register for this Event', 'civicrm-eo-attendance' );
