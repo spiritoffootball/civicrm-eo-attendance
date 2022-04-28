@@ -349,7 +349,7 @@ class CiviCRM_Event_Organiser_Attendance {
 
 		}
 
-		// CiviEvent ID needs to be retrieved differently per template
+		// CiviEvent ID needs to be retrieved differently per template.
 		if ( $tplName == 'CRM/Event/Page/EventInfo.tpl' ) {
 
 			// Do we have a CiviEvent ID?
@@ -391,7 +391,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		$links[] = $link;
 		$links[] = htmlentities( $link );
 
-		// Get EO event ID.
+		// Get EO Event ID.
 		$event_id = $this->civicrm_eo->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Bail if we didn't get one.
@@ -438,12 +438,12 @@ class CiviCRM_Event_Organiser_Attendance {
 		// Init path.
 		$path = [];
 
-		// Check for event.
+		// Check for Event.
 		if ( isset( $args['args'][0] ) && $args['args'][0] == 'civicrm' ) {
 			$path[] = $args['args'][0];
 		}
 
-		// Check for event.
+		// Check for Event.
 		if ( isset( $args['args'][1] ) && $args['args'][1] == 'event' ) {
 			$path[] = $args['args'][1];
 		}
@@ -459,7 +459,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		}
 
 		// Bail if this is itself a redirect to an info page.
-		if ( isset( $_GET['noFullMsg'] ) && $_GET['noFullMsg'] == 'true' ) {
+		if ( isset( $_GET['noFullMsg'] ) && trim( wp_unslash( $_GET['noFullMsg'] ) ) == 'true' ) {
 			return;
 		}
 
@@ -467,14 +467,14 @@ class CiviCRM_Event_Organiser_Attendance {
 		if ( ! isset( $_GET['id'] ) ) {
 			return;
 		}
-		if ( ! is_numeric( trim( $_GET['id'] ) ) ) {
+		if ( ! is_numeric( trim( wp_unslash( $_GET['id'] ) ) ) ) {
 			return;
 		}
 
 		// Get the ID of the CiviEvent.
-		$civi_event_id = absint( trim( $_GET['id'] ) );
+		$civi_event_id = absint( trim( wp_unslash( $_GET['id'] ) ) );
 
-		// Get EO event ID.
+		// Get EO Event ID.
 		$event_id = $this->civicrm_eo->db->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Bail if we didn't get one.
@@ -485,8 +485,8 @@ class CiviCRM_Event_Organiser_Attendance {
 		// Get target permalink.
 		$event_url = get_permalink( $event_id );
 
-		// GO!!
-		wp_redirect( $event_url );
+		// Redirect now.
+		wp_safe_redirect( $event_url );
 		exit();
 
 	}

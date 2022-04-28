@@ -18,6 +18,6 @@ defined( 'ABSPATH' ) || exit;
 		<select id="civicrm_eo_event_leader_role" name="civicrm_eo_event_leader_role">
 			<?php echo $roles; ?>
 		</select>
-		<p class="description"><?php esc_html_e( 'The event leader role is responsible for providing feedback on an event.', 'civicrm-eo-attendance' ); ?></p>
+		<p class="description"><?php esc_html_e( 'The Event Leader Role is responsible for providing feedback on an Event.', 'civicrm-eo-attendance' ); ?></p>
 	</td>
 </tr>

@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 	<input type="hidden" name="civicrm_eo_cde_event_id" id="civicrm_eo_cde_event_id" value="<?php echo $event_id; ?>">
 
-	<p class="description"><?php esc_html_e( 'Please fill out some figures for this event.', 'civicrm-eo-attendance' ); ?></p>
+	<p class="description"><?php esc_html_e( 'Please fill out some figures for this Event.', 'civicrm-eo-attendance' ); ?></p>
 
 	<ul>
 

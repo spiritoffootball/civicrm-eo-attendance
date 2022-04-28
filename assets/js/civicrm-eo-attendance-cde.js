@@ -219,7 +219,7 @@ var CiviCRM_EO_Attendance_CDE = CiviCRM_EO_Attendance_CDE || {};
 				// Register click.
 				CiviCRM_EO_Attendance_CDE.settings.set_clicked( civi_event_id );
 
-				// Request custom data form for this event.
+				// Request form for this Event.
 				me.form_get( civi_event_id );
 
 			});
@@ -227,7 +227,7 @@ var CiviCRM_EO_Attendance_CDE = CiviCRM_EO_Attendance_CDE || {};
 		};
 
 		/**
-		 * Get form for an event via AJAX request.
+		 * Get form for an Event via AJAX request.
 		 *
 		 * @since 0.2.2
 		 *
@@ -246,7 +246,7 @@ var CiviCRM_EO_Attendance_CDE = CiviCRM_EO_Attendance_CDE || {};
 					// Token received by WordPress.
 					action: 'event_custom_data_form_get',
 
-					// Send event ID.
+					// Send Event ID.
 					civi_event_id: civi_event_id
 
 				},
@@ -349,10 +349,10 @@ var CiviCRM_EO_Attendance_CDE = CiviCRM_EO_Attendance_CDE || {};
 				// Declare vars.
 				var civi_event_id = 0;
 
-				// Grab event ID.
+				// Grab Event ID.
 				civi_event_id = parseInt( button.prop('id').split('_')[4] );
 
-				// Submit custom data form.
+				// Submit form.
 				me.form_submit( civi_event_id, button );
 
 			});
@@ -360,7 +360,7 @@ var CiviCRM_EO_Attendance_CDE = CiviCRM_EO_Attendance_CDE || {};
 		};
 
 		/**
-		 * Submit the custom data form for an event via AJAX.
+		 * Submit the form for an Event via AJAX.
 		 *
 		 * @since 0.2.2
 		 *

@@ -86,10 +86,10 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		// Save our settings on plugin settings save.
 		add_action( 'civicrm_event_organiser_settings_updated', [ $this, 'settings_update' ] );
 
-		// Add our components to the event metabox.
+		// Add our components to the Event metabox.
 		add_action( 'civicrm_event_organiser_event_meta_box_after', [ $this, 'components_metabox' ] );
 
-		// Save our event components on event components save.
+		// Save our Event components on Event components save.
 		add_action( 'civicrm_event_organiser_event_components_updated', [ $this, 'components_update' ] );
 
 	}
@@ -138,11 +138,11 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	}
 
 	/**
-	 * Add our components to the event metabox.
+	 * Add our components to the Event metabox.
 	 *
 	 * @since 0.3
 	 *
-	 * @param object $event The EO event object.
+	 * @param object $event The EO Event object.
 	 */
 	public function components_metabox( $event ) {
 
@@ -164,11 +164,11 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	 *
 	 * @since 0.3
 	 *
-	 * @param int $event_id The numeric ID of the EO event.
+	 * @param int $event_id The numeric ID of the EO Event.
 	 */
 	public function components_update( $event_id ) {
 
-		// Save event sharing value.
+		// Save Event sharing value.
 		$this->role_event_update( $event_id );
 
 	}
@@ -176,12 +176,12 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	//##########################################################################
 
 	/**
-	 * Check if the current user was the leader of an event.
+	 * Check if the current User was the Leader of an Event.
 	 *
 	 * @since 0.3
 	 *
 	 * @param int $civi_event_id The numeric ID of the CiviEvent.
-	 * @return bool $is_leader True if current user was event leader.
+	 * @return bool $is_leader True if current User was Event Leader.
 	 */
 	public function user_is_leader( $civi_event_id ) {
 
@@ -193,7 +193,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 			return $is_leader;
 		}
 
-		// Get current user.
+		// Get current User.
 		$current_user = wp_get_current_user();
 
 		// Not if there's no CiviCRM.
@@ -201,18 +201,18 @@ class CiviCRM_EO_Attendance_Event_Leader {
 			return $is_leader;
 		}
 
-		// Get user matching file.
+		// Get User matching file.
 		require_once 'CRM/Core/BAO/UFMatch.php';
 
-		// Get the CiviCRM contact ID.
+		// Get the CiviCRM Contact ID.
 		$contact_id = CRM_Core_BAO_UFMatch::getContactId( $current_user->ID );
 
-		// Not if there's no matching contact.
+		// Not if there's no matching Contact.
 		if ( is_null( $contact_id ) ) {
 			return $is_leader;
 		}
 
-		// Get participant role for this user.
+		// Get Participant role for this User.
 		$params = [
 			'version' => 3,
 			'contact_id' => $contact_id,
@@ -258,16 +258,16 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		// Get the post.
 		$post = get_post( $post_id );
 
-		// Get leader role for this post.
+		// Get Leader Role for this post.
 		$leader_role = $this->role_default_get( $post );
 
 		// Loop through results.
 		foreach ( $result['values'] as $participant_id => $data ) {
 
-			// Get role from participant data.
+			// Get role from Participant data.
 			$role = isset( $data['participant_role_id'] ) ? absint( $data['participant_role_id'] ) : 0;
 
-			// Is it the same as the event default?
+			// Is it the same as the Event default?
 			if ( $role == $leader_role ) {
 
 				// Yes, bail.
@@ -289,7 +289,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	 *
 	 * @since 0.3
 	 *
-	 * @param object $post An EO event object.
+	 * @param object $post An EO Event object.
 	 * @return str $html Markup to display in the form.
 	 */
 	public function role_select_get( $post = null ) {
@@ -302,7 +302,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 			return $html;
 		}
 
-		// First, get all participant_roles.
+		// First, get all Participant Roles.
 		$all_roles = $this->plugin->civicrm_eo->civi->get_participant_roles();
 
 		// Did we get any?
@@ -352,7 +352,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	 *
 	 * @since 0.3
 	 *
-	 * @param object $post An EO event object.
+	 * @param object $post An EO Event object.
 	 * @return mixed $existing_id The numeric ID of the role, false if none exists.
 	 */
 	public function role_default_get( $post = null ) {
@@ -389,11 +389,11 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	//##########################################################################
 
 	/**
-	 * Update event leader role value.
+	 * Update Event Leader Role value.
 	 *
 	 * @since 0.3
 	 *
-	 * @param int $event_id The numeric ID of the event.
+	 * @param int $event_id The numeric ID of the Event.
 	 */
 	public function role_event_update( $event_id ) {
 
@@ -405,18 +405,18 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		// Retrieve meta value.
 		$value = absint( $_POST[ $this->option_name ] );
 
-		// Update event meta.
+		// Update Event meta.
 		$this->role_event_set( $event_id, $value );
 
 	}
 
 	/**
-	 * Update event leader role value.
+	 * Update Event Leader Role value.
 	 *
 	 * @since 0.3
 	 *
-	 * @param int $event_id The numeric ID of the event.
-	 * @param int $value The event participant role value for the CiviEvent.
+	 * @param int $event_id The numeric ID of the Event.
+	 * @param int $value The Event Participant Role value for the CiviEvent.
 	 */
 	public function role_event_set( $event_id, $value = null ) {
 
@@ -433,18 +433,18 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 		}
 
-		// Update event meta.
+		// Update Event meta.
 		update_post_meta( $event_id, $this->meta_name, $value );
 
 	}
 
 	/**
-	 * Get event leader role value.
+	 * Get Event Leader Role value.
 	 *
 	 * @since 0.3
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
-	 * @return int $civi_role The event participant role value for the CiviEvent.
+	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @return int $civi_role The Event Participant Role value for the CiviEvent.
 	 */
 	public function role_event_get( $post_id ) {
 
@@ -462,11 +462,11 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	}
 
 	/**
-	 * Delete event leader role value for a CiviEvent.
+	 * Delete Event Leader Role value for a CiviEvent.
 	 *
 	 * @since 0.3
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 */
 	public function role_event_clear( $post_id ) {
 

@@ -19,6 +19,6 @@ defined( 'ABSPATH' ) || exit;
 	</p>
 
 	<p class="description">
-		<?php esc_html_e( 'Check this box if this is a paid event.', 'civicrm-eo-attendance' ); ?>
+		<?php esc_html_e( 'Check this box if this is a paid Event.', 'civicrm-eo-attendance' ); ?>
 	</p>
 </div>

@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 
 		<input type="hidden" id="civicrm_eo_rvm_<?php echo $civi_event_id; ?>_leader" value="<?php echo $event_leader_role; ?>">
 
-		<p class="description"><?php esc_html_e( 'The following people have indicated that they are available for this event. Choose which people to register for the event and select their role.', 'civicrm-eo-attendance' ); ?></p>
+		<p class="description"><?php esc_html_e( 'The following people have indicated that they are available for this Event. Choose which people to register for the Event and select their role.', 'civicrm-eo-attendance' ); ?></p>
 
 		<ul>
 

@@ -191,7 +191,7 @@ var CiviCRM_EO_Attendance_CDP_Widget = CiviCRM_EO_Attendance_CDP_Widget || {};
 			 */
 			toggle.on( 'click', function( event ) {
 
-				// Grab participant ID.
+				// Grab Participant ID.
 				var participant_id = parseInt( $(this).prop('id').split('-')[4] );
 
 				// Bail if already submitted.
@@ -226,10 +226,10 @@ var CiviCRM_EO_Attendance_CDP_Widget = CiviCRM_EO_Attendance_CDP_Widget || {};
 				// Declare vars.
 				var participant_id = 0;
 
-				// Grab participant ID.
+				// Grab Participant ID.
 				participant_id = parseInt( button.prop('id').split('_')[4] );
 
-				// Submit custom data form.
+				// Submit form.
 				me.form_submit( participant_id, button );
 
 			});
@@ -237,7 +237,7 @@ var CiviCRM_EO_Attendance_CDP_Widget = CiviCRM_EO_Attendance_CDP_Widget || {};
 		};
 
 		/**
-		 * Submit the custom data form for a Participant via AJAX.
+		 * Submit the form for a Participant via AJAX.
 		 *
 		 * @since 0.5.2
 		 *

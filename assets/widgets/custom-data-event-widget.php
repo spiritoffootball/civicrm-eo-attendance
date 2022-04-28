@@ -10,7 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Creates a custom Widget for displaying a list of feedback for events.
+ * Creates a Widget for displaying a list of feedback for Events.
  *
  * @since 0.4.6
  */
@@ -31,7 +31,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			__( 'Event Feedback', 'civicrm-eo-attendance' ),
 			// Args.
 			[
-				'description' => __( 'Use this Widget to show a list of feedback for events.', 'civicrm-eo-attendance' ),
+				'description' => __( 'Use this Widget to show a list of feedback for Events.', 'civicrm-eo-attendance' ),
 			]
 		);
 
@@ -182,21 +182,21 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			return $links;
 		}
 
-		// Get current user.
+		// Get current User.
 		$current_user = wp_get_current_user();
 
-		// Get user matching file.
+		// Get User matching file.
 		require_once 'CRM/Core/BAO/UFMatch.php';
 
-		// Get the CiviCRM contact ID.
+		// Get the CiviCRM Contact ID.
 		$contact_id = CRM_Core_BAO_UFMatch::getContactId( $current_user->ID );
 
-		// Bail if no contact ID found.
+		// Bail if no Contact ID found.
 		if ( empty( $contact_id ) ) {
 			return $links;
 		}
 
-		// Build params to get fields.
+		// Build params to get Fields.
 		$params = [
 			'version' => 3,
 			'contact_id' => $contact_id,
@@ -205,7 +205,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			],
 		];
 
-		// Get participant entries for this contact.
+		// Get Participant entries for this Contact.
 		$participants = civicrm_api( 'participant', 'get', $params );
 
 		// Error check.
@@ -227,48 +227,26 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 
 		}
 
-		/*
-		$e = new Exception;
-		$trace = $e->getTraceAsString();
-		error_log( print_r( array(
-			'method' => __METHOD__,
-			'params' => $params,
-			'participants' => $participants,
-			'backtrace' => $trace,
-		), true ) );
-		*/
-
 		// Loop through them.
 		foreach ( $participants['values'] as $participant ) {
 
-			// Skip to next if it is not a past event.
+			// Skip to next if it is not a past Event.
 			if ( ! $this->is_past( $participant['event_end_date'] ) ) {
 				continue;
 			}
 
-			// Alias event ID.
+			// Alias Event ID.
 			$event_id = $participant['event_id'];
 
-			// Skip to next if not event leader.
+			// Skip to next if not Event Leader.
 			if ( ! $this->is_leader( $event_id, $participant['participant_role_id'] ) ) {
 				continue;
 			}
 
-			// Get the event custom data.
+			// Get the Event data.
 			$event_data = $cde->event_get( $event_id );
 
-			/*
-			$e = new Exception;
-			$trace = $e->getTraceAsString();
-			error_log( print_r( array(
-				'method' => __METHOD__,
-				'participant' => $participant,
-				'event_data' => $event_data,
-				'backtrace' => $trace,
-			), true ) );
-			*/
-
-			// Skip if this event already has data.
+			// Skip if this Event already has data.
 			if ( $cde->event_has_data( $event_data ) ) {
 				continue;
 			}
@@ -276,7 +254,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			// Get EO post ID.
 			$post_id = $civicrm_wp_event_organiser->db->get_eo_event_id_by_civi_event_id( $event_id );
 
-			// Get occurrence ID for this CiviEvent.
+			// Get Occurrence ID for this CiviEvent.
 			$occurrence_id = $civicrm_wp_event_organiser->db->get_eo_occurrence_id_by_civi_event_id( $event_id );
 
 			/*
@@ -284,14 +262,14 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			 * although the correspondence for the CiviEvent remains (this can
 			 * happen because the delete code did not function properly until
 			 * https://github.com/christianwach/civicrm-event-organiser/commit/d1baf0741e59d6884f84af2d7bf05c50f14cb9e2
-			 * fixed the issue) then it is possible that the EO event does not
+			 * fixed the issue) then it is possible that the EO Event does not
 			 * exist. We need to protect against this and log the problem so
 			 * the the data can be fixed. This means going in to CiviCRM and
 			 * deleting the Participants for the CiviEvent, then deleting the
 			 * CiviEvent itself.
 			 */
 
-			// Get EO event.
+			// Get EO Event.
 			$eo_event = get_post( $post_id );
 
 			// If it's not there.
@@ -320,7 +298,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			$text .= '<br>';
 			$text .= eo_format_event_occurrence( $post_id, $occurrence_id );
 
-			// Construct custom class name.
+			// Construct class name.
 			$class = 'civicrm-eo-cde-widget-event-id-' . $event_id;
 
 			// Construct span if we get one.
@@ -337,27 +315,14 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			// Add form.
 			$span .= $this->get_form( $participant );
 
-			/*
-			$e = new Exception;
-			$trace = $e->getTraceAsString();
-			error_log( print_r( array(
-				'method' => __METHOD__,
-				'text' => $text,
-				'multiple' => $multiple ? 'yes' : 'no',
-				'span' => $span,
-				'civi_event_id' => $civi_event_id,
-				'backtrace' => $trace,
-			), true ) );
-			*/
-
 			/**
-			 * Filter event custom data element.
+			 * Filter Event element.
 			 *
 			 * @since 0.4.6
 			 *
 			 * @param string $span The HTML element.
 			 * @param string $text The text content of the element.
-			 * @param int $post_id The numeric ID of the WP post.
+			 * @param int $post_id The numeric ID of the WordPress post.
 			 */
 			$links[] = apply_filters( 'civicrm_event_organiser_cde_widget_element', $span, $text, $post_id );
 
@@ -371,35 +336,24 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 
 	}
 	/**
-	 * Check if an event is a past event.
+	 * Check if an Event is a past Event.
 	 *
 	 * @since 0.4.6
 	 *
 	 * @param str $end_date The end date string for a CiviEvent.
-	 * @return bool $past_event True if the event is past, false otherwise.
+	 * @return bool $past_event True if the Event is past, false otherwise.
 	 */
 	public function is_past( $end_date ) {
 
-		// Init past event flag.
+		// Init past Event flag.
 		$past_event = false;
 
-		// Override if it's a past event.
+		// Override if it's a past Event.
 		$now = new DateTime( 'now', eo_get_blog_timezone() );
 		$end = new DateTime( $end_date, eo_get_blog_timezone() );
 		if ( $end < $now ) {
 			$past_event = true;
 		}
-
-		/*
-		$e = new Exception;
-		$trace = $e->getTraceAsString();
-		error_log( print_r( array(
-			'method' => __METHOD__,
-			'end_date' => $end_date,
-			'past_event' => $past_event ? 'yes' : 'no',
-			'backtrace' => $trace,
-		), true ) );
-		*/
 
 		/*
 		$ts = $now->getTimestamp();
@@ -412,13 +366,13 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 	}
 
 	/**
-	 * Check if an event is a past event.
+	 * Check if an Event is a past Event.
 	 *
 	 * @since 0.4.6
 	 *
 	 * @param int $civi_event_id The numeric ID of the CiviEvent.
 	 * @param int $participant_role_id The numeric ID of the Pariticpant's role.
-	 * @return bool $is_leader True if user has event leader role.
+	 * @return bool $is_leader True if User has Event Leader Role.
 	 */
 	public function is_leader( $civi_event_id, $participant_role_id ) {
 
@@ -434,22 +388,10 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		// Get the post.
 		$post = get_post( $post_id );
 
-		// Get event leader role ID for this post.
+		// Get Event Leader Role ID for this post.
 		$default_role_id = $civicrm_eo_attendance->event_leader->role_default_get( $post );
 
-		/*
-		$e = new Exception;
-		$trace = $e->getTraceAsString();
-		error_log( print_r( array(
-			'method' => __METHOD__,
-			'civi_event_id' => $civi_event_id,
-			'default_role_id' => $default_role_id,
-			'participant_role_id' => $participant_role_id,
-			'backtrace' => $trace,
-		), true ) );
-		*/
-
-		// Override if leader.
+		// Override if Event Leader.
 		if ( $default_role_id == $participant_role_id ) {
 			$is_leader = true;
 		}
@@ -460,7 +402,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 	}
 
 	/**
-	 * Get the event form.
+	 * Get the Event form.
 	 *
 	 * @since 0.5.2
 	 *

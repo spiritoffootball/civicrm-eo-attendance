@@ -21,6 +21,6 @@ defined( 'ABSPATH' ) || exit;
 	</p>
 
 	<p class="description">
-		<?php esc_html_e( 'The event leader role is responsible for providing feedback for this event.', 'civicrm-eo-attendance' ); ?>
+		<?php esc_html_e( 'The Event Leader Role is responsible for providing feedback for this Event.', 'civicrm-eo-attendance' ); ?>
 	</p>
 </div>

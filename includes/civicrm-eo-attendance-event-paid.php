@@ -86,16 +86,16 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		// Save our settings on plugin settings save.
 		add_action( 'civicrm_event_organiser_settings_updated', [ $this, 'settings_update' ] );
 
-		// Add our components to the event metabox.
+		// Add our components to the Event metabox.
 		add_action( 'civicrm_event_organiser_event_meta_box_after', [ $this, 'components_metabox' ] );
 
-		// Save our event components on event components save.
+		// Save our Event components on Event components save.
 		add_action( 'civicrm_event_organiser_event_components_updated', [ $this, 'components_update' ] );
 
-		// Filter events for Rendez Vous to include only paid events.
+		// Filter Events for Rendez Vous to include only paid Events.
 		add_action( 'civicrm_event_organiser_rendez_vous_event_args', [ $this, 'paid_filter' ], 10, 1 );
 
-		// Filter access to custom elements on events.
+		// Filter access to Custom Fields on Events.
 		add_filter( 'civicrm_eo_cde_access', [ $this, 'paid_permissions' ], 10, 2 );
 		add_filter( 'civicrm_eo_cdp_access', [ $this, 'paid_permissions' ], 10, 2 );
 		add_filter( 'civicrm_eo_pl_access', [ $this, 'paid_permissions' ], 10, 2 );
@@ -114,7 +114,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 */
 	public function settings_table() {
 
-		// Get current default event paid status.
+		// Get current default Event paid status.
 		$paid = $this->paid_default_get();
 
 		// Set checkbox checked.
@@ -144,15 +144,15 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	}
 
 	/**
-	 * Add our components to the event metabox.
+	 * Add our components to the Event metabox.
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param object $event The EO event object.
+	 * @param object $event The EO Event object.
 	 */
 	public function components_metabox( $event ) {
 
-		// Get current default event paid status.
+		// Get current default Event paid status.
 		$paid = $this->paid_default_get( $event );
 
 		// Set checkbox checked.
@@ -171,11 +171,11 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param int $event_id The numeric ID of the EO event.
+	 * @param int $event_id The numeric ID of the EO Event.
 	 */
 	public function components_update( $event_id ) {
 
-		// Save event paid value.
+		// Save Event paid value.
 		$this->paid_update( $event_id );
 
 	}
@@ -190,8 +190,8 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param object $post The WP event object.
-	 * @return int $is_paid A paid event returns 1, otherwise 0 (also 0 if none exists).
+	 * @param object $post The WordPress Event object.
+	 * @return int $is_paid A paid Event returns 1, otherwise 0 (also 0 if none exists).
 	 */
 	public function paid_default_get( $post = null ) {
 
@@ -227,11 +227,11 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	//##########################################################################
 
 	/**
-	 * Update event paid value.
+	 * Update Event paid value.
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param int $event_id The numeric ID of the event.
+	 * @param int $event_id The numeric ID of the Event.
 	 * @param int $value Whether paid is enabled or not.
 	 */
 	public function paid_update( $event_id, $value = null ) {
@@ -250,13 +250,13 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	}
 
 	/**
-	 * Get event paid value.
+	 * Get Event paid value.
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 * @param int $default_value The default value at the plugin level.
-	 * @return int $value The event paid value for the CiviEvent.
+	 * @return int $value The Event paid value for the CiviEvent.
 	 */
 	public function paid_get( $post_id, $default_value = 0 ) {
 
@@ -274,26 +274,26 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	}
 
 	/**
-	 * Set event paid value.
+	 * Set Event paid value.
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 * @param int $value Whether paid is enabled or not (1 or 0).
 	 */
 	public function paid_set( $post_id, $value = 0 ) {
 
-		// Update event meta.
+		// Update Event meta.
 		update_post_meta( $post_id, $this->meta_name, $value );
 
 	}
 
 	/**
-	 * Delete event paid value for an event.
+	 * Delete Event paid value for an Event.
 	 *
 	 * @since 0.3.1
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 */
 	public function paid_clear( $post_id ) {
 
@@ -303,7 +303,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	}
 
 	/**
-	 * Filter event query to include only paid events.
+	 * Filter Event query to include only paid Events.
 	 *
 	 * @since 0.5
 	 *
@@ -311,7 +311,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 */
 	public function paid_filter( $query_args ) {
 
-		// Find only events with our meta value.
+		// Find only Events with our meta value.
 		$meta_query = [
 			[
 				'key'     => '_civi_paid',
@@ -338,7 +338,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 * @since 0.5.1
 	 *
 	 * @param bool $granted False by default - assumes access not granted.
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 * @return bool $granted True if access granted, false otherwise.
 	 */
 	public function paid_permissions( $granted, $post_id = null ) {
@@ -349,10 +349,10 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		// Get post.
 		$post = get_post( $post_id );
 
-		// Get event paid status.
+		// Get Event paid status.
 		$paid = $this->paid_default_get( $post );
 
-		// Disallow by default, but allow if this is a paid event.
+		// Disallow by default, but allow if this is a paid Event.
 		$granted = ( $paid != 0 ) ? true : false;
 
 		// --<
@@ -361,12 +361,12 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	}
 
 	/**
-	 * When access to Participant Listings is denied, check if event is paid and
+	 * When access to Participant Listings is denied, check if Event is paid and
 	 * if so, remove the standard Registration Links.
 	 *
 	 * @since 0.5.1
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 */
 	public function paid_permission_denied( $post_id = null ) {
 
@@ -376,10 +376,10 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		// Get post.
 		$post = get_post( $post_id );
 
-		// Get event paid status.
+		// Get Event paid status.
 		$paid = $this->paid_default_get( $post );
 
-		// If this is a paid event.
+		// If this is a paid Event.
 		if ( $paid != 0 ) {
 
 			// Remove core plugin's list renderer.

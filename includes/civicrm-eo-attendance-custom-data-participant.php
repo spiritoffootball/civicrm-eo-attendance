@@ -34,7 +34,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $group_name The group ID option name.
+	 * @var str $group_name The Group ID option name.
 	 */
 	public $group_name = 'civicrm_eo_participant_custom_group_id';
 
@@ -43,7 +43,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $group_name The field IDs option name.
+	 * @var str $group_name The Field IDs option name.
 	 */
 	public $field_ids_name = 'civicrm_eo_participant_custom_field_ids';
 
@@ -84,7 +84,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		add_action( 'wp_ajax_participant_custom_data_form_get', [ $this, 'form_get' ] );
 		add_action( 'wp_ajax_participant_custom_data_form_process', [ $this, 'form_process' ] );
 
-		// Show list in EO event template.
+		// Show list in EO Event template.
 		add_action( 'eventorganiser_additional_event_meta', [ $this, 'list_render' ], 12 );
 
 		// Register widget.
@@ -122,7 +122,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	//##########################################################################
 
 	/**
-	 * Create our CiviCRM custom data entities for all Participants.
+	 * Create our CiviCRM Custom Fields for all Participants.
 	 *
 	 * @since 0.3
 	 */
@@ -136,22 +136,22 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		// Define title.
 		$title = __( 'Participant Statistics', 'civicrm-eo-attendance' );
 
-		// Create group and field and store as plugin options.
+		// Create Group and Field and store as plugin options.
 		$custom_group_id = $this->group_create( $title );
 
-		// Init fields array.
+		// Init Fields array.
 		$custom_field_ids = [];
 
-		// Which fields do we want?
+		// Which Fields do we want?
 		$custom_fields = [
 			'hours' => __( 'Hours Worked', 'civicrm-eo-attendance' ),
 			'minutes' => __( 'Minutes Worked', 'civicrm-eo-attendance' ),
 		];
 
-		// Create fields.
+		// Create Fields.
 		foreach ( $custom_fields as $key => $label ) {
 
-			// Create field.
+			// Create Field.
 			$field_id = $this->field_create( $custom_group_id, $label );
 
 			// Skip on failure.
@@ -168,7 +168,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		$this->plugin->civicrm_eo->db->option_save( $this->group_name, $custom_group_id );
 		$this->plugin->civicrm_eo->db->option_save( $this->field_ids_name, $custom_field_ids );
 
-		// We can then allow renaming either via l18n or admin field.
+		// We can then allow renaming either via l18n or admin Field.
 
 	}
 
@@ -177,8 +177,8 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	 *
 	 * @since 0.3
 	 *
-	 * @param str $title The title of the custom group.
-	 * @return int|bool The ID of the new custom group, false on failure.
+	 * @param str $title The title of the Custom Group.
+	 * @return int|bool The ID of the new Custom Group, false on failure.
 	 */
 	public function group_create( $title ) {
 
@@ -187,7 +187,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			return false;
 		}
 
-		// Create a custom group.
+		// Create a Custom Group.
 		$params = [
 			'version' => 3,
 			'extends' => [ 'Participant' ],
@@ -220,7 +220,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		// Grab first value.
 		$value = array_pop( $result['values'] );
 
-		// Return group ID.
+		// Return Group ID.
 		return $value['id'];
 
 	}
@@ -230,10 +230,10 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	 *
 	 * @since 0.3
 	 *
-	 * @param int $custom_group_id The ID of the custom group.
-	 * @param str $label The descriptive field label.
-	 * @param int $weight The weight to give the field (default 1).
-	 * @return int|bool $custom_field_id The ID of the new custom field, false on failure.
+	 * @param int $custom_group_id The ID of the Custom Group.
+	 * @param str $label The descriptive Field label.
+	 * @param int $weight The weight to give the Field (default 1).
+	 * @return int|bool $custom_field_id The ID of the new Custom Field, false on failure.
 	 */
 	public function field_create( $custom_group_id, $label, $weight = 1 ) {
 
@@ -242,7 +242,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			return false;
 		}
 
-		// Create a numeric custom field.
+		// Create a numeric Custom Field.
 		$params = [
 			'version' => 3,
 			'label' => $label,
@@ -280,7 +280,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		// Grab first value.
 		$value = array_pop( $result['values'] );
 
-		// Return field ID.
+		// Return Field ID.
 		return $value['id'];
 
 	}
@@ -288,7 +288,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	//##########################################################################
 
 	/**
-	 * Get all of a Contact's Participant custom data.
+	 * Get all of a Contact's Participant data.
 	 *
 	 * @since 0.4.6
 	 *
@@ -302,7 +302,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			return false;
 		}
 
-		// Get our list of custom data fields.
+		// Get our list of Custom Fields.
 		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
 
 		// Construct returns array.
@@ -311,14 +311,14 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			$returns[] = 'custom_' . $field_id;
 		}
 
-		// Add event ID.
+		// Add Event ID.
 		$returns[] = 'event_id';
 
 		// Add start and end dates.
 		$returns[] = 'event_start_date';
 		$returns[] = 'event_end_date';
 
-		// Build params to get fields.
+		// Build params to get Fields.
 		$params = [
 			'version' => 3,
 			'contact_id' => $contact_id,
@@ -327,7 +327,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 
 		try {
 
-			// Get fields for this participant.
+			// Get Fields for this Participant.
 			$participants = civicrm_api( 'participant', 'get', $params );
 
 		} catch ( Exception $e ) {
@@ -370,7 +370,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	}
 
 	/**
-	 * Get a Contact's Participant custom data for an Event.
+	 * Get a Contact's Participant data for an Event.
 	 *
 	 * @since 0.3.1
 	 *
@@ -385,7 +385,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			return false;
 		}
 
-		// Get our list of custom data fields.
+		// Get our list of Custom Fields.
 		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
 
 		// Construct returns array.
@@ -394,7 +394,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			$returns[] = 'custom_' . $field_id;
 		}
 
-		// Add event and status IDs.
+		// Add Event and status IDs.
 		$returns[] = 'event_id';
 		$returns[] = 'participant_status_id';
 		$returns[] = 'participant_role_id';
@@ -403,7 +403,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		$returns[] = 'event_start_date';
 		$returns[] = 'event_end_date';
 
-		// Build params to get fields.
+		// Build params to get Fields.
 		$params = [
 			'version' => 3,
 			'contact_id' => $contact_id,
@@ -411,7 +411,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			'return' => $returns,
 		];
 
-		// Get fields for this participant.
+		// Get Fields for this Participant.
 		$participants = civicrm_api( 'participant', 'get', $params );
 
 		// Error check.
@@ -447,7 +447,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	}
 
 	/**
-	 * Get the Participant custom data for an Event by Participant ID.
+	 * Get the Participant data for an Event by Participant ID.
 	 *
 	 * @since 0.4.6
 	 *
@@ -461,7 +461,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			return false;
 		}
 
-		// Get our list of custom data fields.
+		// Get our list of Custom Fields.
 		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
 
 		// Construct returns array.
@@ -470,21 +470,21 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			$returns[] = 'custom_' . $field_id;
 		}
 
-		// Add event ID.
+		// Add Event ID.
 		$returns[] = 'event_id';
 
 		// Add start and end dates.
 		$returns[] = 'event_start_date';
 		$returns[] = 'event_end_date';
 
-		// Build params to get fields.
+		// Build params to get Fields.
 		$params = [
 			'version' => 3,
 			'id' => $participant_id,
 			'return' => $returns,
 		];
 
-		// Get fields for this participant.
+		// Get Fields for this Participant.
 		$participants = civicrm_api( 'participant', 'get', $params );
 
 		// Error check.
@@ -515,18 +515,18 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	}
 
 	/**
-	 * Check if a Participant has custom data.
+	 * Check if a Participant has data.
 	 *
 	 * For now, this only checks for a non-zero values for "hours" and "minutes".
 	 *
 	 * @since 0.3.1
 	 *
 	 * @param array $participant The array of Participant data.
-	 * @return bool $has_data True if participant has data, false otherwise.
+	 * @return bool $has_data True if Participant has data, false otherwise.
 	 */
 	public function participant_has_data( $participant ) {
 
-		// Get fields.
+		// Get Fields.
 		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
 
 		// Construct "hours" key.
@@ -563,7 +563,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 */
 	public function list_render( $post_id = null ) {
 
@@ -589,7 +589,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			// Top and tail.
 			$list = '<li class="civicrm-eo-custom-data-participant">' . $list . $loading . '</li>' . "\n";
 
-			// Handle recurring events.
+			// Handle recurring Events.
 			if ( eo_recurs() ) {
 
 				// Wrap in unordered list.
@@ -673,7 +673,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 * @return array $links The HTML links to the CiviCRM Participant pages.
 	 */
 	public function list_populate( $post_id = null ) {
@@ -687,7 +687,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		 * @since 0.5.1
 		 *
 		 * @param bool $granted False by default - assume access not granted.
-		 * @param int $post_id The numeric ID of the WP post.
+		 * @param int $post_id The numeric ID of the WordPress post.
 		 * @return bool $granted True if access granted, false otherwise.
 		 */
 		if ( false === apply_filters( 'civicrm_eo_cdp_access', false, $post_id ) ) {
@@ -704,16 +704,16 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 			return $links;
 		}
 
-		// Get user matching file.
+		// Get User matching file.
 		require_once 'CRM/Core/BAO/UFMatch.php';
 
-		// Get current user.
+		// Get current User.
 		$current_user = wp_get_current_user();
 
-		// Get the CiviCRM contact ID.
+		// Get the CiviCRM Contact ID.
 		$contact_id = CRM_Core_BAO_UFMatch::getContactId( $current_user->ID );
 
-		// Bail if no contact ID found.
+		// Bail if no Contact ID found.
 		if ( empty( $contact_id ) ) {
 			return $links;
 		}
@@ -737,13 +737,13 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		// Did we get more than one?
 		$multiple = ( count( $civi_event_ids ) > 1 ) ? true : false;
 
-		// Escalate permissions to view participants.
+		// Escalate permissions to view Participants.
 		add_action( 'civicrm_permission_check', [ $this, 'permissions_escalate' ], 10, 2 );
 
 		// Loop through them.
 		foreach ( $civi_event_ids as $civi_event_id ) {
 
-			// Get participant data for this event.
+			// Get Participant data for this Event.
 			$civi_participant = $this->participant_get( $contact_id, $civi_event_id );
 
 			// Skip on failure.
@@ -754,26 +754,27 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 				continue;
 			}
 
-			// Skip if it's not a past event.
+			// Skip if it's not a past Event.
 			$now = new DateTime( 'now', eo_get_blog_timezone() );
 			$end = new DateTime( $civi_participant['event_end_date'], eo_get_blog_timezone() );
 			if ( $end > $now ) {
 				continue;
 			}
 
-			// Skip if this participant already has data.
+			// Skip if this Participant already has data.
 			if ( $this->participant_has_data( $civi_participant ) ) {
 				continue;
 			}
 
-			// Set different link text for single and multiple occurrences.
+			// Set different link text for single and multiple Occurrences.
 			if ( $multiple ) {
 
-				// Get occurrence ID for this CiviEvent.
+				// Get Occurrence ID for this CiviEvent.
 				$occurrence_id = $this->plugin->civicrm_eo->db->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
 
 				// Define text.
 				$text = sprintf(
+					/* translators: %s The formatted Event title. */
 					__( 'Feedback for %s', 'civicrm-eo-attendance' ),
 					eo_format_event_occurrence( $post_id, $occurrence_id )
 				);
@@ -782,26 +783,26 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 				$text = __( 'Participant Feedback', 'civicrm-eo-attendance' );
 			}
 
-			// Construct custom class name.
+			// Construct class name.
 			$class = 'civicrm-eo-cdp-participant-id-' . $civi_participant['id'];
 
 			// Construct span if we get one.
 			$span = '<span class="civicrm-eo-custom-data-participant ' . $class . '">' . $text . '</span>';
 
 			/**
-			 * Filter event custom data element.
+			 * Filter Event data element.
 			 *
 			 * @since 0.2.2
 			 *
 			 * @param string $span The HTML element.
 			 * @param string $text The text content of the element.
-			 * @param int $post_id The numeric ID of the WP post.
+			 * @param int $post_id The numeric ID of the WordPress post.
 			 */
 			$links[] = apply_filters( 'civicrm_event_organiser_custom_data_participant_element', $span, $text, $post_id );
 
 		}
 
-		// Remove permission to view participants.
+		// Remove permission to view Participants.
 		remove_action( 'civicrm_permission_check', [ $this, 'permissions_escalate' ], 10 );
 
 		// --<
@@ -810,7 +811,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	}
 
 	/**
-	 * Grant the permissions necessary for custom data functionality.
+	 * Grant the necessary permissions.
 	 *
 	 * @since 0.5.1
 	 *
@@ -832,19 +833,19 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	//##########################################################################
 
 	/**
-	 * Get a form for filling in Participant custom data.
+	 * Get a form for filling in Participant Custom Fields.
 	 *
 	 * @since 0.2.2
 	 */
 	public function form_get() {
 
-		// Get participant ID.
-		$participant_id = isset( $_POST['participant_id'] ) ? $_POST['participant_id'] : '';
+		// Get Participant ID.
+		$participant_id = isset( $_POST['participant_id'] ) ? wp_unslash( $_POST['participant_id'] ) : '';
 
 		// Sanitise.
 		$participant_id = absint( trim( $participant_id ) );
 
-		// Get participant data.
+		// Get Participant data.
 		$participant = $this->participant_get_by_id( $participant_id );
 
 		// Find elapsed time.
@@ -887,12 +888,12 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		$data['markup'] = '<ul><li>' . $form . '</li></ul>';
 
 		// Send data to browser.
-		$this->send_data( $data );
+		wp_send_json( $data );
 
 	}
 
 	/**
-	 * Save Participant custom data.
+	 * Save Participant Custom Fields.
 	 *
 	 * @since 0.2.2
 	 */
@@ -903,8 +904,8 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 							__( 'Oops! Something went wrong.', 'civicrm-eo-attendance' ) .
 						'</li></ul>';
 
-		// Get participant ID.
-		$participant_id = isset( $_POST['participant_id'] ) ? absint( trim( $_POST['participant_id'] ) ) : '';
+		// Get Participant ID.
+		$participant_id = isset( $_POST['participant_id'] ) ? (int) wp_unslash( $_POST['participant_id'] ) : '';
 
 		// Init data.
 		$data = [
@@ -917,38 +918,38 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		if ( ! function_exists( 'civi_wp' ) ) {
 			$data['error'] = '1';
 			$data['markup'] = $error_markup;
-			$this->send_data( $data );
+			wp_send_json( $data );
 		}
 
 		// Try and init CiviCRM.
 		if ( ! civi_wp()->initialize() ) {
 			$data['error'] = '1';
 			$data['markup'] = $error_markup;
-			$this->send_data( $data );
+			wp_send_json( $data );
 		}
 
-		// Build params to save fields.
+		// Build params to save Fields.
 		$params = [
 			'version' => 3,
 			'id' => $participant_id,
 		];
 
-		// Get fields.
+		// Get Fields.
 		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
 
-		// Process each field.
+		// Process each Field.
 		foreach ( $fields as $key => $field_id ) {
 
 			// Construct key defined in POST and grab value.
 			$post_key = 'civicrm_eo_cdp_' . $key;
-			$value = isset( $_POST[ $post_key ] ) ? absint( trim( $_POST[ $post_key ] ) ) : 0;
+			$value = isset( $_POST[ $post_key ] ) ? (int) wp_unslash( $_POST[ $post_key ] ) : 0;
 
 			// Add to params.
 			$params[ 'custom_' . $field_id ] = $value;
 
 		}
 
-		// Update participant.
+		// Update Participant.
 		$result = civicrm_api( 'participant', 'create', $params );
 
 		// Error check.
@@ -967,7 +968,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 
 			$data['error'] = '1';
 			$data['markup'] = $error_markup;
-			$this->send_data( $data );
+			wp_send_json( $data );
 
 		}
 
@@ -978,36 +979,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		$data['markup'] = $markup;
 
 		// Send data to browser.
-		$this->send_data( $data );
-
-	}
-
-	//##########################################################################
-
-	/**
-	 * Send JSON data to the browser.
-	 *
-	 * @since 0.2.2
-	 *
-	 * @param array $data The data to send.
-	 */
-	private function send_data( $data ) {
-
-		// Is this an AJAX request?
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-
-			// Set reasonable headers.
-			header( 'Content-type: text/plain' );
-			header( 'Cache-Control: no-cache' );
-			header( 'Expires: -1' );
-
-			// Echo.
-			echo json_encode( $data );
-
-			// Die.
-			exit();
-
-		}
+		wp_send_json( $data );
 
 	}
 

@@ -80,10 +80,10 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 */
 	public function register_hooks() {
 
-		// Apply changes to CiviEvent when an EO event is synced to CiviCRM.
+		// Apply changes to CiviEvent when an EO Event is synced to CiviCRM.
 		add_filter( 'civicrm_event_organiser_prepared_civi_event', [ $this, 'prepare_civi_event' ], 10, 2 );
 
-		// Post-process an EO event when a CiviEvent is synced to WordPress.
+		// Post-process an EO Event when a CiviEvent is synced to WordPress.
 		add_action( 'civicrm_event_organiser_eo_event_updated', [ $this, 'process_eo_event' ], 10, 2 );
 
 		// Add our settings to the settings table.
@@ -92,10 +92,10 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		// Save our settings on plugin settings save.
 		add_action( 'civicrm_event_organiser_settings_updated', [ $this, 'settings_update' ] );
 
-		// Add our components to the event metabox.
+		// Add our components to the Event metabox.
 		add_action( 'civicrm_event_organiser_event_meta_box_after', [ $this, 'components_metabox' ] );
 
-		// Save our event components on event components save.
+		// Save our Event components on Event components save.
 		add_action( 'civicrm_event_organiser_event_components_updated', [ $this, 'components_update' ] );
 
 	}
@@ -103,17 +103,17 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	//##########################################################################
 
 	/**
-	 * Update a CiviEvent when an EO event is synced to CiviCRM.
+	 * Update a CiviEvent when an EO Event is synced to CiviCRM.
 	 *
 	 * @since 0.2.2
 	 *
 	 * @param array $civi_event The array of data for the CiviEvent.
-	 * @param object $post The WP post object.
+	 * @param object $post The WordPress post object.
 	 * @return array $civi_event The modified array of data for the CiviEvent.
 	 */
 	public function prepare_civi_event( $civi_event, $post ) {
 
-		// Get existing event sharing status.
+		// Get existing Event sharing status.
 		$existing_id = $this->sharing_default_get( $post );
 
 		// Override param with our value.
@@ -125,24 +125,24 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	}
 
 	/**
-	 * Update an EO event when a CiviEvent is synced to WordPress.
+	 * Update an EO Event when a CiviEvent is synced to WordPress.
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $event_id The numeric ID of the EO event.
+	 * @param int $event_id The numeric ID of the EO Event.
 	 * @param array $civi_event An array of data for the CiviEvent.
 	 */
 	public function process_eo_event( $event_id, $civi_event ) {
 
-		// If the event has a participant listing profile specified.
+		// If the Event has a Participant Listing Profile specified.
 		if ( ! empty( $civi_event['is_share'] ) ) {
 
-			// Save specified event sharing.
+			// Save specified Event sharing.
 			$this->sharing_set( $event_id, absint( $civi_event['is_share'] ) );
 
 		} else {
 
-			// Set default event sharing.
+			// Set default Event sharing.
 			$this->sharing_set( $event_id );
 
 		}
@@ -158,7 +158,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 */
 	public function settings_table() {
 
-		// Get current default event sharing status.
+		// Get current default Event sharing status.
 		$sharing = $this->sharing_default_get();
 
 		// Set checkbox checked.
@@ -188,15 +188,15 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	}
 
 	/**
-	 * Add our components to the event metabox.
+	 * Add our components to the Event metabox.
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param object $event The EO event object.
+	 * @param object $event The EO Event object.
 	 */
 	public function components_metabox( $event ) {
 
-		// Get current default event sharing status.
+		// Get current default Event sharing status.
 		$sharing = $this->sharing_default_get( $event );
 
 		// Set checkbox checked.
@@ -215,11 +215,11 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $event_id The numeric ID of the EO event.
+	 * @param int $event_id The numeric ID of the EO Event.
 	 */
 	public function components_update( $event_id ) {
 
-		// Save event sharing value.
+		// Save Event sharing value.
 		$this->sharing_update( $event_id );
 
 	}
@@ -234,7 +234,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param object $post The WP event object.
+	 * @param object $post The WordPress Event object.
 	 * @return int $existing_id The numeric ID of the CiviEvent sharing setting (or 0 if none exists).
 	 */
 	public function sharing_default_get( $post = null ) {
@@ -271,11 +271,11 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	//##########################################################################
 
 	/**
-	 * Update event sharing value.
+	 * Update Event sharing value.
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $event_id The numeric ID of the event.
+	 * @param int $event_id The numeric ID of the Event.
 	 * @param int $value Whether sharing is enabled or not.
 	 */
 	public function sharing_update( $event_id, $value = null ) {
@@ -294,12 +294,12 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	}
 
 	/**
-	 * Get event sharing value.
+	 * Get Event sharing value.
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
-	 * @return bool $value The event sharing value for the CiviEvent.
+	 * @param int $post_id The numeric ID of the WordPress post.
+	 * @return bool $value The Event sharing value for the CiviEvent.
 	 */
 	public function sharing_get( $post_id ) {
 
@@ -317,26 +317,26 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	}
 
 	/**
-	 * Set event sharing value.
+	 * Set Event sharing value.
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 * @param bool $value Whether sharing is enabled or not.
 	 */
 	public function sharing_set( $post_id, $value = 0 ) {
 
-		// Update event meta.
+		// Update Event meta.
 		update_post_meta( $post_id, $this->meta_name, $value );
 
 	}
 
 	/**
-	 * Delete event sharing value for a CiviEvent.
+	 * Delete Event sharing value for a CiviEvent.
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WP post.
+	 * @param int $post_id The numeric ID of the WordPress post.
 	 */
 	public function sharing_clear( $post_id ) {
 

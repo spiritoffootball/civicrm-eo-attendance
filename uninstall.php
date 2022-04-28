@@ -14,33 +14,33 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 // Access plugin.
 global $civicrm_wp_event_organiser;
 
-// Delete custom group and fields for event.
+// Delete Custom Group and Custom Fields for Event.
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_custom_group_id' );
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_custom_field_ids' );
 
-// Delete custom group and fields for participant.
+// Delete Custom Group and Custom Fields for Participant.
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_participant_custom_group_id' );
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_participant_custom_field_ids' );
 
-// Delete default settings for events.
+// Delete default settings for Events.
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_leader_role' );
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_default_sharing' );
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_default_listing' );
 
-// Delete Rendez Vous term ID option.
+// Delete Rendez Vous Term ID option.
 $civicrm_wp_event_organiser->db->option_delete( 'civicrm_eo_event_rv_term_id' );
 
 /**
- * This procedure leaves the CiviCRM custom fields intact.
+ * This procedure leaves the CiviCRM Custom Fields intact.
  *
- * Should delete the custom fields and data in CiviCRM as well? My current
+ * Should delete the Custom Fields and data in CiviCRM as well? My current
  * opinion is not to delete them in case they contain data that needs to be
  * retained for some reason.
  *
  * The trouble with leaving this in place is that if the plugin is reactivated
  * then the tables will still exist and the method that creates the entities
- * will fail, leaving us with no means for discovering the IDs of the groups
- * and fields.
+ * will fail, leaving us with no means for discovering the IDs of the Groups
+ * and Fields.
  *
  * Hmm.
  */

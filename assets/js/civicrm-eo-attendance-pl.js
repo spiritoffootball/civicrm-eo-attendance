@@ -195,7 +195,7 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 				// Register click.
 				CiviCRM_EO_Attendance_PL.settings.set_clicked( civi_event_id );
 
-				// Request participants.
+				// Request Participants.
 				me.send( civi_event_id );
 
 			});
@@ -222,7 +222,7 @@ var CiviCRM_EO_Attendance_PL = CiviCRM_EO_Attendance_PL || {};
 					// Token received by WordPress.
 					action: 'participants_list_get',
 
-					// Send event ID.
+					// Send Event ID.
 					civi_event_id: civi_event_id
 
 				},

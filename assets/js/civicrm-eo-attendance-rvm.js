@@ -169,7 +169,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 				// Grab classes.
 				classes = $(this).prop( 'class' ).split( ' ' );
 
-				// Get event ID.
+				// Get Event ID.
 				for (var i = 0, item; item = classes[i++];) {
 					if ( item.match( 'civicrm-eo-rv-event-id-' ) ) {
 						civi_event_id = parseInt( item.split('-')[5] );
@@ -202,7 +202,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 				var id = $(this).prop( 'id' ),
 					civi_event_id = 0;
 
-				// Get event ID.
+				// Get Event ID.
 				if ( id.match( 'civicrm_eo_rvm_cancel_' ) ) {
 					civi_event_id = parseInt( id.split('_')[4] );
 				}
@@ -233,16 +233,16 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 					return;
 				}
 
-				// Get event ID.
+				// Get Event ID.
 				if ( id.match( 'civicrm_eo_rvm_submit_' ) ) {
 					civi_event_id = parseInt( id.split('_')[4] );
 				}
 
-				// Get event leader ID.
+				// Get Event Leader ID.
 				event_leader = parseInt( $( '#civicrm_eo_rvm_' + civi_event_id + '_leader' ).val() );
 
 				/**
-				 * Loop through options and check for at least one event leader.
+				 * Loop through options and check for at least one Event Leader.
 				 *
 				 * @since 1.4.8
 				 */
@@ -258,7 +258,7 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 
 				});
 
-				// Bail if we have no event leader.
+				// Bail if we have no Event Leader.
 				if ( event_leader_exists === 0 ) {
 					$('#civicrm_eo_rvm_error_' + civi_event_id).html(
 						CiviCRM_EO_Attendance_RVM.settings.get_localisation( 'leader' )

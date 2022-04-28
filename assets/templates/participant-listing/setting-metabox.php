@@ -21,6 +21,6 @@ defined( 'ABSPATH' ) || exit;
 	</p>
 
 	<p class="description">
-		<?php esc_html_e( 'The profile shown on the Participant Listing page. Select "Disabled" if you do not want participants to be shown.', 'civicrm-eo-attendance' ); ?>
+		<?php esc_html_e( 'The profile shown on the Participant Listing page. Select "Disabled" if you do not want Participants to be shown.', 'civicrm-eo-attendance' ); ?>
 	</p>
 </div>

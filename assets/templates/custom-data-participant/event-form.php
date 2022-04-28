@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 	<input type="hidden" name="civicrm_eo_cdp_participant_id" id="civicrm_eo_cdp_participant_id" value="<?php echo $participant_id; ?>">
 
-	<p class="description"><?php esc_html_e( 'How much time did you spend working on this event?', 'civicrm-eo-attendance' ); ?></p>
+	<p class="description"><?php esc_html_e( 'How much time did you spend working on this Event?', 'civicrm-eo-attendance' ); ?></p>
 
 	<ul>
 
