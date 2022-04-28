@@ -105,7 +105,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Add our settings to the settings table.
@@ -136,6 +136,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	public function settings_update() {
 
 		// Set value based on whether the checkbox is ticked.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$value = ( isset( $_POST[ $this->option_name ] ) ) ? 1 : 0;
 
 		// Save option.
@@ -180,7 +181,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Get the default Event Paid value for a post.
@@ -224,7 +225,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Update Event paid value.
@@ -240,6 +241,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		if ( is_null( $value ) ) {
 
 			// Set value based on whether the checkbox is ticked.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$value = ( isset( $_POST[ $this->option_name ] ) ) ? 1 : 0;
 
 		}

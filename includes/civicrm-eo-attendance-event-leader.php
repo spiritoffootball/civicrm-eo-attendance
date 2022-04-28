@@ -94,7 +94,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Add our settings to the settings table.
@@ -127,6 +127,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$civicrm_eo_event_leader_role = '0';
 
 		// Get variables.
+		// phpcs:ignore WordPress.PHP.DontExtract.extract_extract
 		extract( $_POST );
 
 		// Sanitise.
@@ -173,7 +174,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Check if the current User was the Leader of an Event.
@@ -282,7 +283,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Builds a form element for Event Leader Roles.
@@ -386,7 +387,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Update Event Leader Role value.
@@ -398,12 +399,14 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	public function role_event_update( $event_id ) {
 
 		// Kick out if not set.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! isset( $_POST[ $this->option_name ] ) ) {
 			return;
 		}
 
 		// Retrieve meta value.
-		$value = absint( $_POST[ $this->option_name ] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$value = absint( wp_unslash( $_POST[ $this->option_name ] ) );
 
 		// Update Event meta.
 		$this->role_event_set( $event_id, $value );

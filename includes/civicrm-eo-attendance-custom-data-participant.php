@@ -119,7 +119,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Create our CiviCRM Custom Fields for all Participants.
@@ -285,7 +285,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Get all of a Contact's Participant data.
@@ -556,7 +556,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Get the Participant Feedback list for an Event.
@@ -830,7 +830,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Get a form for filling in Participant Custom Fields.

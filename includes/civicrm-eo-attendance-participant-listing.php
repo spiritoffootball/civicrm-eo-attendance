@@ -106,7 +106,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Update a CiviEvent when an EO Event is synced to CiviCRM.
@@ -163,7 +163,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Add our settings to the settings table.
@@ -242,7 +242,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Get all CiviEvent Participant Listing Profiles.
@@ -556,7 +556,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Update Participant Listing Profile value for an Event.
@@ -648,7 +648,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Add a list of Participant links for an Event to the EO Event meta list.
@@ -969,7 +969,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 	}
 
-	//##########################################################################
+	// -------------------------------------------------------------------------
 
 	/**
 	 * Get a CiviEvent's Participants.
