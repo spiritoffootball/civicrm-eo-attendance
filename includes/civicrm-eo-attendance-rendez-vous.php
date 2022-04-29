@@ -1431,7 +1431,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			$options = [];
 
 			// Get default role ID.
-			$default_id = $this->plugin->civicrm_eo->civi->get_participant_role( $post );
+			$default_id = $this->plugin->civicrm_eo->civi->registration->get_participant_role( $post );
 
 			// Loop.
 			foreach ( $roles as $key => $role ) {
