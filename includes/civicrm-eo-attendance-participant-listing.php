@@ -833,6 +833,9 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 			// Get the full CiviEvent.
 			$civi_event = $this->plugin->civicrm_eo->civi->event->get_event_by_id( $civi_event_id );
+			if ( $civi_event === false ) {
+				continue;
+			}
 
 			// Init past Event flag.
 			$past_event = false;
@@ -1087,6 +1090,9 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 
 			// Get the full CiviEvent.
 			$civi_event = $this->plugin->civicrm_eo->civi->event->get_event_by_id( $civi_event_id );
+			if ( $civi_event === false ) {
+				wp_send_json( $data );
+			}
 
 			// Show link if registration is not closed.
 			if ( ! $this->plugin->civicrm_eo->civi->registration->is_registration_closed( $civi_event ) ) {
