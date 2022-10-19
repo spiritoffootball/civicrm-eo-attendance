@@ -9,9 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-04-26T17:27:34+00:00\n"
+"POT-Creation-Date: 2022-10-19T15:04:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.7.0\n"
 "X-Domain: civicrm-eo-attendance\n"
 
 #. Plugin Name of the plugin
@@ -34,7 +34,7 @@ msgstr ""
 msgid "http://haystack.co.uk"
 msgstr ""
 
-msgid "Please fill out some figures for this event."
+msgid "Please fill out some figures for this Event."
 msgstr ""
 
 msgid "Number of Attendees"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-msgid "How much time did you spend working on this event?"
+msgid "How much time did you spend working on this Event?"
 msgstr ""
 
 msgid "Hours"
@@ -64,7 +64,7 @@ msgstr ""
 msgid "Minutes"
 msgstr ""
 
-msgid "The following people have indicated that they are available for this event. Choose which people to register for the event and select their role."
+msgid "The following people have indicated that they are available for this Event. Choose which people to register for the Event and select their role."
 msgstr ""
 
 msgid "Close"
@@ -73,25 +73,25 @@ msgstr ""
 msgid "Default Event Leader Role"
 msgstr ""
 
-msgid "The event leader role is responsible for providing feedback on an event."
+msgid "The Event Leader Role is responsible for providing feedback on an Event."
 msgstr ""
 
 msgid "Event Leader Role:"
 msgstr ""
 
-msgid "The event leader role is responsible for providing feedback for this event."
+msgid "The Event Leader Role is responsible for providing feedback for this Event."
 msgstr ""
 
 msgid "Are Events to be Paid Events by default?"
 msgstr ""
 
-msgid "Check the box if you want events to be paid events. If most events are not paid, leave the box unchecked."
+msgid "Check the box if you want Events to be paid Events. If most Events are not paid, leave the box unchecked."
 msgstr ""
 
 msgid "Paid Event:"
 msgstr ""
 
-msgid "Check this box if this is a paid event."
+msgid "Check this box if this is a paid Event."
 msgstr ""
 
 msgid "Default CiviEvent Sharing Panel visibility"
@@ -112,13 +112,13 @@ msgstr ""
 msgid "Participant Listing Profile:"
 msgstr ""
 
-msgid "The profile shown on the Participant Listing page. Select \"Disabled\" if you do not want participants to be shown."
+msgid "The profile shown on the Participant Listing page. Select \"Disabled\" if you do not want Participants to be shown."
 msgstr ""
 
 msgid "Event Feedback"
 msgstr ""
 
-msgid "Use this Widget to show a list of feedback for events."
+msgid "Use this Widget to show a list of feedback for Events."
 msgstr ""
 
 msgid "You are up-to-date with your feedback."
@@ -157,7 +157,7 @@ msgstr ""
 msgid "Participant Feedback"
 msgstr ""
 
-msgid "Use this widget to show a list of feedback for participants."
+msgid "Use this widget to show a list of feedback for Participants."
 msgstr ""
 
 msgid "Participant Feedback Required"
@@ -184,6 +184,7 @@ msgstr ""
 msgid "Event Statistics"
 msgstr ""
 
+#. translators: %s The formatted Event title.
 msgid "Feedback for %s"
 msgstr ""
 
@@ -208,13 +209,14 @@ msgstr ""
 msgid "Participants and Registration"
 msgstr ""
 
+#. translators: %s The formatted Event title.
 msgid "Participants for %s"
 msgstr ""
 
-msgid "No participants for this event"
+msgid "No Participants for this Event"
 msgstr ""
 
-msgid "Register for this event"
+msgid "Register for this Event"
 msgstr ""
 
 msgid "Registration is closed"
@@ -226,7 +228,7 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-msgid "You must choose someone to be the event leader."
+msgid "You must choose someone to be the Event Leader."
 msgstr ""
 
 msgid "Refreshing this Rendez-vous failed."
@@ -241,6 +243,7 @@ msgstr ""
 msgid "All Rendez-vous successfully refreshed."
 msgstr ""
 
+#. translators: %s: The formatted Event date.
 msgid "Availability for %s"
 msgstr ""
 
@@ -268,29 +271,35 @@ msgstr ""
 msgid "Registration via Rendez Vous"
 msgstr ""
 
+#. translators: 1: The Event title.
 msgid "You have been registered for %s"
 msgstr ""
 
-msgid "This is to let you know that you have been registered as attending the event \"%1$s\" on %2$s at %3$s. If you think this has been done in error, or you have anything else you want to say to the organiser, please follow the link below and reply to this conversation on the Spirit of Football website."
+#. translators: 1: The Event title, 2: The start date, 3: The start time.
+msgid "This is to let you know that you have been registered as attending the Event \"%1$s\" on %2$s at %3$s. If you think this has been done in error, or you have anything else you want to say to the organiser, please follow the link below and reply to this conversation on the Spirit of Football website."
 msgstr ""
 
+#. translators: 1: The Event title.
 msgid "You have been unregistered from %s"
 msgstr ""
 
-msgid "This is to let you know that your registration for the event \"%1$s\" on %2$s at %3$s has been cancelled and that you will no longer be attending. If you think this has been done in error, please follow the link below and reply to this conversation on the Spirit of Football website."
+#. translators: 1: The Event title, 2: The start date, 3: The start time.
+msgid "This is to let you know that your registration for the Event \"%1$s\" on %2$s at %3$s has been cancelled and that you will no longer be attending. If you think this has been done in error, please follow the link below and reply to this conversation on the Spirit of Football website."
 msgstr ""
 
 msgid "Enable Attendance"
 msgstr ""
 
-msgid "Select an Organiser"
+msgid "Attendance Organizers"
 msgstr ""
 
-msgid "Choose who is responsible for Attendance"
+msgid "Choose the people responsible for Attendance."
 msgstr ""
 
+#. translators: 1: The Contact name, 2: The Event title.
 msgid "%1$s cannot attend \"%2$s\""
 msgstr ""
 
-msgid "Unfortunately %1$s can no longer attend \"%2$s\" on %3$s at %4$s and their registration for this event has been cancelled. Please visit the \"%5$s\" to review registrations for this event."
+#. translators: 1: The Contact name, 2: The Event title, 3: The Event date, 4: The Event time, 5: The link.
+msgid "Unfortunately %1$s can no longer attend \"%2$s\" on %3$s at %4$s and their registration for this Event has been cancelled. Please visit the \"%5$s\" to review registrations for this Event."
 msgstr ""
