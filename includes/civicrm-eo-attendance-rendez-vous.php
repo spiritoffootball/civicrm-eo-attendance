@@ -79,14 +79,14 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	/**
 	 * Group "Rendez Vous Organizer" meta key name.
 	 *
-	 * This Group meta value is set per Group to determine the person in the
-	 * Group who is responsible for managing the attendance Rendez Vous. The UI
+	 * This Group meta value is set per Group to determine the people in the
+	 * Group who are responsible for managing the attendance Rendez Vous. The UI
 	 * actually allows any Group admin or mod to manage registrations, but there
-	 * has to be one person in charge.
+	 * has to be at least one person in charge.
 	 *
 	 * @since 0.5
 	 * @access public
-	 * @var str $group_meta_key The Group "Rendez Vous Organizer" meta key name.
+	 * @var str $organizer_meta_key The Group "Rendez Vous Organizer" meta key name.
 	 */
 	public $organizer_meta_key = '_civicrm_eo_event_organizer';
 
@@ -165,8 +165,10 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Allow all Rendez Vous to be refreshed.
 		add_action( 'bp_screens', [ $this, 'refresh_rv_all' ], 3 );
 
-		// Add form element to Group manage screen.
+		// Add form element, scripts and styles to Group manage screen.
 		add_action( 'rendez_vous_group_edit_screen_after', [ $this, 'group_manage_form_amend' ], 10, 1 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'group_manage_form_enqueue_styles' ], 20 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'group_manage_form_enqueue_scripts' ], 20 );
 
 		// Check element when Group manage screen is submitted.
 		add_action( 'rendez_vous_group_edit_screen_save', [ $this, 'group_manage_form_submit' ], 10, 2 );
@@ -540,13 +542,19 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @param DateTime $datetime The DateTime object for the month to create an RV for.
 	 * @param int $group_id The numeric ID of the Group.
-	 * @return int|bool $updated_id The ID of the created Rendez Vous (false on failure or true if skipped).
+	 * @return int|bool $updated_id The ID of the created Rendez Vous - false on failure or true if skipped.
 	 */
 	public function rv_create( $datetime, $group_id = 0 ) {
 
 		// Members Group ID.
 		if ( $group_id === 0 ) {
 			$group_id = bp_get_current_group_id();
+		}
+
+		// The current User must be an Organiser.
+		$organizer_id = $this->is_organiser( $group_id );
+		if ( empty( $organizer_id ) ) {
+			return true;
 		}
 
 		// Get members of Group.
@@ -621,14 +629,6 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// No need to create if there are no dates.
 		if ( count( $days ) === 0 ) {
-			return true;
-		}
-
-		// Get organizer.
-		$organizer_id = groups_get_groupmeta( $group_id, $this->organizer_meta_key );
-
-		// Bail if we don't have one.
-		if ( empty( $organizer_id ) ) {
 			return true;
 		}
 
@@ -993,14 +993,9 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 					// Is attendance enabled for this Group?
 					if ( $this->group_get_option( $group_id, $this->group_meta_key ) ) {
 
-						// Get the organizer ID from Group meta.
-						$organizer_id = groups_get_groupmeta( $group_id, $this->organizer_meta_key );
-
-						// Get current User.
-						$current_user = wp_get_current_user();
-
-						// Is this the organizer?
-						if ( $organizer_id == $current_user->ID || is_super_admin() ) {
+						// The current User must be an Organiser.
+						$organizer_id = $this->is_organiser( $group_id );
+						if ( $organizer_id !== false ) {
 
 							// Build the URL we want.
 							$current_url = home_url( add_query_arg( [] ) );
@@ -1929,18 +1924,11 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			$label .
 		'</div></div>';
 
-		// Get the organizer ID from Group meta.
-		$organizer_id = groups_get_groupmeta( $group_id, $this->organizer_meta_key );
+		// Get the Organiser IDs from Group meta.
+		$organizer_ids = groups_get_groupmeta( $group_id, $this->organizer_meta_key );
 
 		// Init options.
 		$options = [];
-
-		// Add empty value if none set.
-		if ( empty( $organizer_id ) ) {
-			$options[] = '<option value="0" selected="selected">' .
-				__( 'Select an Organiser', 'civicrm-eo-attendance' ) .
-			'</option>';
-		}
 
 		// Get Group admins.
 		$admins = groups_get_group_admins( $group_id );
@@ -1954,11 +1942,9 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Loop.
 		foreach ( $organizers as $user ) {
 
-			// Init selected.
+			// Assign selected if this User is an Organizer.
 			$selected = '';
-
-			// Override selected if this is the organizer.
-			if ( $organizer_id == $user->user_id ) {
+			if ( in_array( $user->user_id, (array) $organizer_ids ) ) {
 				$selected = ' selected="selected"';
 			}
 
@@ -1972,20 +1958,21 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Create options markup.
 		$organizer_options = implode( "\n", $options );
 
-		// Wrap in select.
-		$organizer_options = '<select id="' . $this->organizer_meta_key . '" name="' . $this->organizer_meta_key . '">' .
+		// Wrap in multi-select.
+		$organizer_options = '<select id="' . $this->organizer_meta_key . '" name="' . $this->organizer_meta_key . '[]" multiple="multiple">' .
 			$organizer_options .
 		'</select>';
 
-		// Costruct label.
+		// Construct label.
 		$organizer_label = '<label for="' . $this->organizer_meta_key . '">' .
-			__( 'Choose who is responsible for Attendance', 'civicrm-eo-attendance' ) .
+			__( 'Attendance Organizers', 'civicrm-eo-attendance' ) .
 		'</label>';
 
 		// Wrap in divs.
 		$organizer_div = '<div class="field-group civicrm-eo-group-organizer"><div class="select">' .
 			$organizer_label .
 			$organizer_options .
+			'<p class="description">' . __( 'Choose the people responsible for Attendance.', 'civicrm-eo-attendance' ) . '</p>' .
 		'</div></div>';
 
 		// Construct markup.
@@ -2006,29 +1993,95 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 */
 	public function group_manage_form_submit( $group_id, $settings ) {
 
-		// Sanity check.
-		if ( 'POST' !== strtoupper( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) {
+		// Sanity checks.
+		if ( empty( $_SERVER['REQUEST_METHOD'] ) ) {
+			return false;
+		}
+		if ( 'POST' !== strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) ) {
 			return false;
 		}
 
-		// Init options.
-		$options = [
+		// Init defaults.
+		$defaults = [
 			$this->group_meta_key => 0,
-			$this->organizer_meta_key => 0,
+			$this->organizer_meta_key => [],
 		];
 
-		// Sanitise input.
-		if ( ! empty( $_POST[ $this->group_meta_key ] ) ) {
-			$s = wp_parse_args( $_POST, $options );
-			$options = array_intersect_key(
-				array_map( 'absint', $s ),
-				$options
-			);
+		$args = wp_parse_args( $_POST, $defaults );
+
+		// Cast "enabled" value as integer.
+		if ( ! empty( $args[ $this->group_meta_key ] ) ) {
+			$args[ $this->group_meta_key ] = (int) $args[ $this->group_meta_key ];
+		}
+
+		// Cast Organiser IDs as integers.
+		if ( ! empty( $args[ $this->organizer_meta_key ] ) ) {
+			$args[ $this->organizer_meta_key ] = array_map( 'absint', $args[ $this->organizer_meta_key ] );
 		}
 
 		// Go ahead and save the meta values.
-		groups_update_groupmeta( $group_id, $this->group_meta_key, $options[ $this->group_meta_key ] );
-		groups_update_groupmeta( $group_id, $this->organizer_meta_key, $options[ $this->organizer_meta_key ] );
+		groups_update_groupmeta( $group_id, $this->group_meta_key, $args[ $this->group_meta_key ] );
+		groups_update_groupmeta( $group_id, $this->organizer_meta_key, $args[ $this->organizer_meta_key ] );
+
+	}
+
+	/**
+	 * Add our CSS to the Group manage screen.
+	 *
+	 * @since 0.5.3
+	 */
+	public function group_manage_form_enqueue_styles() {
+
+		// Bail if not on group admin screen.
+		if ( ! bp_is_group_admin_screen( 'rendez-vous' ) ) {
+			return;
+		}
+
+		// Register Select2 styles.
+		wp_register_style(
+			'ceo_attendance_select2_css',
+			set_url_scheme( 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css' ),
+			null,
+			'4.0.13'
+		);
+
+		// Enqueue styles.
+		wp_enqueue_style( 'ceo_attendance_select2_css' );
+
+	}
+
+	/**
+	 * Add our Javascripts to the Group manage screen.
+	 *
+	 * @since 0.5.3
+	 */
+	public function group_manage_form_enqueue_scripts() {
+
+		// Bail if not on group admin screen.
+		if ( ! bp_is_group_admin_screen( 'rendez-vous' ) ) {
+			return;
+		}
+
+		// Register Select2.
+		wp_register_script(
+			'ceo_attendance_select2_js',
+			set_url_scheme( 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js' ),
+			[ 'jquery' ],
+			'4.0.13',
+			true
+		);
+
+		// Enqueue script.
+		wp_enqueue_script( 'ceo_attendance_select2_js' );
+
+		// Enqueue group admin js.
+		wp_enqueue_script(
+			'ceo_attendance_select2_custom_js',
+			CIVICRM_EO_ATTENDANCE_URL . 'assets/js/civicrm-eo-attendance-group-admin.js',
+			[ 'ceo_attendance_select2_js' ],
+			CIVICRM_EO_ATTENDANCE_VERSION,
+			true
+		);
 
 	}
 
@@ -2311,6 +2364,49 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// --<
 		return $past_event;
+
+	}
+
+	/**
+	 * Check if the current User is an Organiser.
+	 *
+	 * @since 0.5.3
+	 *
+	 * @param int $group_id The numeric ID of the Group.
+	 * @return int|bool $is_organiser False if the current User is not an organiser, User ID otherwise.
+	 */
+	public function is_organiser( $group_id ) {
+
+		// Always allow super admins.
+		if ( is_super_admin() ) {
+			return true;
+		}
+
+		// Assume not Organiser.
+		$is_organiser = false;
+
+		// Bail if the current User is not logged in.
+		if ( ! is_user_logged_in() ) {
+			return $is_organiser;
+		}
+
+		// Bail if we don't have any organizers.
+		$organizer_ids = groups_get_groupmeta( $group_id, $this->organizer_meta_key );
+		if ( empty( $organizer_ids ) ) {
+			return $is_organiser;
+		}
+
+		// Bail if the current User is not an organizer.
+		$current_user = wp_get_current_user();
+		if ( ! in_array( $current_user->ID, (array) $organizer_ids ) ) {
+			return $is_organiser;
+		}
+
+		// Okay this is an Organiser.
+		$is_organiser = true;
+
+		// --<
+		return $is_organiser;
 
 	}
 
