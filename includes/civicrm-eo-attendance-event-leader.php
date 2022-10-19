@@ -123,18 +123,16 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	 */
 	public function settings_update() {
 
-		// Set defaults.
-		$civicrm_eo_event_leader_role = '0';
+		// Get Leader Role.
+		$key = 'civicrm_eo_event_leader_role';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$leader_role = isset( $_POST[ $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : '0';
 
-		// Get variables.
-		// phpcs:ignore WordPress.PHP.DontExtract.extract_extract
-		extract( $_POST );
-
-		// Sanitise.
-		$civicrm_eo_event_leader_role = absint( $civicrm_eo_event_leader_role );
+		// Always cast as integer.
+		$leader_role = (int) $leader_role;
 
 		// Save option.
-		$this->plugin->civicrm_eo->db->option_save( $this->option_name, $civicrm_eo_event_leader_role );
+		$this->plugin->civicrm_eo->db->option_save( $this->option_name, $leader_role );
 
 	}
 

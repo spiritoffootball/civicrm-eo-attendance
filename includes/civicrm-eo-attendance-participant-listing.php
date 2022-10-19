@@ -192,17 +192,16 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 */
 	public function settings_update() {
 
-		// Set defaults.
-		$civicrm_eo_event_default_listing = '0';
+		// Get Leader Role.
+		$key = 'civicrm_eo_event_default_listing';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$default_listing = isset( $_POST[ $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : '0';
 
-		// Get variables.
-		extract( $_POST );
-
-		// Sanitise.
-		$civicrm_eo_event_default_listing = absint( $civicrm_eo_event_default_listing );
+		// Always cast as integer.
+		$default_listing = (int) $default_listing;
 
 		// Save option.
-		$this->plugin->civicrm_eo->db->option_save( $this->option_name, $civicrm_eo_event_default_listing );
+		$this->plugin->civicrm_eo->db->option_save( $this->option_name, $default_listing );
 
 	}
 
@@ -568,12 +567,14 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	public function profile_update( $event_id ) {
 
 		// Kick out if not set.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! isset( $_POST['civicrm_eo_event_listing'] ) ) {
 			return;
 		}
 
 		// Retrieve meta value.
-		$profile_id = absint( $_POST['civicrm_eo_event_listing'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$profile_id = (int) sanitize_text_field( wp_unslash( $_POST['civicrm_eo_event_listing'] ) );
 
 		// Update Event meta.
 		update_post_meta( $event_id, $this->meta_name, $profile_id );
@@ -1039,10 +1040,11 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	public function participants_list_get() {
 
 		// Get Event ID.
-		$civi_event_id = isset( $_POST['civi_event_id'] ) ? wp_unslash( $_POST['civi_event_id'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$civi_event_id = isset( $_POST['civi_event_id'] ) ? sanitize_text_field( wp_unslash( $_POST['civi_event_id'] ) ) : '';
 
-		// Sanitise.
-		$civi_event_id = absint( trim( $civi_event_id ) );
+		// Always cast as integer.
+		$civi_event_id = (int) $civi_event_id;
 
 		// Init data.
 		$data = [

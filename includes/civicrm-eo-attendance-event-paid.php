@@ -324,6 +324,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 		// Amend query args.
 		if ( empty( $query_args['meta_query'] ) ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			$query_args['meta_query'] = [ $meta_query ];
 		} else {
 			$query_args['meta_query'][] = $meta_query;

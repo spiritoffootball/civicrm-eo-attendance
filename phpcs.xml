@@ -16,6 +16,7 @@
 
 		<!-- Ignore docblock formatting -->
 		<exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamType" />
+		<exclude name="Squiz.Commenting.BlockComment.HasEmptyLineBefore" />
 
 		<!-- Yoda? Really? -->
 		<exclude name="WordPress.PHP.YodaConditions.NotYoda" />

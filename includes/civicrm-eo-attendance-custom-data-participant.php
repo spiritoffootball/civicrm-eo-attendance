@@ -840,13 +840,16 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	public function form_get() {
 
 		// Get Participant ID.
-		$participant_id = isset( $_POST['participant_id'] ) ? wp_unslash( $_POST['participant_id'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$participant_id = isset( $_POST['participant_id'] ) ? sanitize_text_field( wp_unslash( $_POST['participant_id'] ) ) : '';
 
-		// Sanitise.
-		$participant_id = absint( trim( $participant_id ) );
+		// Always cast as integer.
+		$participant_id = (int) $participant_id;
 
 		// Get Participant data.
 		$participant = $this->participant_get_by_id( $participant_id );
+
+		// TODO: Handle failures.
 
 		// Find elapsed time.
 		$start = new DateTime( $participant['event_start_date'], eo_get_blog_timezone() );
@@ -905,7 +908,11 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 						'</li></ul>';
 
 		// Get Participant ID.
-		$participant_id = isset( $_POST['participant_id'] ) ? (int) wp_unslash( $_POST['participant_id'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$participant_id = isset( $_POST['participant_id'] ) ? sanitize_text_field( wp_unslash( $_POST['participant_id'] ) ) : '0';
+
+		// Always cast as integer.
+		$participant_id = (int) $participant_id;
 
 		// Init data.
 		$data = [
@@ -942,7 +949,8 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 
 			// Construct key defined in POST and grab value.
 			$post_key = 'civicrm_eo_cdp_' . $key;
-			$value = isset( $_POST[ $post_key ] ) ? (int) wp_unslash( $_POST[ $post_key ] ) : 0;
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$value = isset( $_POST[ $post_key ] ) ? (int) sanitize_text_field( wp_unslash( $_POST[ $post_key ] ) ) : 0;
 
 			// Add to params.
 			$params[ 'custom_' . $field_id ] = $value;

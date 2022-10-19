@@ -672,10 +672,13 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 	public function form_get() {
 
 		// Get Event ID.
-		$civi_event_id = isset( $_POST['civi_event_id'] ) ? wp_unslash( $_POST['civi_event_id'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$civi_event_id = isset( $_POST['civi_event_id'] ) ? sanitize_text_field( wp_unslash( $_POST['civi_event_id'] ) ) : '0';
 
-		// Sanitise.
-		$event_id = absint( trim( $civi_event_id ) );
+		// Always cast as integer.
+		$event_id = (int) $civi_event_id;
+
+		// TODO: Handle failures.
 
 		// Init data.
 		$data = [
@@ -713,8 +716,11 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 						'</li></ul>';
 
 		// Get form data.
-		$civi_event_id = isset( $_POST['civi_event_id'] ) ? wp_unslash( $_POST['civi_event_id'] ) : '0';
-		$civi_event_id = absint( trim( $civi_event_id ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$civi_event_id = isset( $_POST['civi_event_id'] ) ? sanitize_text_field( wp_unslash( $_POST['civi_event_id'] ) ) : '0';
+
+		// Always cast as integer.
+		$event_id = (int) $civi_event_id;
 
 		// Init data.
 		$data = [
@@ -751,7 +757,8 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 
 			// Construct key defined in POST and grab value.
 			$post_key = 'civicrm_eo_cde_' . $key;
-			$value = isset( $_POST[ $post_key ] ) ? (int) trim( wp_unslash( $_POST[ $post_key ] ) ) : 0;
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$value = isset( $_POST[ $post_key ] ) ? (int) sanitize_text_field( wp_unslash( $_POST[ $post_key ] ) ) : 0;
 
 			// Add to params.
 			$params[ 'custom_' . $field_id ] = $value;

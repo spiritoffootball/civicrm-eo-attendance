@@ -459,20 +459,24 @@ class CiviCRM_Event_Organiser_Attendance {
 		}
 
 		// Bail if this is itself a redirect to an info page.
-		if ( isset( $_GET['noFullMsg'] ) && trim( wp_unslash( $_GET['noFullMsg'] ) ) == 'true' ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['noFullMsg'] ) && 'true' === sanitize_text_field( wp_unslash( $_GET['noFullMsg'] ) ) ) {
 			return;
 		}
 
 		// Bail if no ID.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
 		if ( ! isset( $_GET['id'] ) ) {
 			return;
 		}
-		if ( ! is_numeric( trim( wp_unslash( $_GET['id'] ) ) ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
+		if ( ! is_numeric( sanitize_text_field( wp_unslash( $_GET['id'] ) ) ) ) {
 			return;
 		}
 
 		// Get the ID of the CiviEvent.
-		$civi_event_id = absint( trim( wp_unslash( $_GET['id'] ) ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
+		$civi_event_id = (int) sanitize_text_field( wp_unslash( $_GET['id'] ) );
 
 		// Get EO Event ID.
 		$event_id = $this->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );

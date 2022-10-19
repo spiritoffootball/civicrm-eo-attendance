@@ -344,12 +344,20 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 */
 	public function refresh_rv_single() {
 
+		// Sanity checks.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( empty( $_GET['action'] ) || empty( $_GET['rdv'] ) ) {
+			return;
+		}
+
 		// Was the "refresh" button clicked?
-		if ( ! empty( $_GET['action'] ) && 'refresh' == $_GET['action'] && ! empty( $_GET['rdv'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( 'refresh' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
 
 			// Get redirect and Rendez Vous ID.
 			$redirect = remove_query_arg( [ 'rdv', 'action', 'n' ], wp_get_referer() );
-			$rendez_vous_id = absint( $_GET['rdv'] );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$rendez_vous_id = (int) sanitize_text_field( wp_unslash( $_GET['rdv'] ) );
 
 			// Do the update.
 			$updated_id = $this->rv_update( $rendez_vous_id );
@@ -377,14 +385,17 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	public function refresh_rv_all() {
 
 		// Was the "refresh" button clicked?
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( empty( $_GET['action'] ) ) {
 			return;
 		}
-		if ( 'refresh_all' != trim( wp_unslash( $_GET['action'] ) ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( 'refresh_all' !== sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
 			return;
 		}
 
 		// Is this the Rendez Vous component Group archive?
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( bp_is_group() && bp_is_current_action( rendez_vous()->get_component_slug() ) && empty( $_REQUEST['rdv'] ) ) {
 
 			// Get redirect.
@@ -495,6 +506,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		];
 
 		if ( empty( $query_args['meta_query'] ) ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			$query_args['meta_query'] = [ $month_query ];
 		} else {
 			$query_args['meta_query'][] = $month_query;
@@ -1485,8 +1497,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$error_markup = __( 'Oops! Something went wrong.', 'civicrm-eo-attendance' );
 
 		// Get form data.
-		$civi_event_id = isset( $_POST['civi_event_id'] ) ? wp_unslash( $_POST['civi_event_id'] ) : '0';
-		$civi_event_id = absint( trim( $civi_event_id ) );
+		$civi_event_id = isset( $_POST['civi_event_id'] ) ? sanitize_text_field( wp_unslash( $_POST['civi_event_id'] ) ) : '0';
+		$civi_event_id = (int) $civi_event_id;
 		$register_data = isset( $_POST['register'] ) ? wp_unslash( $_POST['register'] ) : [];
 		$unregister_data = isset( $_POST['unregister'] ) ? wp_unslash( $_POST['unregister'] ) : [];
 
@@ -2007,6 +2019,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			$this->organizer_meta_key => [],
 		];
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$args = wp_parse_args( $_POST, $defaults );
 
 		// Cast "enabled" value as integer.
@@ -2229,8 +2242,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			}
 
 			// Get date of Event.
-			// TODO: use Date object.
-			$date = date( 'Y-m-d H:i:s', $timestamp );
+			$date = gmdate( 'Y-m-d H:i:s', $timestamp );
 
 			// Skip to next if it is a past Event.
 			if ( $this->is_past( $date ) ) {
