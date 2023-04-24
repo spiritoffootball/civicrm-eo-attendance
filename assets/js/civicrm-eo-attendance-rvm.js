@@ -326,7 +326,8 @@ var CiviCRM_EO_Attendance_RVM = CiviCRM_EO_Attendance_RVM || {};
 						// Send form data.
 						civi_event_id: parseInt( civi_event_id ),
 						register: register_data,
-						unregister: unregister_data
+						unregister: unregister_data,
+						_ajax_nonce: CiviCRM_EO_Attendance_RVM.settings.get_setting( 'ajax_nonce' )
 
 					},
 

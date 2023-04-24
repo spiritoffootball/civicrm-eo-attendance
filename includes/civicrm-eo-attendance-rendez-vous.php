@@ -288,6 +288,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Define settings.
 		$settings = [
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'ajax_nonce' => wp_create_nonce( 'civicrm_eo_rvm_ajax_nonce' ),
 		];
 
 		// Localisation array.
@@ -1506,41 +1507,62 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 */
 	public function rv_form_process() {
 
-		// Show something when there's an error.
-		$error_markup = __( 'Oops! Something went wrong.', 'civicrm-eo-attendance' );
-
-		// Get form data.
-		$civi_event_id = isset( $_POST['civi_event_id'] ) ? sanitize_text_field( wp_unslash( $_POST['civi_event_id'] ) ) : '0';
-		$civi_event_id = (int) $civi_event_id;
-		$register_data = isset( $_POST['register'] ) ? wp_unslash( $_POST['register'] ) : [];
-		$unregister_data = isset( $_POST['unregister'] ) ? wp_unslash( $_POST['unregister'] ) : [];
-
 		// Init data.
 		$data = [
-			'civi_event_id' => $civi_event_id,
-			'error' => '0',
-			'markup' => '',
+			'error' => '1',
+			'markup' => __( 'Oops! Something went wrong.', 'civicrm-eo-attendance' ),
 		];
+
+		// Since this is an AJAX request, check security.
+		$result = check_ajax_referer( 'civicrm_eo_rvm_ajax_nonce', false, false );
+		if ( $result === false ) {
+			wp_send_json( $json );
+		}
 
 		// Bail if no CiviCRM init function.
 		if ( ! function_exists( 'civi_wp' ) ) {
-			$data['error'] = '1';
-			$data['markup'] = $error_markup;
 			wp_send_json( $data );
 		}
 
 		// Try and init CiviCRM.
 		if ( ! civi_wp()->initialize() ) {
-			$data['error'] = '1';
-			$data['markup'] = $error_markup;
 			wp_send_json( $data );
 		}
 
-		// Sanity check.
-		if ( ! is_array( $register_data ) || ! is_array( $unregister_data ) ) {
-			$data['error'] = '1';
-			$data['markup'] = $error_markup;
-			wp_send_json( $data );
+		// Get form data.
+		$civi_event_id = isset( $_POST['civi_event_id'] ) ? sanitize_text_field( wp_unslash( $_POST['civi_event_id'] ) ) : '0';
+		$civi_event_id = (int) $civi_event_id;
+
+		// Check and sanitise Register data.
+		$register_data = filter_input( INPUT_POST, 'register', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		if ( ! empty( $register_data ) ) {
+
+			// Sanitise array contents.
+			array_walk(
+				$register_data,
+				function( &$item ) {
+					$item = (int) trim( $item );
+				}
+			);
+
+		} else {
+			$register_data = [];
+		}
+
+		// Check and sanitise Unregister data.
+		$unregister_data = filter_input( INPUT_POST, 'unregister', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		if ( ! empty( $unregister_data ) ) {
+
+			// Sanitise array contents.
+			array_walk(
+				$unregister_data,
+				function( &$item ) {
+					$item = (int) trim( $item );
+				}
+			);
+
+		} else {
+			$unregister_data = [];
 		}
 
 		// Get now in appropriate format.
@@ -1557,7 +1579,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$linked_title = '<a href="' . esc_url( $event_link ) . '">' . esc_html( $event_title ) . '</a>';
 
 		// Handle registrations.
-		if ( count( $register_data ) > 0 ) {
+		if ( ! empty( $register_data ) ) {
 
 			// Register each attendee.
 			foreach ( $register_data as $attendee_id => $role_id ) {
@@ -1634,7 +1656,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		}
 
 		// Handle de-registrations.
-		if ( count( $unregister_data ) > 0 ) {
+		if ( ! empty( $unregister_data ) ) {
 
 			// De-register each attendee.
 			foreach ( $unregister_data as $attendee_id => $role_id ) {
@@ -1705,11 +1727,12 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		}
 
-		// What to return?
-		$markup = __( 'Thanks!', 'civicrm-eo-attendance' );
-
-		// Amend data.
-		$data['markup'] = $markup;
+		// Build return data.
+		$data = [
+			'civi_event_id' => $civi_event_id,
+			'error' => '0',
+			'markup' => __( 'Thanks!', 'civicrm-eo-attendance' ),
+		];
 
 		// Send data to browser.
 		wp_send_json( $data );
