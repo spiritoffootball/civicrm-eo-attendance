@@ -188,8 +188,10 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 */
 	public function activate() {
 
+		/*
 		// Create data entities.
-		//$this->entities_create();
+		$this->entities_create();
+		*/
 
 	}
 
@@ -344,36 +346,39 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 */
 	public function refresh_rv_single() {
 
+		// Check link validity.
+		$nonce = filter_input( INPUT_GET, 'civicrm_eo_refresh_nonce' );
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'civicrm_eo_refresh_action' ) ) {
+			return;
+		}
+
 		// Sanity checks.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( empty( $_GET['action'] ) || empty( $_GET['rdv'] ) ) {
 			return;
 		}
 
 		// Was the "refresh" button clicked?
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( 'refresh' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
-
-			// Get redirect and Rendez Vous ID.
-			$redirect = remove_query_arg( [ 'rdv', 'action', 'n' ], wp_get_referer() );
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$rendez_vous_id = (int) sanitize_text_field( wp_unslash( $_GET['rdv'] ) );
-
-			// Do the update.
-			$updated_id = $this->rv_update( $rendez_vous_id );
-
-			// Appropriate error messages.
-			if ( $updated_id === false ) {
-				bp_core_add_message( __( 'Refreshing this Rendez-vous failed.', 'civicrm-eo-attendance' ), 'error' );
-			} else {
-				bp_core_add_message( __( 'Rendez-vous successfully refreshed.', 'civicrm-eo-attendance' ) );
-				$redirect = add_query_arg( 'rdv', $updated_id, $redirect );
-			}
-
-			// Finally redirect.
-			bp_core_redirect( $redirect );
-
+		if ( 'refresh' !== sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
+			return;
 		}
+
+		// Get redirect and Rendez Vous ID.
+		$redirect = remove_query_arg( [ 'rdv', 'action', 'n', 'civicrm_eo_refresh_nonce' ], wp_get_referer() );
+		$rendez_vous_id = (int) sanitize_text_field( wp_unslash( $_GET['rdv'] ) );
+
+		// Do the update.
+		$updated_id = $this->rv_update( $rendez_vous_id );
+
+		// Appropriate error messages.
+		if ( $updated_id === false ) {
+			bp_core_add_message( __( 'Refreshing this Rendez-vous failed.', 'civicrm-eo-attendance' ), 'error' );
+		} else {
+			bp_core_add_message( __( 'Rendez-vous successfully refreshed.', 'civicrm-eo-attendance' ) );
+			$redirect = add_query_arg( 'rdv', $updated_id, $redirect );
+		}
+
+		// Finally redirect.
+		bp_core_redirect( $redirect );
 
 	}
 
@@ -384,22 +389,22 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 */
 	public function refresh_rv_all() {
 
-		// Was the "refresh" button clicked?
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( empty( $_GET['action'] ) ) {
+		// Check link validity.
+		$nonce = filter_input( INPUT_GET, 'civicrm_eo_refresh_all_nonce' );
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'civicrm_eo_refresh_all_action' ) ) {
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( 'refresh_all' !== sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
+
+		// Was the "refresh" button clicked?
+		if ( empty( $_GET['action'] ) || 'refresh_all' !== sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
 			return;
 		}
 
 		// Is this the Rendez Vous component Group archive?
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( bp_is_group() && bp_is_current_action( rendez_vous()->get_component_slug() ) && empty( $_REQUEST['rdv'] ) ) {
 
 			// Get redirect.
-			$redirect = remove_query_arg( [ 'action', 'rdv', 'n' ], wp_get_referer() );
+			$redirect = remove_query_arg( [ 'action', 'rdv', 'n', 'civicrm_eo_refresh_all_nonce' ], wp_get_referer() );
 
 			// Get Group ID.
 			$group_id = bp_get_current_group_id();
@@ -440,7 +445,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			foreach( $rv_ids AS $rv_id ) {
 				$this->rv_delete( $rv_id );
 			}
-			return;
+			bp_core_redirect( $redirect );
 			// ============================== delete ===============================
 			*/
 
@@ -559,7 +564,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	public function rv_create( $datetime, $group_id = 0 ) {
 
 		// Members Group ID.
-		if ( $group_id === 0 ) {
+		if ( empty( $group_id ) ) {
 			$group_id = bp_get_current_group_id();
 		}
 
@@ -588,7 +593,15 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$month_start = $datetime->format( 'Y-m-01' );
 		$month_end = $datetime->format( 'Y-m-t' );
 
-		// Construct args.
+		/**
+		 * Filter Event query arguments.
+		 *
+		 * Used internally to include only paid Events.
+		 *
+		 * @since 0.4.7
+		 *
+		 * @param array $query_args The array of query args.
+		 */
 		$event_args = apply_filters( 'civicrm_event_organiser_rendez_vous_event_args', [
 			'event_start_after'  => $month_start,
 			'event_start_before' => $month_end,
@@ -651,7 +664,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			'duration' => '01:00',
 			'venue' => __( 'Erfurt', 'civicrm-eo-attendance' ),
 			'status' => 'draft',
-			'group_id' => $group_id,
+			'group_id' => (int) $group_id,
 			'attendees' => $attendee_ids,
 			'days' => $days,
 		];
@@ -666,7 +679,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			$trace = $e->getTraceAsString();
 			error_log( print_r( [
 				'method' => __METHOD__,
-				'new_rv' => $rendez_vous_id,
+				'new_rv_id' => $rendez_vous_id,
+				'rendez_vous_args' => $rendez_vous,
 				'backtrace' => $trace,
 			], true ) );
 			return false;
@@ -730,7 +744,15 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$month_start = $final->format( 'Y-m-01' );
 		$month_end = $final->format( 'Y-m-t' );
 
-		// Construct args.
+		/**
+		 * Filter Event query arguments.
+		 *
+		 * Used internally to include only paid Events.
+		 *
+		 * @since 0.4.7
+		 *
+		 * @param array $query_args The array of query args.
+		 */
 		$event_args = apply_filters( 'civicrm_event_organiser_rendez_vous_event_args', [
 			'event_start_after'  => $month_start,
 			'event_start_before' => $month_end,
@@ -838,17 +860,10 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		}
 
-		// Define title.
-		$title = sprintf(
-			/* translators: %s: The formatted Event date. */
-			__( 'Availability for %s', 'civicrm-eo-attendance' ),
-			date_i18n( 'F Y', $final->getTimestamp() )
-		);
-
 		// Construct update array.
 		$rv_data = [
 			'id' => $rendez_vous->id,
-			'title' => $title,
+			'title' => $rendez_vous->title,
 			'duration' => '01:00',
 			'venue' => $rendez_vous->venue,
 			'status' => 'publish',
@@ -870,9 +885,6 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Store the Event IDs for the Rendez Vous.
 		update_post_meta( $updated_id, $this->reference_meta_key, $references );
-
-		// Store the month for the Rendez Vous.
-		update_post_meta( $updated_id, $this->month_meta_key, $month_start );
 
 		// --<
 		return $updated_id;
@@ -1011,10 +1023,11 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 							// Build the URL we want.
 							$current_url = home_url( add_query_arg( [] ) );
-							$url = add_query_arg( 'action', 'refresh_all', $current_url );
+							$refresh_url = add_query_arg( 'action', 'refresh_all', $current_url );
+							$url = wp_nonce_url( $refresh_url, 'civicrm_eo_refresh_all_action', 'civicrm_eo_refresh_all_nonce' );
 
 							// Construct link.
-							$link = '<a href="' . esc_url( $url ) . '">' .
+							$link = '<a href="' . $url . '">' .
 										__( 'Refresh All', 'civicrm-eo-attendance' ) .
 									'</a>';
 
@@ -1074,7 +1087,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 							__( 'Edit', 'civicrm-eo-attendance' ),
 						],
 						[
-							'action=refresh',
+							'action=refresh&#038;civicrm_eo_refresh_nonce=' . wp_create_nonce( 'civicrm_eo_refresh_action' ),
 							'class="refresh-rendez-vous"',
 							__( 'Refresh', 'civicrm-eo-attendance' ),
 						],
