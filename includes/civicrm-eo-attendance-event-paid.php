@@ -310,6 +310,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 * @since 0.5
 	 *
 	 * @param array $query_args The array of query args.
+	 * @return array $query_args The modified array of query args.
 	 */
 	public function paid_filter( $query_args ) {
 
