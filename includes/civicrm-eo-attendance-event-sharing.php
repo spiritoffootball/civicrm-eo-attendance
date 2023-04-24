@@ -180,6 +180,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	public function settings_update() {
 
 		// Set value based on whether the checkbox is ticked.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$value = ( isset( $_POST[ $this->option_name ] ) ) ? 1 : 0;
 
 		// Save option.
@@ -284,6 +285,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		if ( is_null( $value ) ) {
 
 			// Set value based on whether the checkbox is ticked.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$value = ( isset( $_POST[ $this->option_name ] ) ) ? 1 : 0;
 
 		}
