@@ -33,6 +33,16 @@ if ( ! defined( 'CIVICRM_EO_ATTENDANCE_PATH' ) ) {
 	define( 'CIVICRM_EO_ATTENDANCE_PATH', plugin_dir_path( CIVICRM_EO_ATTENDANCE_FILE ) );
 }
 
+// Set our debugging status here.
+if ( ! defined( 'CIVICRM_EO_ATTENDANCE_DEBUG' ) ) {
+	define( 'CIVICRM_EO_ATTENDANCE_DEBUG', true );
+}
+
+// Set our localhost status here.
+if ( ! defined( 'CIVICRM_EO_ATTENDANCE_LOCALHOST' ) ) {
+	define( 'CIVICRM_EO_ATTENDANCE_LOCALHOST', true );
+}
+
 /**
  * CiviCRM Event Organiser Attendance Class.
  *
@@ -492,6 +502,40 @@ class CiviCRM_Event_Organiser_Attendance {
 		// Redirect now.
 		wp_safe_redirect( $event_url );
 		exit();
+
+	}
+
+	/**
+	 * Write to the error log.
+	 *
+	 * @since 0.6.1
+	 *
+	 * @param array $data The data to write to the log file.
+	 */
+	public function log_error( $data = [] ) {
+
+		// Skip if not debugging.
+		if ( false === CIVICRM_EO_ATTENDANCE_DEBUG ) {
+			return;
+		}
+
+		// Skip if empty.
+		if ( empty( $data ) ) {
+			return;
+		}
+
+		// Format data.
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+		$error = print_r( $data, true );
+
+		// Write to log file.
+		if ( true === CIVICRM_EO_ATTENDANCE_LOCALHOST ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			error_log( $error );
+		} else {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			error_log( $error, 3, WP_CONTENT_DIR . '/debug.log' );
+		}
 
 	}
 
