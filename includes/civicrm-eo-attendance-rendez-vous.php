@@ -441,15 +441,6 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				}
 			}
 
-			/*
-			// ============================== delete ===============================
-			foreach( $rv_ids AS $rv_id ) {
-				$this->rv_delete( $rv_id );
-			}
-			bp_core_redirect( $redirect );
-			// ============================== delete ===============================
-			*/
-
 			// Init error flag.
 			$has_error = false;
 
@@ -465,7 +456,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 					$returned_id = $this->rv_create( $datetime, $group_id );
 				} else {
 					$flipped = array_flip( $rv_meta );
-					$returned_id = $this->rv_update( $flipped[ $month ] );
+					$rendez_vous_id = $flipped[ $month ];
+					$returned_id = $this->rv_update( $datetime, $rendez_vous_id );
 				}
 
 				// Error check.
@@ -711,10 +703,11 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.4.7
 	 *
-	 * @param int|bool $rendez_vous_id The numeric ID of the Rendez Vous to update.
+	 * @param DateTime $datetime The DateTime object for the month of the Rendez Vous.
+	 * @param int $rendez_vous_id The numeric ID of the Rendez Vous to update.
 	 * @return int|bool $updated_id The ID of the updated Rendez Vous, or false on failure.
 	 */
-	public function rv_update( $rendez_vous_id ) {
+	public function rv_update( $datetime, $rendez_vous_id ) {
 
 		// Get Rendez Vous to rebuild.
 		$rendez_vous = rendez_vous_get_item( $rendez_vous_id );
@@ -738,12 +731,9 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			$references = [];
 		}
 
-		// Get final date.
-		$final = new DateTime( $rendez_vous->older_date, eo_get_blog_timezone() );
-
 		// Events on this month.
-		$month_start = $final->format( 'Y-m-01' );
-		$month_end = $final->format( 'Y-m-t' );
+		$month_start = $datetime->format( 'Y-m-01' );
+		$month_end = $datetime->format( 'Y-m-t' );
 
 		/**
 		 * Filter Event query arguments.
@@ -865,6 +855,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$rv_data = [
 			'id' => $rendez_vous->id,
 			'title' => $rendez_vous->title,
+			'organizer' => $rendez_vous->organizer,
 			'duration' => '01:00',
 			'venue' => $rendez_vous->venue,
 			'status' => 'publish',
@@ -2425,11 +2416,6 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 */
 	public function is_organiser( $group_id ) {
 
-		// Always allow super admins.
-		if ( is_super_admin() ) {
-			return true;
-		}
-
 		// Assume not Organiser.
 		$is_organiser = false;
 
@@ -2444,6 +2430,11 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			return $is_organiser;
 		}
 
+		// Always allow super admins.
+		if ( is_super_admin() ) {
+			return array_pop( $organizer_ids );
+		}
+
 		// Bail if the current User is not an organizer.
 		$current_user = wp_get_current_user();
 		if ( ! in_array( $current_user->ID, (array) $organizer_ids ) ) {
@@ -2451,7 +2442,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		}
 
 		// Okay this is an Organiser.
-		$is_organiser = true;
+		$is_organiser = $current_user->ID;
 
 		// --<
 		return $is_organiser;
