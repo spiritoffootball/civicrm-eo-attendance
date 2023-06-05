@@ -165,6 +165,9 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Allow all Rendez Vous to be refreshed.
 		add_action( 'bp_screens', [ $this, 'refresh_rv_all' ], 3 );
 
+		// Sort Rendez Vous listings by descending date.
+		//add_filter( 'bp_before_rendez_vouss_has_args_parse_args', [ $this, 'rv_sort' ], 20, 1 );
+
 		// Add form element, scripts and styles to Group manage screen.
 		add_action( 'rendez_vous_group_edit_screen_after', [ $this, 'group_manage_form_amend' ], 10, 1 );
 		add_action( 'wp_enqueue_scripts', [ $this, 'group_manage_form_enqueue_styles' ], 20 );
@@ -341,6 +344,58 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Sort the list of Rendez Vous.
+	 *
+	 * @since 0.4.7
+	 *
+	 * @param array $args The array of params for the Rendez Vous.
+	 * @return int|bool $rendez_vous_id The numeric ID of the Rendez Vous Post, or false on failure.
+	 */
+	public function rv_sort( $args ) {
+
+		// Bail if not on a Group screen.
+		if ( empty( $args['group_id'] ) ) {
+			return $args;
+		}
+
+		/*
+		$e = new Exception();
+		$trace = $e->getTraceAsString();
+		error_log( print_r( [
+			'method' => __METHOD__,
+			'args' => $args,
+			//'backtrace' => $trace,
+		], true ) );
+		*/
+
+		$args['meta_query'] = [
+			'rendez_vous_month' => [
+				'key' => '_rendez_vous_month',
+				'compare' => 'EXISTS'
+			],
+		];
+
+		// Set order to date descending.
+		//$args['meta_key'] = 'rendez_vous_month';
+		$args['orderby'] = 'rendez_vous_month';
+		$args['order'] = 'DESC';
+
+		/*
+		$e = new Exception();
+		$trace = $e->getTraceAsString();
+		error_log( print_r( [
+			'method' => __METHOD__,
+			'args' => $args,
+			//'backtrace' => $trace,
+		], true ) );
+		*/
+
+		// --<
+		return $args;
+
+	}
+
+	/**
 	 * Intercept clicks on "Refresh" button for a single Rendez Vous.
 	 *
 	 * @since 0.5
@@ -367,8 +422,20 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$redirect = remove_query_arg( [ 'rdv', 'action', 'n', 'civicrm_eo_refresh_nonce' ], wp_get_referer() );
 		$rendez_vous_id = (int) sanitize_text_field( wp_unslash( $_GET['rdv'] ) );
 
+		// Get Rendez Vous to rebuild.
+		$rendez_vous = rendez_vous_get_item( $rendez_vous_id );
+
+		// Bail if this is not an attendance Rendez Vous.
+		$month = $this->get_meta( $rendez_vous );
+		if ( $month === false ) {
+			return;
+		}
+
+		// Create DateTime object.
+		$datetime = new DateTime( $month, eo_get_blog_timezone() );
+
 		// Do the update.
-		$updated_id = $this->rv_update( $rendez_vous_id );
+		$updated_id = $this->rv_update( $datetime, $rendez_vous_id );
 
 		// Appropriate error messages.
 		if ( $updated_id === false ) {
