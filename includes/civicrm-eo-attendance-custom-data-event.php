@@ -21,11 +21,11 @@ defined( 'ABSPATH' ) || exit;
 class CiviCRM_EO_Attendance_Custom_Data_Event {
 
 	/**
-	 * Plugin (calling) object.
+	 * Plugin object.
 	 *
 	 * @since 0.2.2
 	 * @access public
-	 * @var object $plugin The plugin object.
+	 * @var CiviCRM_Event_Organiser_Attendance
 	 */
 	public $plugin;
 
@@ -34,7 +34,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $group_name The Group ID option name.
+	 * @var string
 	 */
 	public $group_name = 'civicrm_eo_event_custom_group_id';
 
@@ -43,7 +43,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Event {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $group_name The Field IDs option name.
+	 * @var string
 	 */
 	public $field_ids_name = 'civicrm_eo_event_custom_field_ids';
 

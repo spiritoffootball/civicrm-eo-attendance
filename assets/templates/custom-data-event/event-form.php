@@ -11,7 +11,8 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-?><!-- assets/templates/custom-data-event/event-form.php -->
+?>
+<!-- assets/templates/custom-data-event/event-form.php -->
 <form class="civicrm_eo_cde" id="civicrm_eo_cde_<?php echo esc_attr( $event_id ); ?>">
 
 	<input type="hidden" name="civicrm_eo_cde_event_id" id="civicrm_eo_cde_event_id" value="<?php echo esc_attr( $event_id ); ?>">

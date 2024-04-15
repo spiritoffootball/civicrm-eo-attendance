@@ -11,7 +11,8 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-?><!-- assets/templates/event-paid/setting-metabox.php -->
+?>
+<!-- assets/templates/event-paid/setting-metabox.php -->
 <div class="civi_eo_event_option_block">
 	<p>
 		<label for="civicrm_eo_event_default_paid"><?php esc_html_e( 'Paid Event:', 'civicrm-eo-attendance' ); ?></label>

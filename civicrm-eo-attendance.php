@@ -1,11 +1,13 @@
 <?php
 /**
+ * CiviCRM Event Organiser Attendance
+ *
  * Plugin Name: CiviCRM Event Organiser Attendance
  * Description: Attendance functionality for CiviCRM Event Organiser plugin.
- * Version: 0.6.1
- * Author: Christian Wach
- * Author URI: https://haystack.co.uk
- * Plugin URI: https://github.com/christianwach/civicrm-eo-attendance
+ * Plugin URI:  https://github.com/christianwach/civicrm-eo-attendance
+ * Version:     0.6.1
+ * Author:      Christian Wach
+ * Author URI:  https://haystack.co.uk
  * Text Domain: civicrm-eo-attendance
  * Domain Path: /languages
  *
@@ -57,7 +59,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $civicrm_eo The plugin reference.
+	 * @var CiviCRM_Event_Organiser
 	 */
 	public $civicrm_eo;
 
@@ -66,7 +68,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $participant_listing The Participant Listing object.
+	 * @var CiviCRM_EO_Attendance_Participant_Listing
 	 */
 	public $participant_listing;
 
@@ -75,7 +77,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.3
 	 * @access public
-	 * @var object $event_leader The Event Leader object.
+	 * @var CiviCRM_EO_Attendance_Event_Leader
 	 */
 	public $event_leader;
 
@@ -84,7 +86,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.2.2
 	 * @access public
-	 * @var object $custom_data_event The Event Custom Data object.
+	 * @var CiviCRM_EO_Attendance_Custom_Data_Event
 	 */
 	public $custom_data_event;
 
@@ -93,7 +95,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.2.2
 	 * @access public
-	 * @var object $custom_data_participant The Participant Custom Data object.
+	 * @var CiviCRM_EO_Attendance_Custom_Data_Participant
 	 */
 	public $custom_data_participant;
 
@@ -102,7 +104,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.2.2
 	 * @access public
-	 * @var object $event_sharing The Event Sharing object.
+	 * @var CiviCRM_EO_Attendance_Event_Sharing
 	 */
 	public $event_sharing;
 
@@ -111,7 +113,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var object $event_paid The Event Paid object.
+	 * @var CiviCRM_EO_Attendance_Event_Paid
 	 */
 	public $event_paid;
 
@@ -120,7 +122,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.4.7
 	 * @access public
-	 * @var object $event_paid The Rendez Vous Manager object.
+	 * @var CiviCRM_EO_Attendance_Rendez_Vous
 	 */
 	public $rendez_vous;
 
@@ -193,25 +195,13 @@ class CiviCRM_Event_Organiser_Attendance {
 	 */
 	public function include_files() {
 
-		// Load our Participant Listing class.
+		// Load our class files.
 		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-participant-listing.php';
-
-		// Load our Event Leader class.
 		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-leader.php';
-
-		// Load our Event Paid class.
 		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-paid.php';
-
-		// Load our Participant Custom Data class.
 		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-custom-data-participant.php';
-
-		// Load our Event Custom Data class.
 		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-custom-data-event.php';
-
-		// Load our Event Sharing class.
 		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-sharing.php';
-
-		// Load our Rendez Vous class.
 		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-rendez-vous.php';
 
 	}
@@ -232,7 +222,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		// Front end hooks.
 		if ( ! is_admin() ) {
 
-			// Change urls on front end.
+			// Change URLs on front end.
 			add_action( 'civicrm_alterContent', [ $this, 'content_parse' ], 10, 4 );
 
 			// Register any public styles.

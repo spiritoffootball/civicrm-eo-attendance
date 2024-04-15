@@ -21,11 +21,11 @@ defined( 'ABSPATH' ) || exit;
 class CiviCRM_EO_Attendance_Rendez_Vous {
 
 	/**
-	 * Plugin (calling) object.
+	 * Plugin object.
 	 *
 	 * @since 0.4.7
 	 * @access public
-	 * @var object $plugin The plugin object.
+	 * @var CiviCRM_Event_Organiser_Attendance
 	 */
 	public $plugin;
 
@@ -34,7 +34,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.4.7
 	 * @access public
-	 * @var object $eo The CiviCRM EO Plugin Admin object reference.
+	 * @var CEO_Admin_DB
 	 */
 	public $db;
 
@@ -45,7 +45,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $term_option The Rendez Vous Term ID option name.
+	 * @var string
 	 */
 	public $term_option = 'civicrm_eo_event_rv_term_id';
 
@@ -54,7 +54,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5
 	 * @access public
-	 * @var str $month_meta_key The Rendez Vous "Month" meta key name.
+	 * @var string
 	 */
 	public $month_meta_key = '_rendez_vous_month';
 
@@ -63,7 +63,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5
 	 * @access public
-	 * @var str $reference_meta_key The Rendez Vous "Reference Array" meta key name.
+	 * @var string
 	 */
 	public $reference_meta_key = '_rendez_vous_reference';
 
@@ -72,7 +72,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5
 	 * @access public
-	 * @var str $group_meta_key The Group "Attendance Enabled" meta key name.
+	 * @var string
 	 */
 	public $group_meta_key = '_civicrm_eo_event_attendance';
 
@@ -86,7 +86,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5
 	 * @access public
-	 * @var str $organizer_meta_key The Group "Rendez Vous Organizer" meta key name.
+	 * @var string
 	 */
 	public $organizer_meta_key = '_civicrm_eo_event_organizer';
 
@@ -95,7 +95,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5
 	 * @access public
-	 * @var int $future_count The number of future Rendez Vous to generate.
+	 * @var integer
 	 */
 	public $future_count = 6;
 

@@ -21,11 +21,11 @@ defined( 'ABSPATH' ) || exit;
 class CiviCRM_EO_Attendance_Event_Paid {
 
 	/**
-	 * Plugin (calling) object.
+	 * Plugin object.
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var object $plugin The plugin object.
+	 * @var CiviCRM_Event_Organiser_Attendance
 	 */
 	public $plugin;
 
@@ -34,7 +34,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $option_name The option name.
+	 * @var string
 	 */
 	public $option_name = 'civicrm_eo_event_default_paid';
 
@@ -43,7 +43,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 *
 	 * @since 0.3.1
 	 * @access public
-	 * @var str $meta_name The Post meta name.
+	 * @var string
 	 */
 	public $meta_name = '_civi_paid';
 
