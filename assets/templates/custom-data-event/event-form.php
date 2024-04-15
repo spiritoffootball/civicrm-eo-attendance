@@ -12,45 +12,45 @@
 defined( 'ABSPATH' ) || exit;
 
 ?><!-- assets/templates/custom-data-event/event-form.php -->
-<form class="civicrm_eo_cde" id="civicrm_eo_cde_<?php echo $event_id; ?>">
+<form class="civicrm_eo_cde" id="civicrm_eo_cde_<?php echo esc_attr( $event_id ); ?>">
 
-	<input type="hidden" name="civicrm_eo_cde_event_id" id="civicrm_eo_cde_event_id" value="<?php echo $event_id; ?>">
+	<input type="hidden" name="civicrm_eo_cde_event_id" id="civicrm_eo_cde_event_id" value="<?php echo esc_attr( $event_id ); ?>">
 
 	<p class="description"><?php esc_html_e( 'Please fill out some figures for this Event.', 'civicrm-eo-attendance' ); ?></p>
 
 	<ul>
 
 		<li>
-			<label for="civicrm_eo_cde_total_<?php echo $event_id; ?>"><?php esc_html_e( 'Number of Attendees', 'civicrm-eo-attendance' ); ?></label>
-			<input type="text" maxlength="6" name="civicrm_eo_cde_total_<?php echo $event_id; ?>" id="civicrm_eo_cde_total_<?php echo $event_id; ?>" class="civicrm-eo-form-text">
+			<label for="civicrm_eo_cde_total_<?php echo esc_attr( $event_id ); ?>"><?php esc_html_e( 'Number of Attendees', 'civicrm-eo-attendance' ); ?></label>
+			<input type="text" maxlength="6" name="civicrm_eo_cde_total_<?php echo esc_attr( $event_id ); ?>" id="civicrm_eo_cde_total_<?php echo esc_attr( $event_id ); ?>" class="civicrm-eo-form-text">
 		</li>
 
 		<li>
-			<label for="civicrm_eo_cde_boys_<?php echo $event_id; ?>"><?php esc_html_e( 'Number of Boys', 'civicrm-eo-attendance' ); ?></label>
-			<input type="text" maxlength="6" name="civicrm_eo_cde_boys_<?php echo $event_id; ?>" id="civicrm_eo_cde_boys_<?php echo $event_id; ?>" class="civicrm-eo-form-text">
+			<label for="civicrm_eo_cde_boys_<?php echo esc_attr( $event_id ); ?>"><?php esc_html_e( 'Number of Boys', 'civicrm-eo-attendance' ); ?></label>
+			<input type="text" maxlength="6" name="civicrm_eo_cde_boys_<?php echo esc_attr( $event_id ); ?>" id="civicrm_eo_cde_boys_<?php echo esc_attr( $event_id ); ?>" class="civicrm-eo-form-text">
 		</li>
 
 		<li>
-			<label for="civicrm_eo_cde_girls_<?php echo $event_id; ?>"><?php esc_html_e( 'Number of Girls', 'civicrm-eo-attendance' ); ?></label>
-			<input type="text" maxlength="6" name="civicrm_eo_cde_girls_<?php echo $event_id; ?>" id="civicrm_eo_cde_girls_<?php echo $event_id; ?>" class="civicrm-eo-form-text">
+			<label for="civicrm_eo_cde_girls_<?php echo esc_attr( $event_id ); ?>"><?php esc_html_e( 'Number of Girls', 'civicrm-eo-attendance' ); ?></label>
+			<input type="text" maxlength="6" name="civicrm_eo_cde_girls_<?php echo esc_attr( $event_id ); ?>" id="civicrm_eo_cde_girls_<?php echo esc_attr( $event_id ); ?>" class="civicrm-eo-form-text">
 		</li>
 
 		<li>
-			<label for="civicrm_eo_cde_low_<?php echo $event_id; ?>"><?php esc_html_e( 'Age (Youngest)', 'civicrm-eo-attendance' ); ?></label>
-			<input type="text" maxlength="3" name="civicrm_eo_cde_low_<?php echo $event_id; ?>" id="civicrm_eo_cde_low_<?php echo $event_id; ?>" class="civicrm-eo-form-text">
+			<label for="civicrm_eo_cde_low_<?php echo esc_attr( $event_id ); ?>"><?php esc_html_e( 'Age (Youngest)', 'civicrm-eo-attendance' ); ?></label>
+			<input type="text" maxlength="3" name="civicrm_eo_cde_low_<?php echo esc_attr( $event_id ); ?>" id="civicrm_eo_cde_low_<?php echo esc_attr( $event_id ); ?>" class="civicrm-eo-form-text">
 		</li>
 
 		<li>
-			<label for="civicrm_eo_cde_high_<?php echo $event_id; ?>"><?php esc_html_e( 'Age (Oldest)', 'civicrm-eo-attendance' ); ?></label>
-			<input type="text" maxlength="3" name="civicrm_eo_cde_high_<?php echo $event_id; ?>" id="civicrm_eo_cde_high_<?php echo $event_id; ?>" class="civicrm-eo-form-text">
+			<label for="civicrm_eo_cde_high_<?php echo esc_attr( $event_id ); ?>"><?php esc_html_e( 'Age (Oldest)', 'civicrm-eo-attendance' ); ?></label>
+			<input type="text" maxlength="3" name="civicrm_eo_cde_high_<?php echo esc_attr( $event_id ); ?>" id="civicrm_eo_cde_high_<?php echo esc_attr( $event_id ); ?>" class="civicrm-eo-form-text">
 		</li>
 
 	</ul>
 
-	<div class="civicrm_eo_cde_error_<?php echo $event_id; ?>"></div>
+	<div class="civicrm_eo_cde_error_<?php echo esc_attr( $event_id ); ?>"></div>
 
 	<p class="submit">
-		<input type="submit" name="civicrm_eo_cde_submit_<?php echo $event_id; ?>" id="civicrm_eo_cde_submit_<?php echo $event_id; ?>" value="<?php esc_attr_e( 'Submit', 'civicrm-eo-attendance' ); ?>">
+		<input type="submit" name="civicrm_eo_cde_submit_<?php echo esc_attr( $event_id ); ?>" id="civicrm_eo_cde_submit_<?php echo esc_attr( $event_id ); ?>" value="<?php esc_attr_e( 'Submit', 'civicrm-eo-attendance' ); ?>">
 	</p>
 
 </form>

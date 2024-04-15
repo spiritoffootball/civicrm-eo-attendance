@@ -11,11 +11,12 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-?><!-- assets/templates/event-sharing/setting-metabox.php -->
+?>
+<!-- assets/templates/event-sharing/setting-metabox.php -->
 <div class="civi_eo_event_option_block">
 	<p>
 		<label for="civicrm_eo_event_default_sharing"><?php esc_html_e( 'Display Sharing Panel:', 'civicrm-eo-attendance' ); ?></label>
-		<input type="checkbox" id="civicrm_eo_event_default_sharing" name="civicrm_eo_event_default_sharing" value="1"<?php echo $sharing_checked; ?> />
+		<input type="checkbox" id="civicrm_eo_event_default_sharing" name="civicrm_eo_event_default_sharing" value="1"<?php checked( $sharing_checked ); ?> />
 	</p>
 
 	<p class="description">

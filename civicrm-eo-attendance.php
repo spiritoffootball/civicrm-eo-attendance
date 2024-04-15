@@ -258,7 +258,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		static $done;
 
 		// Only do this once.
-		if ( isset( $done ) && $done === true ) {
+		if ( isset( $done ) && true === $done ) {
 			return;
 		}
 
@@ -266,13 +266,13 @@ class CiviCRM_Event_Organiser_Attendance {
 		$this->civicrm_eo = civicrm_eo();
 
 		// Init objects.
-		$this->participant_listing = new CiviCRM_EO_Attendance_Participant_Listing();
-		$this->event_leader = new CiviCRM_EO_Attendance_Event_Leader();
-		$this->event_paid = new CiviCRM_EO_Attendance_Event_Paid();
+		$this->participant_listing     = new CiviCRM_EO_Attendance_Participant_Listing();
+		$this->event_leader            = new CiviCRM_EO_Attendance_Event_Leader();
+		$this->event_paid              = new CiviCRM_EO_Attendance_Event_Paid();
 		$this->custom_data_participant = new CiviCRM_EO_Attendance_Custom_Data_Participant();
-		$this->custom_data_event = new CiviCRM_EO_Attendance_Custom_Data_Event();
-		$this->event_sharing = new CiviCRM_EO_Attendance_Event_Sharing();
-		$this->rendez_vous = new CiviCRM_EO_Attendance_Rendez_Vous();
+		$this->custom_data_event       = new CiviCRM_EO_Attendance_Custom_Data_Event();
+		$this->event_sharing           = new CiviCRM_EO_Attendance_Event_Sharing();
+		$this->rendez_vous             = new CiviCRM_EO_Attendance_Rendez_Vous();
 
 		// Store references.
 		$this->participant_listing->set_references( $this );
@@ -331,23 +331,23 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.3.4
 	 *
-	 * @param str $content Previously generated content.
-	 * @param str $context Context of content - page or form.
-	 * @param str $tplName The file name of the tpl.
+	 * @param str    $content Previously generated content.
+	 * @param str    $context Context of content - page or form.
+	 * @param str    $tpl_name The file name of the template.
 	 * @param object $object A reference to the page or form object.
 	 */
-	public function content_parse( $content, $context, $tplName, $object ) {
+	public function content_parse( $content, $context, $tpl_name, $object ) {
 
 		// Bail if not one of the forms we want.
 		if (
-			$tplName != 'CRM/Event/Form/Registration/ThankYou.tpl' &&
-			$tplName != 'CRM/Event/Page/EventInfo.tpl'
+			'CRM/Event/Form/Registration/ThankYou.tpl' !== $tpl_name &&
+			'CRM/Event/Page/EventInfo.tpl' !== $tpl_name
 		) {
 			return;
 		}
 
 		// CiviEvent ID needs to be retrieved differently per template.
-		if ( $tplName == 'CRM/Event/Form/Registration/ThankYou.tpl' ) {
+		if ( 'CRM/Event/Form/Registration/ThankYou.tpl' === $tpl_name ) {
 
 			// Do we have a CiviEvent ID?
 			if ( ! isset( $object->_values['event']['id'] ) ) {
@@ -360,7 +360,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		}
 
 		// CiviEvent ID needs to be retrieved differently per template.
-		if ( $tplName == 'CRM/Event/Page/EventInfo.tpl' ) {
+		if ( 'CRM/Event/Page/EventInfo.tpl' === $tpl_name ) {
 
 			// Do we have a CiviEvent ID?
 			if ( ! isset( $object->_id ) ) {
@@ -377,7 +377,8 @@ class CiviCRM_Event_Organiser_Attendance {
 
 		// Use CiviCRM to construct link.
 		$link = CRM_Utils_System::url(
-			'civicrm/event/info', 'reset=1&id=' . $civi_event_id,
+			'civicrm/event/info',
+			'reset=1&id=' . $civi_event_id,
 			true,
 			null,
 			false,
@@ -390,7 +391,8 @@ class CiviCRM_Event_Organiser_Attendance {
 
 		// Use CiviCRM to construct alternative link.
 		$link = CRM_Utils_System::url(
-			'civicrm/event/info', 'id=' . $civi_event_id . '&reset=1',
+			'civicrm/event/info',
+			'id=' . $civi_event_id . '&reset=1',
 			true,
 			null,
 			false,
@@ -405,7 +407,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		$event_id = $this->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Bail if we didn't get one.
-		if ( $event_id === false ) {
+		if ( false === $event_id ) {
 			return;
 		}
 
@@ -433,7 +435,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		}
 
 		// Bail if not on CiviCRM's basepage.
-		if ( 'basepage' != civi_wp()->civicrm_context_get() ) {
+		if ( 'basepage' !== civi_wp()->civicrm_context_get() ) {
 			return;
 		}
 
@@ -449,17 +451,17 @@ class CiviCRM_Event_Organiser_Attendance {
 		$path = [];
 
 		// Check for Event.
-		if ( isset( $args['args'][0] ) && $args['args'][0] == 'civicrm' ) {
+		if ( isset( $args['args'][0] ) && 'civicrm' === $args['args'][0] ) {
 			$path[] = $args['args'][0];
 		}
 
 		// Check for Event.
-		if ( isset( $args['args'][1] ) && $args['args'][1] == 'event' ) {
+		if ( isset( $args['args'][1] ) && 'event' === $args['args'][1] ) {
 			$path[] = $args['args'][1];
 		}
 
 		// Check for info page.
-		if ( isset( $args['args'][2] ) && $args['args'][2] == 'info' ) {
+		if ( isset( $args['args'][2] ) && 'info' === $args['args'][2] ) {
 			$path[] = $args['args'][2];
 		}
 
@@ -492,7 +494,7 @@ class CiviCRM_Event_Organiser_Attendance {
 		$event_id = $this->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 		// Bail if we didn't get one.
-		if ( $event_id === false ) {
+		if ( false === $event_id ) {
 			return;
 		}
 

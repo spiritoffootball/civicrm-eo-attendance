@@ -51,13 +51,17 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
 		// Show Widget prefix.
-		echo ( isset( $args['before_widget'] ) ? $args['before_widget'] : '' );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo isset( $args['before_widget'] ) ? $args['before_widget'] : '';
 
 		// Show title if there is one.
 		if ( ! empty( $title ) ) {
-			echo ( isset( $args['before_title'] ) ? $args['before_title'] : '' );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo isset( $args['before_title'] ) ? $args['before_title'] : '';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $title;
-			echo ( isset( $args['after_title'] ) ? $args['after_title'] : '' );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo isset( $args['after_title'] ) ? $args['after_title'] : '';
 		}
 
 		// Set default max items if absent.
@@ -81,16 +85,18 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 
 			// Show something.
 			$list = '<li class="civicrm-eo-cde-widget cde-up-to-date">' .
-						__( 'You are up-to-date with your feedback.', 'civicrm-eo-attendance' ) .
+						esc_html__( 'You are up-to-date with your feedback.', 'civicrm-eo-attendance' ) .
 					'</li>' . "\n";
 
 		}
 
 		// Wrap in unordered list.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<ul class="civicrm-eo-cde-widget">' . $list . '</ul>';
 
 		// Show Widget suffix.
-		echo ( isset( $args['after_widget'] ) ? $args['after_widget'] : '' );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo isset( $args['after_widget'] ) ? $args['after_widget'] : '';
 
 	}
 
@@ -122,11 +128,11 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		?>
 
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'civicrm-eo-attendance' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>"></label>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'civicrm-eo-attendance' ); ?> <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>"></label>
 		</p>
 
 		<p>
-		<label for="<?php echo $this->get_field_id( 'max_items' ); ?>"><?php esc_html_e( 'Max number to show:', 'civicrm-eo-attendance' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'max_items' ); ?>" name="<?php echo $this->get_field_name( 'max_items' ); ?>" type="text" value="<?php echo esc_attr( $max_items ); ?>" style="width: 30%" /></label>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'max_items' ) ); ?>"><?php esc_html_e( 'Max number to show:', 'civicrm-eo-attendance' ); ?> <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max_items' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max_items' ) ); ?>" type="text" value="<?php echo esc_attr( $max_items ); ?>" style="width: 30%" /></label>
 		</p>
 
 		<?php
@@ -182,9 +188,6 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		// Get current User.
 		$current_user = wp_get_current_user();
 
-		// Get User matching file.
-		require_once 'CRM/Core/BAO/UFMatch.php';
-
 		// Get the CiviCRM Contact ID.
 		$contact_id = CRM_Core_BAO_UFMatch::getContactId( $current_user->ID );
 
@@ -195,29 +198,30 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 
 		// Build params to get Fields.
 		$params = [
-			'version' => 3,
+			'version'    => 3,
 			'contact_id' => $contact_id,
-			'options' => [
+			'options'    => [
 				'sort' => 'event_end_date ASC',
 			],
 		];
 
 		// Get Participant entries for this Contact.
-		$participants = civicrm_api( 'Participant', 'get', $params );
+		$result = civicrm_api( 'Participant', 'get', $params );
 
 		// Error check.
-		if ( isset( $participants['is_error'] ) && $participants['is_error'] == '1' ) {
+		if ( isset( $result['is_error'] ) && 1 === (int) $result['is_error'] ) {
 
 			// Log and bail.
-			$e = new Exception();
+			$e     = new Exception();
 			$trace = $e->getTraceAsString();
-			error_log( print_r( [
-				'method' => __METHOD__,
-				'message' => $participants['error_message'],
-				'params' => $params,
-				'participants' => $participants,
-				'backtrace' => $trace,
-			], true ) );
+			$log   = [
+				'method'       => __METHOD__,
+				'message'      => $result['error_message'],
+				'params'       => $params,
+				'participants' => $result,
+				'backtrace'    => $trace,
+			];
+			civicrm_eo_attendance()->plugin->log_error( $log );
 
 			// --<
 			return $links;
@@ -225,7 +229,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		}
 
 		// Loop through them.
-		foreach ( $participants['values'] as $participant ) {
+		foreach ( $result['values'] as $participant ) {
 
 			// Skip to next if it is not a past Event.
 			if ( ! $this->is_past( $participant['event_end_date'] ) ) {
@@ -273,17 +277,18 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			if ( ! ( $eo_event instanceof WP_Post ) ) {
 
 				// Write to log file.
-				$e = new Exception();
+				$e     = new Exception();
 				$trace = $e->getTraceAsString();
-				error_log( print_r( [
-					'method' => __METHOD__,
-					'message' => '=============== EO Event is missing ===============',
-					'post_id' => $post_id,
+				$log   = [
+					'method'        => __METHOD__,
+					'message'       => '=============== EO Event is missing ===============',
+					'post_id'       => $post_id,
 					'occurrence_id' => $occurrence_id,
-					'participant' => $participant,
-					'event_data' => $event_data,
-					'backtrace' => $trace,
-				], true ) );
+					'participant'   => $participant,
+					'event_data'    => $event_data,
+					'backtrace'     => $trace,
+				];
+				civicrm_eo_attendance()->plugin->log_error( $log );
 
 				// Skip to next.
 				continue;
@@ -291,7 +296,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 			}
 
 			// Let's have a title.
-			$text = '<span class="civicrm-eo-cde-widget-event-title">' . $participant['event_title'] . '</span>';
+			$text  = '<span class="civicrm-eo-cde-widget-event-title">' . $participant['event_title'] . '</span>';
 			$text .= '<br>';
 			$text .= eo_format_event_occurrence( $post_id, $occurrence_id );
 
@@ -386,7 +391,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		$default_role_id = civicrm_eo_attendance()->event_leader->role_default_get( $event );
 
 		// Override if Event Leader.
-		if ( $default_role_id == $participant_role_id ) {
+		if ( (int) $default_role_id === (int) $participant_role_id ) {
 			$is_leader = true;
 		}
 
@@ -441,12 +446,12 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		// Translations.
 		$localisation = [
 			'processing' => __( 'Processing...', 'civicrm-eo-attendance' ),
-			'empty' => __( 'You must enter values for each field', 'civicrm-eo-attendance' ),
-			'negative' => __( 'You must enter positive values for each field', 'civicrm-eo-attendance' ),
-			'match' => __( 'Number of attendees must be the sum of boys and girls', 'civicrm-eo-attendance' ),
-			'range' => __( 'Youngest must be younger than oldest', 'civicrm-eo-attendance' ),
-			'positive' => __( 'You must enter positive values for ages', 'civicrm-eo-attendance' ),
-			'complete' => __( 'You are up-to-date with your feedback.', 'civicrm-eo-attendance' ),
+			'empty'      => __( 'You must enter values for each field', 'civicrm-eo-attendance' ),
+			'negative'   => __( 'You must enter positive values for each field', 'civicrm-eo-attendance' ),
+			'match'      => __( 'Number of attendees must be the sum of boys and girls', 'civicrm-eo-attendance' ),
+			'range'      => __( 'Youngest must be younger than oldest', 'civicrm-eo-attendance' ),
+			'positive'   => __( 'You must enter positive values for ages', 'civicrm-eo-attendance' ),
+			'complete'   => __( 'You are up-to-date with your feedback.', 'civicrm-eo-attendance' ),
 		];
 
 		// Define settings.
@@ -457,7 +462,7 @@ class CiviCRM_EO_Attendance_CDE_Widget extends WP_Widget {
 		// Localisation array.
 		$vars = [
 			'localisation' => $localisation,
-			'settings' => $settings,
+			'settings'     => $settings,
 		];
 
 		// Localise the WordPress way.

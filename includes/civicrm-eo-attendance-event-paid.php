@@ -105,7 +105,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Add our settings to the settings table.
@@ -118,9 +118,9 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$paid = $this->paid_default_get();
 
 		// Set checkbox checked.
-		$paid_checked = '';
-		if ( $paid !== 0 ) {
-			$paid_checked = ' checked="checked"';
+		$paid_checked = false;
+		if ( 0 !== $paid ) {
+			$paid_checked = true;
 		}
 
 		// Include template file.
@@ -157,9 +157,9 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$paid = $this->paid_default_get( $event );
 
 		// Set checkbox checked.
-		$paid_checked = '';
-		if ( $paid !== 0 ) {
-			$paid_checked = ' checked="checked"';
+		$paid_checked = false;
+		if ( 0 !== $paid ) {
+			$paid_checked = true;
 		}
 
 		// Include template file.
@@ -181,7 +181,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Get the default Event Paid value for an Event.
@@ -203,7 +203,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
 
 		// Override with default if we get one.
-		if ( $default !== '' && is_numeric( $default ) ) {
+		if ( '' !== $default && is_numeric( $default ) ) {
 			$existing_id = absint( $default );
 		}
 
@@ -214,7 +214,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 			$stored_id = $this->paid_get( $post->ID, $existing_id );
 
 			// Override with stored value if we have one.
-			if ( $stored_id !== '' && is_numeric( $stored_id ) ) {
+			if ( '' !== $stored_id && is_numeric( $stored_id ) ) {
 				$existing_id = absint( $stored_id );
 			}
 
@@ -225,7 +225,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Update Event paid value.
@@ -266,7 +266,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$value = get_post_meta( $post_id, $this->meta_name, true );
 
 		// Empty string if not yet set, so override with default.
-		if ( $value === '' ) {
+		if ( '' === $value ) {
 			$value = $default_value;
 		}
 
@@ -342,7 +342,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 	 * @since 0.5.1
 	 *
 	 * @param bool $granted False by default - assumes access not granted.
-	 * @param int $post_id The numeric ID of the WordPress Post.
+	 * @param int  $post_id The numeric ID of the WordPress Post.
 	 * @return bool $granted True if access granted, false otherwise.
 	 */
 	public function paid_permissions( $granted, $post_id = null ) {
@@ -357,7 +357,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$paid = $this->paid_default_get( $post );
 
 		// Disallow by default, but allow if this is a paid Event.
-		$granted = ( $paid != 0 ) ? true : false;
+		$granted = ( 0 !== $paid ) ? true : false;
 
 		// --<
 		return $granted;
@@ -384,7 +384,7 @@ class CiviCRM_EO_Attendance_Event_Paid {
 		$paid = $this->paid_default_get( $post );
 
 		// If this is a paid Event.
-		if ( $paid != 0 ) {
+		if ( 0 !== $paid ) {
 
 			// Remove core plugin's list renderer.
 			remove_action( 'eventorganiser_additional_event_meta', 'civicrm_event_organiser_register_links' );

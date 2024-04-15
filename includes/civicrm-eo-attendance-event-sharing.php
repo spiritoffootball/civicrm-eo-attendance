@@ -100,14 +100,14 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Update a CiviEvent when an EO Event is synced to CiviCRM.
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param array $civi_event The array of data for the CiviEvent.
+	 * @param array  $civi_event The array of data for the CiviEvent.
 	 * @param object $post The WordPress Post object.
 	 * @return array $civi_event The modified array of data for the CiviEvent.
 	 */
@@ -129,7 +129,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $event_id The numeric ID of the EO Event.
+	 * @param int   $event_id The numeric ID of the EO Event.
 	 * @param array $civi_event An array of data for the CiviEvent.
 	 */
 	public function process_eo_event( $event_id, $civi_event ) {
@@ -149,7 +149,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Add our settings to the settings table.
@@ -162,9 +162,9 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$sharing = $this->sharing_default_get();
 
 		// Set checkbox checked.
-		$sharing_checked = '';
-		if ( $sharing !== 0 ) {
-			$sharing_checked = ' checked="checked"';
+		$sharing_checked = false;
+		if ( 0 !== $sharing ) {
+			$sharing_checked = true;
 		}
 
 		// Include template file.
@@ -201,9 +201,9 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$sharing = $this->sharing_default_get( $event );
 
 		// Set checkbox checked.
-		$sharing_checked = '';
-		if ( $sharing !== 0 ) {
-			$sharing_checked = ' checked="checked"';
+		$sharing_checked = false;
+		if ( 0 !== $sharing ) {
+			$sharing_checked = true;
 		}
 
 		// Include template file.
@@ -225,7 +225,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Get the default CiviEvent sharing value for an Event.
@@ -247,7 +247,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
 
 		// Override with default if we get one.
-		if ( $default !== '' && is_numeric( $default ) ) {
+		if ( '' !== $default && is_numeric( $default ) ) {
 			$existing_id = absint( $default );
 		}
 
@@ -258,7 +258,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 			$stored_id = $this->sharing_get( $post->ID );
 
 			// Override with stored value if we have one.
-			if ( $stored_id !== '' && is_numeric( $stored_id ) ) {
+			if ( '' !== $stored_id && is_numeric( $stored_id ) ) {
 				$existing_id = absint( $stored_id );
 			}
 
@@ -269,7 +269,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Update Event sharing value.
@@ -309,7 +309,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$value = get_post_meta( $post_id, $this->meta_name, true );
 
 		// If it's not yet set it will be an empty string, so cast as boolean.
-		if ( $value === '' ) {
+		if ( '' === $value ) {
 			$value = 0;
 		}
 
@@ -323,7 +323,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	 *
 	 * @since 0.2.2
 	 *
-	 * @param int $post_id The numeric ID of the WordPress Post.
+	 * @param int  $post_id The numeric ID of the WordPress Post.
 	 * @param bool $value Whether sharing is enabled or not.
 	 */
 	public function sharing_set( $post_id, $value = 0 ) {

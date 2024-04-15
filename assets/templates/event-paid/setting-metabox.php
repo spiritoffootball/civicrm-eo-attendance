@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 <div class="civi_eo_event_option_block">
 	<p>
 		<label for="civicrm_eo_event_default_paid"><?php esc_html_e( 'Paid Event:', 'civicrm-eo-attendance' ); ?></label>
-		<input type="checkbox" id="civicrm_eo_event_default_paid" name="civicrm_eo_event_default_paid" value="1"<?php echo $paid_checked; ?> />
+		<input type="checkbox" id="civicrm_eo_event_default_paid" name="civicrm_eo_event_default_paid" value="1"<?php checked( $paid_checked ); ?> />
 	</p>
 
 	<p class="description">

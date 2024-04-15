@@ -100,6 +100,15 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	public $future_count = 6;
 
 	/**
+	 * Rendered Form markup.
+	 *
+	 * @since 0.5
+	 * @access private
+	 * @var string
+	 */
+	private $form;
+
+	/**
 	 * Initialises this object.
 	 *
 	 * @since 0.4.7
@@ -165,8 +174,10 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Allow all Rendez Vous to be refreshed.
 		add_action( 'bp_screens', [ $this, 'refresh_rv_all' ], 3 );
 
+		/*
 		// Sort Rendez Vous listings by descending date.
-		//add_filter( 'bp_before_rendez_vouss_has_args_parse_args', [ $this, 'rv_sort' ], 20, 1 );
+		add_filter( 'bp_before_rendez_vouss_has_args_parse_args', [ $this, 'rv_sort' ], 20, 1 );
+		*/
 
 		// Add form element, scripts and styles to Group manage screen.
 		add_action( 'rendez_vous_group_edit_screen_after', [ $this, 'group_manage_form_amend' ], 10, 1 );
@@ -207,7 +218,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Creates a Rendez Vous Term for the Rendez Vous used by this plugin.
@@ -232,13 +243,14 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Log and bail on error.
 		if ( is_wp_error( $new_term ) ) {
 
-			$e = new Exception();
+			$e     = new Exception();
 			$trace = $e->getTraceAsString();
-			error_log( print_r( [
-				'method' => __METHOD__,
-				'new_term' => $new_term,
+			$log   = [
+				'method'    => __METHOD__,
+				'new_term'  => $new_term,
 				'backtrace' => $trace,
-			], true ) );
+			];
+			$this->plugin->log_error( $log );
 			return;
 
 		}
@@ -282,22 +294,22 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Translations.
 		$localisation = [
-			'submit' => __( 'Submit', 'civicrm-eo-attendance' ),
-			'update' => __( 'Update', 'civicrm-eo-attendance' ),
+			'submit'     => __( 'Submit', 'civicrm-eo-attendance' ),
+			'update'     => __( 'Update', 'civicrm-eo-attendance' ),
 			'processing' => __( 'Processing...', 'civicrm-eo-attendance' ),
-			'leader' => __( 'You must choose someone to be the Event Leader.', 'civicrm-eo-attendance' ),
+			'leader'     => __( 'You must choose someone to be the Event Leader.', 'civicrm-eo-attendance' ),
 		];
 
 		// Define settings.
 		$settings = [
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'ajax_url'   => admin_url( 'admin-ajax.php' ),
 			'ajax_nonce' => wp_create_nonce( 'civicrm_eo_rvm_ajax_nonce' ),
 		];
 
 		// Localisation array.
 		$vars = [
 			'localisation' => $localisation,
-			'settings' => $settings,
+			'settings'     => $settings,
 		];
 
 		// Localise the WordPress way.
@@ -341,7 +353,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Sort the list of Rendez Vous.
@@ -358,37 +370,17 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			return $args;
 		}
 
-		/*
-		$e = new Exception();
-		$trace = $e->getTraceAsString();
-		error_log( print_r( [
-			'method' => __METHOD__,
-			'args' => $args,
-			//'backtrace' => $trace,
-		], true ) );
-		*/
-
+		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 		$args['meta_query'] = [
 			'rendez_vous_month' => [
-				'key' => '_rendez_vous_month',
-				'compare' => 'EXISTS'
+				'key'     => '_rendez_vous_month',
+				'compare' => 'EXISTS',
 			],
 		];
 
 		// Set order to date descending.
-		//$args['meta_key'] = 'rendez_vous_month';
 		$args['orderby'] = 'rendez_vous_month';
-		$args['order'] = 'DESC';
-
-		/*
-		$e = new Exception();
-		$trace = $e->getTraceAsString();
-		error_log( print_r( [
-			'method' => __METHOD__,
-			'args' => $args,
-			//'backtrace' => $trace,
-		], true ) );
-		*/
+		$args['order']   = 'DESC';
 
 		// --<
 		return $args;
@@ -419,7 +411,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		}
 
 		// Get redirect and Rendez Vous ID.
-		$redirect = remove_query_arg( [ 'rdv', 'action', 'n', 'civicrm_eo_refresh_nonce' ], wp_get_referer() );
+		$redirect       = remove_query_arg( [ 'rdv', 'action', 'n', 'civicrm_eo_refresh_nonce' ], wp_get_referer() );
 		$rendez_vous_id = (int) sanitize_text_field( wp_unslash( $_GET['rdv'] ) );
 
 		// Get Rendez Vous to rebuild.
@@ -427,7 +419,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Bail if this is not an attendance Rendez Vous.
 		$month = $this->get_meta( $rendez_vous );
-		if ( $month === false ) {
+		if ( false === $month ) {
 			return;
 		}
 
@@ -438,7 +430,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$updated_id = $this->rv_update( $datetime, $rendez_vous_id );
 
 		// Appropriate error messages.
-		if ( $updated_id === false ) {
+		if ( false === $updated_id ) {
 			bp_core_add_message( __( 'Refreshing this Rendez-vous failed.', 'civicrm-eo-attendance' ), 'error' );
 		} else {
 			bp_core_add_message( __( 'Rendez-vous successfully refreshed.', 'civicrm-eo-attendance' ) );
@@ -481,8 +473,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			$args = [
 				'per_page' => ( $this->future_count + 1 ),
 				'group_id' => $group_id,
-				'orderby' => 'rendez_vous_date',
-				'order'   => 'DESC',
+				'orderby'  => 'rendez_vous_date',
+				'order'    => 'DESC',
 				'no_cache' => true,
 			];
 
@@ -496,14 +488,14 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			remove_filter( 'rendez_vous_query_args', [ $this, 'refresh_filter_query' ], 10 );
 
 			$rv_meta = [];
-			$rv_ids = [];
+			$rv_ids  = [];
 
 			// Do the loop to find existing IDs.
 			if ( $has_rendez_vous ) {
 				while ( rendez_vous_the_rendez_vouss() ) {
 					rendez_vous_the_rendez_vous();
-					$id = rendez_vous_get_the_rendez_vous_id();
-					$rv_ids[] = $id;
+					$id             = rendez_vous_get_the_rendez_vous_id();
+					$rv_ids[]       = $id;
 					$rv_meta[ $id ] = get_post_meta( $id, $this->month_meta_key, true );
 				}
 			}
@@ -519,23 +511,23 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				$datetime = new DateTime( $month, eo_get_blog_timezone() );
 
 				// Create it if it doesn't exist, update otherwise.
-				if ( ! in_array( $month, $rv_meta ) ) {
+				if ( ! in_array( $month, $rv_meta, true ) ) {
 					$returned_id = $this->rv_create( $datetime, $group_id );
 				} else {
-					$flipped = array_flip( $rv_meta );
+					$flipped        = array_flip( $rv_meta );
 					$rendez_vous_id = $flipped[ $month ];
-					$returned_id = $this->rv_update( $datetime, $rendez_vous_id );
+					$returned_id    = $this->rv_update( $datetime, $rendez_vous_id );
 				}
 
 				// Error check.
-				if ( $returned_id === false ) {
+				if ( false === $returned_id ) {
 					$has_error = true;
 				}
 
 			}
 
 			// Appropriate error messages.
-			if ( $has_error === true ) {
+			if ( true === $has_error ) {
 				bp_core_add_message( __( 'Refreshing all Rendez-vous failed.', 'civicrm-eo-attendance' ), 'error' );
 			} else {
 				bp_core_add_message( __( 'All Rendez-vous successfully refreshed.', 'civicrm-eo-attendance' ) );
@@ -596,7 +588,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Get first day of this month.
 		$month_start = $now->format( 'Y-m-01' );
-		$start = new DateTime( $month_start, eo_get_blog_timezone() );
+		$start       = new DateTime( $month_start, eo_get_blog_timezone() );
 
 		// Check this month plus N months ahead.
 		$checks = [ $start->format( 'Y-m-d' ) ];
@@ -610,7 +602,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Create a Rendez Vous for use by this plugin.
@@ -618,7 +610,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 * @since 0.4.7
 	 *
 	 * @param DateTime $datetime The DateTime object for the month to create an RV for.
-	 * @param int $group_id The numeric ID of the Group.
+	 * @param int      $group_id The numeric ID of the Group.
 	 * @return int|bool $updated_id The ID of the created Rendez Vous - false on failure or true if skipped.
 	 */
 	public function rv_create( $datetime, $group_id = 0 ) {
@@ -639,7 +631,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// For the title, we use the 3rd day of the month to avoid daylight-saving
 		// and timezone oddities related to the 1st.
-		$title_date = $datetime->format( 'Y-m-03' );
+		$title_date     = $datetime->format( 'Y-m-03' );
 		$title_datetime = new DateTime( $title_date, eo_get_blog_timezone() );
 
 		// Define title.
@@ -651,7 +643,13 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Events on this month.
 		$month_start = $datetime->format( 'Y-m-01' );
-		$month_end = $datetime->format( 'Y-m-t' );
+		$month_end   = $datetime->format( 'Y-m-t' );
+
+		// Default event query args.
+		$event_query_args = [
+			'event_start_after'  => $month_start,
+			'event_start_before' => $month_end,
+		];
 
 		/**
 		 * Filter Event query arguments.
@@ -660,12 +658,9 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		 *
 		 * @since 0.4.7
 		 *
-		 * @param array $query_args The array of query args.
+		 * @param array $event_query_args The array of query args.
 		 */
-		$event_args = apply_filters( 'civicrm_event_organiser_rendez_vous_event_args', [
-			'event_start_after'  => $month_start,
-			'event_start_before' => $month_end,
-		] );
+		$event_args = apply_filters( 'civicrm_event_organiser_rendez_vous_event_args', $event_query_args );
 
 		// Get Event data.
 		$events = eo_get_events( $event_args );
@@ -687,16 +682,16 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				$civi_event_id = $this->plugin->civicrm_eo->mapping->get_civi_event_id_by_eo_occurrence_id( $event->ID, $event->occurrence_id );
 
 				// Skip unless we have a CiviEvent.
-				if ( $civi_event_id === false ) {
+				if ( false === $civi_event_id ) {
 					continue;
 				}
 
 				// Get start.
 				$event_start_time = eo_get_the_start( DATETIMEOBJ, $event->ID, $event->occurrence_id );
-				$timestamp = $event_start_time->getTimestamp();
+				$timestamp        = $event_start_time->getTimestamp();
 
 				// Ensure no duplicates by adding a trivial amount.
-				while ( in_array( $timestamp, $used ) ) {
+				while ( in_array( $timestamp, $used, true ) ) {
 					$timestamp++;
 				}
 
@@ -719,14 +714,14 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Construct create array.
 		$rendez_vous = [
-			'title' => $title,
+			'title'     => $title,
 			'organizer' => $organizer_id,
-			'duration' => '01:00',
-			'venue' => __( 'Erfurt', 'civicrm-eo-attendance' ),
-			'status' => 'draft',
-			'group_id' => (int) $group_id,
+			'duration'  => '01:00',
+			'venue'     => __( 'Erfurt', 'civicrm-eo-attendance' ),
+			'status'    => 'draft',
+			'group_id'  => (int) $group_id,
 			'attendees' => $attendee_ids,
-			'days' => $days,
+			'days'      => $days,
 		];
 
 		// Create it.
@@ -735,14 +730,15 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Log and bail on error.
 		if ( ! is_int( $rendez_vous_id ) ) {
 
-			$e = new Exception();
+			$e     = new Exception();
 			$trace = $e->getTraceAsString();
-			error_log( print_r( [
-				'method' => __METHOD__,
-				'new_rv_id' => $rendez_vous_id,
+			$log   = [
+				'method'           => __METHOD__,
+				'new_rv_id'        => $rendez_vous_id,
 				'rendez_vous_args' => $rendez_vous,
-				'backtrace' => $trace,
-			], true ) );
+				'backtrace'        => $trace,
+			];
+			$this->plugin->log_error( $log );
 			return false;
 
 		}
@@ -754,7 +750,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		add_post_meta( $rendez_vous_id, $this->month_meta_key, $month_start, true );
 
 		// Update args.
-		$rendez_vous['id'] = $rendez_vous_id;
+		$rendez_vous['id']     = $rendez_vous_id;
 		$rendez_vous['status'] = 'publish';
 
 		// Publish the Rendez Vous.
@@ -771,7 +767,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 * @since 0.4.7
 	 *
 	 * @param DateTime $datetime The DateTime object for the month of the Rendez Vous.
-	 * @param int $rendez_vous_id The numeric ID of the Rendez Vous to update.
+	 * @param int      $rendez_vous_id The numeric ID of the Rendez Vous to update.
 	 * @return int|bool $updated_id The ID of the updated Rendez Vous, or false on failure.
 	 */
 	public function rv_update( $datetime, $rendez_vous_id ) {
@@ -800,7 +796,13 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Events on this month.
 		$month_start = $datetime->format( 'Y-m-01' );
-		$month_end = $datetime->format( 'Y-m-t' );
+		$month_end   = $datetime->format( 'Y-m-t' );
+
+		// Default event query args.
+		$event_query_args = [
+			'event_start_after'  => $month_start,
+			'event_start_before' => $month_end,
+		];
 
 		/**
 		 * Filter Event query arguments.
@@ -809,20 +811,17 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		 *
 		 * @since 0.4.7
 		 *
-		 * @param array $query_args The array of query args.
+		 * @param array $event_query_args The array of query args.
 		 */
-		$event_args = apply_filters( 'civicrm_event_organiser_rendez_vous_event_args', [
-			'event_start_after'  => $month_start,
-			'event_start_before' => $month_end,
-		] );
+		$event_args = apply_filters( 'civicrm_event_organiser_rendez_vous_event_args', $event_query_args );
 
 		// Get Event data.
 		$events = eo_get_events( $event_args );
 
 		// Init comparison arrays.
 		$correspondences = [];
-		$new_items = [];
-		$missing_items = [];
+		$new_items       = [];
+		$missing_items   = [];
 
 		// Parse Events.
 		if ( count( $events ) > 0 ) {
@@ -832,15 +831,18 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				$civi_event_id = $this->plugin->civicrm_eo->mapping->get_civi_event_id_by_eo_occurrence_id( $event->ID, $event->occurrence_id );
 
 				// Skip unless we have a CiviEvent.
-				if ( $civi_event_id === false ) {
+				if ( false === $civi_event_id ) {
 					continue;
 				}
+
+				// Make sure it's an integer.
+				$civi_event_id = (int) $civi_event_id;
 
 				// Always add to correspondences.
 				$correspondences[ $event->occurrence_id ] = $civi_event_id;
 
 				// Add to array if new.
-				if ( ! in_array( $civi_event_id, $references ) ) {
+				if ( ! in_array( $civi_event_id, $references, true ) ) {
 					$new_items[ $civi_event_id ] = [ $event->ID, $event->occurrence_id ];
 				}
 
@@ -852,7 +854,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			foreach ( $references as $timestamp => $civi_event_id ) {
 
 				// Add to array if missing.
-				if ( ! in_array( $civi_event_id, $correspondences ) ) {
+				if ( ! in_array( $civi_event_id, $correspondences, true ) ) {
 					$missing_items[ $timestamp ] = $civi_event_id;
 				}
 
@@ -870,10 +872,10 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 				// Get timestamp.
 				$event_start_time = eo_get_the_start( DATETIMEOBJ, $event_data[0], $event_data[1] );
-				$timestamp = $event_start_time->getTimestamp();
+				$timestamp        = $event_start_time->getTimestamp();
 
 				// Ensure no duplicates by adding a trivial amount.
-				while ( in_array( $timestamp, $used ) ) {
+				while ( in_array( $timestamp, $used, true ) ) {
 					$timestamp++;
 				}
 
@@ -905,14 +907,14 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		}
 
 		// If there are no changes to dates.
-		if ( count( $missing_items ) == 0 && count( $new_items ) == 0 ) {
+		if ( count( $missing_items ) === 0 && count( $new_items ) === 0 ) {
 
 			// Compare like-with-like.
 			sort( $rendez_vous->attendees );
 			sort( $attendee_ids );
 
 			// Bail if there is no change of members.
-			if ( $rendez_vous->attendees == $attendee_ids ) {
+			if ( $rendez_vous->attendees === $attendee_ids ) {
 				return $rendez_vous_id;
 			}
 
@@ -920,15 +922,15 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Construct update array.
 		$rv_data = [
-			'id' => $rendez_vous->id,
-			'title' => $rendez_vous->title,
+			'id'        => $rendez_vous->id,
+			'title'     => $rendez_vous->title,
 			'organizer' => $rendez_vous->organizer,
-			'duration' => '01:00',
-			'venue' => $rendez_vous->venue,
-			'status' => 'publish',
-			'group_id' => $rendez_vous->group_id,
+			'duration'  => '01:00',
+			'venue'     => $rendez_vous->venue,
+			'status'    => 'publish',
+			'group_id'  => $rendez_vous->group_id,
 			'attendees' => $attendee_ids,
-			'days' => $rendez_vous->days,
+			'days'      => $rendez_vous->days,
 		];
 
 		// Update the Rendez Vous.
@@ -991,13 +993,13 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.4.7
 	 *
-	 * @param int $rendez_vous_id The numeric ID of the Rendez Vous Post.
+	 * @param int   $rendez_vous_id The numeric ID of the Rendez Vous Post.
 	 * @param array $days The array of dates for the Rendez Vous.
 	 */
 	public function rv_days_update( $rendez_vous_id, $days ) {
 
 		// Make sure we have the "none" option.
-		if ( ! in_array( 'none', array_keys( $days ) ) ) {
+		if ( ! in_array( 'none', array_keys( $days ), true ) ) {
 			$days['none'] = [];
 		}
 
@@ -1021,17 +1023,20 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			return [];
 		}
 
-		// Perform the Group member query.
-		$members = new BP_Group_Member_Query( [
-			'group_id' => $group_id,
-			'type' => 'alphabetical',
-			'per_page' => 10000,
-			'page' => 1,
+		// Build query.
+		$query = [
+			'group_id'   => $group_id,
+			'type'       => 'alphabetical',
+			'per_page'   => 10000,
+			'page'       => 1,
 			'group_role' => [ 'member', 'mod', 'admin' ],
-		] );
+		];
+
+		// Perform the Group member query.
+		$members = new BP_Group_Member_Query( $query );
 
 		// Bail if no results.
-		if ( count( $members->results ) == 0 ) {
+		if ( count( $members->results ) === 0 ) {
 			return [];
 		}
 
@@ -1043,7 +1048,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Filters the "New Rendez-vous" button output.
@@ -1054,56 +1059,56 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5
 	 *
-	 * @param string $contents Button context to be used.
-	 * @param array $args Array of args for the button.
+	 * @param string    $contents Button context to be used.
+	 * @param array     $args Array of args for the button.
 	 * @param BP_Button $button BP_Button object.
 	 * @return string $contents The modified Button context to be used.
 	 */
 	public function rv_archive_button( $contents, $args, $button ) {
 
-		// Is this a Rendez Vous button?
-		if ( isset( $args['component'] ) && $args['component'] == 'rendez_vous' ) {
+		// Bail if not a Rendez Vous button.
+		if ( ! isset( $args['component'] ) || 'rendez_vous' !== $args['component'] ) {
+			return $contents;
+		}
 
-			// Is this a New Rendez Vous button?
-			if ( isset( $args['wrapper_id'] ) && $args['wrapper_id'] == 'new-rendez-vous' ) {
+		// Bail if not a New Rendez Vous button.
+		if ( ! isset( $args['wrapper_id'] ) || 'new-rendez-vous' !== $args['wrapper_id'] ) {
+			return $contents;
+		}
 
-				// Is this the Rendez Vous component?
-				if ( bp_is_group() && bp_is_current_action( rendez_vous()->get_component_slug() ) ) {
+		// Bail if not the Rendez Vous component.
+		if ( ! bp_is_group() || ! bp_is_current_action( rendez_vous()->get_component_slug() ) ) {
+			return $contents;
+		}
 
-					// Get the currently displayed Group ID.
-					$group_id = bp_get_current_group_id();
+		// Get the currently displayed Group ID.
+		$group_id = bp_get_current_group_id();
 
-					// Is attendance enabled for this Group?
-					if ( $this->group_get_option( $group_id, $this->group_meta_key ) ) {
+		// Bail if attendance is not enabled for this Group.
+		if ( ! $this->group_get_option( $group_id, $this->group_meta_key ) ) {
+			return $contents;
+		}
 
-						// The current User must be an Organiser.
-						$organizer_id = $this->is_organiser( $group_id );
-						if ( $organizer_id !== false ) {
+		// The current User must be an Organiser.
+		$organizer_id = $this->is_organiser( $group_id );
+		if ( false !== $organizer_id ) {
 
-							// Build the URL we want.
-							$current_url = home_url( add_query_arg( [] ) );
-							$refresh_url = add_query_arg( 'action', 'refresh_all', $current_url );
-							$url = wp_nonce_url( $refresh_url, 'civicrm_eo_refresh_all_action', 'civicrm_eo_refresh_all_nonce' );
+			// Build the URL we want.
+			$current_url = home_url( add_query_arg( [] ) );
+			$refresh_url = add_query_arg( 'action', 'refresh_all', $current_url );
+			$url         = wp_nonce_url( $refresh_url, 'civicrm_eo_refresh_all_action', 'civicrm_eo_refresh_all_nonce' );
 
-							// Construct link.
-							$link = '<a href="' . $url . '">' .
-										__( 'Refresh All', 'civicrm-eo-attendance' ) .
-									'</a>';
+			// Construct link.
+			$link = '<a href="' . $url . '">' .
+						__( 'Refresh All', 'civicrm-eo-attendance' ) .
+					'</a>';
 
-							// Add in our button.
-							$contents = str_replace(
-								'</div>',
-								'</div><div class="generic-button civicrm-eo-generic-button">' . $link . '</div>',
-								$contents
-							);
-
-						}
-
-					}
-
-				}
-
-			}
+			// Add in our button.
+			$contents = str_replace(
+				'</div>',
+				'</div><div class="generic-button civicrm-eo-generic-button">' . $link . '</div>',
+				$contents
+			);
 
 		}
 
@@ -1112,25 +1117,25 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Filters the single Rendez Vous "Edit" button output.
 	 *
 	 * @since 0.4.8
 	 *
-	 * @param string $contents Button context to be used.
-	 * @param array $args Array of args for the button.
+	 * @param string    $contents Button context to be used.
+	 * @param array     $args Array of args for the button.
 	 * @param BP_Button $button BP_Button object.
 	 * @return string $contents The modified Button context to be used.
 	 */
 	public function rv_form_button( $contents, $args, $button ) {
 
 		// Is this a Rendez Vous button?
-		if ( isset( $args['component'] ) && $args['component'] == 'rendez_vous' ) {
+		if ( isset( $args['component'] ) && 'rendez_vous' === $args['component'] ) {
 
 			// Is this a Rendez Vous edit button?
-			if ( isset( $args['wrapper_id'] ) && $args['wrapper_id'] == 'rendez-vous-edit-btn' ) {
+			if ( isset( $args['wrapper_id'] ) && 'rendez-vous-edit-btn' === $args['wrapper_id'] ) {
 
 				// Get current item.
 				$item = rendez_vous()->item;
@@ -1277,9 +1282,9 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.4.7
 	 *
-	 * @param str $output The existing output.
+	 * @param str   $output The existing output.
 	 * @param array $header The array of dates.
-	 * @param str $view The output mode ('view' or 'edit').
+	 * @param str   $view The output mode ('view' or 'edit').
 	 * @return str $output The modified output.
 	 */
 	public function rv_form_last_row( $output, $header, $view ) {
@@ -1325,7 +1330,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		foreach ( $header as $date ) {
 
 			// Handle "none" item.
-			if ( 'none' == $date ) {
+			if ( 'none' === $date ) {
 				$output .= '<td>&nbsp;</td>';
 				continue;
 			}
@@ -1355,7 +1360,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				$output .= '<span class="' . implode( ' ', $classes ) . '">' . __( 'Register', 'civicrm-eo-attendance' ) . '</span>';
 
 				// Create dummy Event object.
-				$post = new stdClass();
+				$post     = new stdClass();
 				$post->ID = $this->plugin->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 
 				// Add form.
@@ -1384,8 +1389,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.4.8
 	 *
-	 * @param int $civi_event_id The numeric ID of the CiviEvent.
-	 * @param array $attendee_ids The numeric IDs of the attendees.
+	 * @param int    $civi_event_id The numeric ID of the CiviEvent.
+	 * @param array  $attendee_ids The numeric IDs of the attendees.
 	 * @param object $post A bare-bones Post object with the EO Event ID.
 	 * @return str $markup The rendered registration form.
 	 */
@@ -1409,7 +1414,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Init data arrays.
 		$checked = [];
-		$select = [];
+		$select  = [];
 
 		// Init "event has Participants" flag.
 		$participants_exist = false;
@@ -1430,11 +1435,11 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				$participant = $this->plugin->custom_data_participant->participant_get( $contact_id, $civi_event_id );
 
 				// If currently registered.
-				if ( $participant !== false ) {
+				if ( false !== $participant ) {
 
 					// Populate data arrays.
-					$checked[ $attendee_id ] = ' checked="checked"';
-					$select[ $attendee_id ] = $this->rv_form_registration_roles( $post, $participant['participant_role_id'] );
+					$checked[ $attendee_id ] = true;
+					$select[ $attendee_id ]  = $this->rv_form_registration_roles( $post, $participant['participant_role_id'] );
 
 					// Set flag.
 					$participants_exist = true;
@@ -1442,8 +1447,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				} else {
 
 					// Add default entries to data arrays.
-					$checked[ $attendee_id ] = '';
-					$select[ $attendee_id ] = $this->rv_form_registration_roles( $post );
+					$checked[ $attendee_id ] = false;
+					$select[ $attendee_id ]  = $this->rv_form_registration_roles( $post );
 
 				}
 
@@ -1477,7 +1482,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 * @since 0.4.8
 	 *
 	 * @param object $post An EO Event object.
-	 * @param int $participant_role_id The numeric ID of the Participant Role.
+	 * @param int    $participant_role_id The numeric ID of the Participant Role.
 	 * @return str $html Markup to display in the form.
 	 */
 	public function rv_form_registration_roles( $post, $participant_role_id = null ) {
@@ -1501,7 +1506,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		}
 
 		// Did we get any?
-		if ( $this->all_roles['is_error'] == '0' && count( $this->all_roles['values'] ) > 0 ) {
+		if ( 0 === (int) $this->all_roles['is_error'] && count( $this->all_roles['values'] ) > 0 ) {
 
 			// Get the values array.
 			$roles = $this->all_roles['values'];
@@ -1522,12 +1527,12 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				$selected = '';
 
 				// Override selected when this value is the same as the given Participant Role ID.
-				if ( ! is_null( $participant_role_id ) && $participant_role_id == $role_id ) {
+				if ( ! empty( $participant_role_id ) && (int) $participant_role_id === (int) $role_id ) {
 					$selected = ' selected="selected"';
 				}
 
 				// Override selected when this value is the same as the default.
-				if ( is_null( $participant_role_id ) && $default_id == $role_id ) {
+				if ( empty( $participant_role_id ) && (int) $default_id === (int) $role_id ) {
 					$selected = ' selected="selected"';
 				}
 
@@ -1554,6 +1559,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	public function rv_form_footer() {
 
 		// Render forms.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $this->form;
 
 	}
@@ -1567,13 +1573,13 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Init data.
 		$data = [
-			'error' => '1',
+			'error'  => '1',
 			'markup' => __( 'Oops! Something went wrong.', 'civicrm-eo-attendance' ),
 		];
 
 		// Since this is an AJAX request, check security.
 		$result = check_ajax_referer( 'civicrm_eo_rvm_ajax_nonce', false, false );
-		if ( $result === false ) {
+		if ( false === $result ) {
 			wp_send_json( $json );
 		}
 
@@ -1625,13 +1631,13 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Get now in appropriate format.
 		$now_obj = new DateTime( 'now', eo_get_blog_timezone() );
-		$now = $now_obj->format( 'Y-m-d H:i:s' );
+		$now     = $now_obj->format( 'Y-m-d H:i:s' );
 
 		// Get Event details.
-		$event_id = $this->plugin->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
+		$event_id      = $this->plugin->civicrm_eo->mapping->get_eo_event_id_by_civi_event_id( $civi_event_id );
 		$occurrence_id = $this->plugin->civicrm_eo->mapping->get_eo_occurrence_id_by_civi_event_id( $civi_event_id );
-		$event_title = get_the_title( $event_id );
-		$event_link = get_permalink( $event_id );
+		$event_title   = get_the_title( $event_id );
+		$event_link    = get_permalink( $event_id );
 
 		// Construct title.
 		$linked_title = '<a href="' . esc_url( $event_link ) . '">' . esc_html( $event_title ) . '</a>';
@@ -1652,20 +1658,20 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 				// Build params to create Participant.
 				$params = [
-					'version' => 3,
-					'contact_id' => $contact_id,
-					'event_id' => $civi_event_id,
-					'status_id' => 1, // Registered.
-					'role_id' => $role_id,
+					'version'       => 3,
+					'contact_id'    => $contact_id,
+					'event_id'      => $civi_event_id,
+					'status_id'     => 1, // Registered.
+					'role_id'       => $role_id,
 					'register_date' => $now, // As in: '2007-07-21 00:00:00'.
-					'source' => __( 'Registration via Rendez Vous', 'civicrm-eo-attendance' ),
+					'source'        => __( 'Registration via Rendez Vous', 'civicrm-eo-attendance' ),
 				];
 
 				// Get current Participant data.
 				$participant = $this->plugin->custom_data_participant->participant_get( $contact_id, $civi_event_id );
 
 				// Trigger update if Participant is found.
-				if ( $participant !== false ) {
+				if ( false !== $participant ) {
 					$params['id'] = $participant['participant_id'];
 				}
 
@@ -1673,18 +1679,19 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				$result = civicrm_api( 'Participant', 'create', $params );
 
 				// Error check.
-				if ( isset( $result['is_error'] ) && $result['is_error'] == '1' ) {
+				if ( isset( $result['is_error'] ) && 1 === (int) $result['is_error'] ) {
 
 					// Log error.
-					$e = new Exception();
+					$e     = new Exception();
 					$trace = $e->getTraceAsString();
-					error_log( print_r( [
-						'method' => __METHOD__,
-						'message' => $result['error_message'],
-						'params' => $params,
-						'result' => $result,
+					$log   = [
+						'method'    => __METHOD__,
+						'message'   => $result['error_message'],
+						'params'    => $params,
+						'result'    => $result,
 						'backtrace' => $trace,
-					], true ) );
+					];
+					$this->plugin->log_error( $log );
 
 				} else {
 
@@ -1731,32 +1738,33 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				$participant = $this->plugin->custom_data_participant->participant_get( $contact_id, $civi_event_id );
 
 				// Skip if no Participant found.
-				if ( $participant === false ) {
+				if ( false === $participant ) {
 					continue;
 				}
 
 				// Build params to delete Participant.
 				$params = [
 					'version' => 3,
-					'id' => $participant['participant_id'],
+					'id'      => $participant['participant_id'],
 				];
 
 				// Use CiviCRM API to delete Participant.
 				$result = civicrm_api( 'Participant', 'delete', $params );
 
 				// Error check.
-				if ( isset( $result['is_error'] ) && $result['is_error'] == '1' ) {
+				if ( isset( $result['is_error'] ) && 1 === (int) $result['is_error'] ) {
 
 					// Log error.
-					$e = new Exception();
+					$e     = new Exception();
 					$trace = $e->getTraceAsString();
-					error_log( print_r( [
-						'method' => __METHOD__,
-						'message' => $result['error_message'],
-						'params' => $params,
-						'result' => $result,
+					$log   = [
+						'method'    => __METHOD__,
+						'message'   => $result['error_message'],
+						'params'    => $params,
+						'result'    => $result,
 						'backtrace' => $trace,
-					], true ) );
+					];
+					$this->plugin->log_error( $log );
 
 				} else {
 
@@ -1788,8 +1796,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Build return data.
 		$data = [
 			'civi_event_id' => $civi_event_id,
-			'error' => '0',
-			'markup' => __( 'Thanks!', 'civicrm-eo-attendance' ),
+			'error'         => '0',
+			'markup'        => __( 'Thanks!', 'civicrm-eo-attendance' ),
 		];
 
 		// Send data to browser.
@@ -1823,7 +1831,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$current_user = wp_get_current_user();
 
 		// Don't notify the recipient if they are the current User.
-		if ( $recipient_id == $current_user->ID ) {
+		if ( (int) $recipient_id === $current_user->ID ) {
 			return;
 		}
 
@@ -1855,7 +1863,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$current_user = wp_get_current_user();
 
 		// Allow if User is the Rendez Vous 'organizer'.
-		if ( $rendez_vous->organizer == $current_user->ID ) {
+		if ( (int) $rendez_vous->organizer === $current_user->ID ) {
 			return true;
 		}
 
@@ -1874,7 +1882,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Check if a Rendez Vous has a Term.
@@ -1891,7 +1899,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			foreach ( $item->type as $type ) {
 
 				// Is this our Term?
-				if ( $type->term_id == $this->plugin->civicrm_eo->db->option_get( $this->term_option ) ) {
+				if ( (int) $type->term_id === (int) $this->plugin->civicrm_eo->db->option_get( $this->term_option ) ) {
 					return true;
 				}
 
@@ -1939,7 +1947,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * For a given Rendez Vous, get our meta value.
@@ -1960,7 +1968,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$rv_meta = get_post_meta( $item->id, $this->month_meta_key, true );
 
 		// There's no meta if we get the default empty string returned.
-		if ( $rv_meta === '' ) {
+		if ( '' === $rv_meta ) {
 			return false;
 		}
 
@@ -1988,7 +1996,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$rv_meta = get_post_meta( $item->id, $this->month_meta_key, true );
 
 		// There's no meta if we get the default empty string returned.
-		if ( $rv_meta === '' ) {
+		if ( '' === $rv_meta ) {
 			return false;
 		}
 
@@ -1997,7 +2005,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 	}
 
-	// -------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------
 
 	/**
 	 * Inject a checkbox into Group manage screen.
@@ -2018,11 +2026,11 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		}
 
 		// Construct checkbox.
-		$checkbox = '<input type="checkbox" id="' . $this->group_meta_key . '" name="' . $this->group_meta_key . '" value="1"' . $checked . '> ';
+		$checkbox = '<input type="checkbox" id="' . esc_attr( $this->group_meta_key ) . '" name="' . esc_attr( $this->group_meta_key ) . '" value="1"' . $checked . '> ';
 
 		// Construct label.
-		$label = '<label for="' . $this->group_meta_key . '">' .
-			$checkbox . __( 'Enable Attendance', 'civicrm-eo-attendance' ) .
+		$label = '<label for="' . esc_attr( $this->group_meta_key ) . '">' .
+			$checkbox . esc_html__( 'Enable Attendance', 'civicrm-eo-attendance' ) .
 		'</label>';
 
 		// Wrap in divs.
@@ -2050,12 +2058,12 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 			// Assign selected if this User is an Organizer.
 			$selected = '';
-			if ( in_array( $user->user_id, (array) $organizer_ids ) ) {
+			if ( in_array( $user->user_id, (array) $organizer_ids, true ) ) {
 				$selected = ' selected="selected"';
 			}
 
 			// Construct option.
-			$options[] = '<option value="' . $user->user_id . '"' . $selected . '>' .
+			$options[] = '<option value="' . esc_attr( $user->user_id ) . '"' . $selected . '>' .
 				bp_core_get_user_displayname( $user->user_id ) .
 			'</option>';
 
@@ -2065,26 +2073,27 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		$organizer_options = implode( "\n", $options );
 
 		// Wrap in multi-select.
-		$organizer_options = '<select id="' . $this->organizer_meta_key . '" name="' . $this->organizer_meta_key . '[]" multiple="multiple">' .
+		$organizer_options = '<select id="' . esc_attr( $this->organizer_meta_key ) . '" name="' . esc_attr( $this->organizer_meta_key ) . '[]" multiple="multiple">' .
 			$organizer_options .
 		'</select>';
 
 		// Construct label.
 		$organizer_label = '<label for="' . $this->organizer_meta_key . '">' .
-			__( 'Attendance Organizers', 'civicrm-eo-attendance' ) .
+			esc_html__( 'Attendance Organizers', 'civicrm-eo-attendance' ) .
 		'</label>';
 
 		// Wrap in divs.
 		$organizer_div = '<div class="field-group civicrm-eo-group-organizer"><div class="select">' .
 			$organizer_label .
 			$organizer_options .
-			'<p class="description">' . __( 'Choose the people responsible for Attendance.', 'civicrm-eo-attendance' ) . '</p>' .
+			'<p class="description">' . esc_html__( 'Choose the people responsible for Attendance.', 'civicrm-eo-attendance' ) . '</p>' .
 		'</div></div>';
 
 		// Construct markup.
 		$markup = $enabled_div . $organizer_div;
 
 		// Show markup.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $markup;
 
 	}
@@ -2094,7 +2103,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5.1
 	 *
-	 * @param int $group_id The numeric ID of the Group.
+	 * @param int   $group_id The numeric ID of the Group.
 	 * @param array $settings The Rendez Vous settings array.
 	 */
 	public function group_manage_form_submit( $group_id, $settings ) {
@@ -2109,7 +2118,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Init defaults.
 		$defaults = [
-			$this->group_meta_key => 0,
+			$this->group_meta_key     => 0,
 			$this->organizer_meta_key => [],
 		];
 
@@ -2197,8 +2206,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5.1
 	 *
-	 * @param int $group_id The Group ID.
-	 * @param str $meta_key The meta key.
+	 * @param int   $group_id The Group ID.
+	 * @param str   $meta_key The meta key.
 	 * @param mixed $default The default value to fallback to.
 	 * @return mixed The meta value, or false on failure.
 	 */
@@ -2250,7 +2259,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Bail if this is not an attendance Rendez Vous.
 		$rv_meta = $this->get_meta( $rendez_vous );
-		if ( $rv_meta === false ) {
+		if ( false === $rv_meta ) {
 			return;
 		}
 
@@ -2265,7 +2274,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		// Get the days that this attendee used to have.
 		$this->attending = [];
 		foreach ( $rendez_vous->days as $timestamp => $attendee_ids ) {
-			if ( in_array( $current_user->ID, $attendee_ids ) ) {
+			if ( in_array( $current_user->ID, $attendee_ids, true ) ) {
 				$this->attending[ $timestamp ] = $references[ $timestamp ];
 			}
 		}
@@ -2281,8 +2290,8 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 *
 	 * @since 0.5.1
 	 *
-	 * @param array $args The arguments.
-	 * @param int $attendee_id The User ID of the attendee.
+	 * @param array  $args The arguments.
+	 * @param int    $attendee_id The User ID of the attendee.
 	 * @param object $rendez_vous The Rendez Vous.
 	 */
 	public function registrations_update( $args = [], $attendee_id = 0, $rendez_vous = null ) {
@@ -2308,16 +2317,13 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			return;
 		}
 
-		// Get User matching file.
-		require_once 'CRM/Core/BAO/UFMatch.php';
-
 		// Get the CiviCRM Contact ID.
 		$contact_id = CRM_Core_BAO_UFMatch::getContactId( $attendee_id );
 
 		// Look for missing items.
 		$missing_items = [];
 		foreach ( $this->attending as $timestamp => $civi_event_id ) {
-			if ( ! in_array( $timestamp, $args['days'] ) ) {
+			if ( ! in_array( $timestamp, $args['days'], true ) ) {
 				$missing_items[ $timestamp ] = $civi_event_id;
 			}
 		}
@@ -2345,27 +2351,28 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 			// Build params to get Participant.
 			$params = [
-				'version' => 3,
+				'version'    => 3,
 				'contact_id' => $contact_id,
-				'event_id' => $civi_event_id,
+				'event_id'   => $civi_event_id,
 			];
 
 			// Get Participant instances.
 			$participants = civicrm_api( 'Participant', 'get', $params );
 
 			// Error check.
-			if ( isset( $participants['is_error'] ) && $participants['is_error'] == '1' ) {
+			if ( isset( $participants['is_error'] ) && 1 === (int) $participants['is_error'] ) {
 
 				// Log and skip.
-				$e = new Exception();
+				$e     = new Exception();
 				$trace = $e->getTraceAsString();
-				error_log( print_r( [
-					'method' => __METHOD__,
-					'message' => $participants['error_message'],
-					'params' => $params,
+				$log   = [
+					'method'       => __METHOD__,
+					'message'      => $participants['error_message'],
+					'params'       => $params,
 					'participants' => $participants,
-					'backtrace' => $trace,
-				], true ) );
+					'backtrace'    => $trace,
+				];
+				$this->plugin->log_error( $log );
 				continue;
 
 			}
@@ -2381,25 +2388,26 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			// Build params to delete Participant.
 			$params = [
 				'version' => 3,
-				'id' => $registration['id'],
+				'id'      => $registration['id'],
 			];
 
 			// Use CiviCRM API to delete Participant.
 			$result = civicrm_api( 'Participant', 'delete', $params );
 
 			// Error check.
-			if ( isset( $result['is_error'] ) && $result['is_error'] == '1' ) {
+			if ( isset( $result['is_error'] ) && 1 === (int) $result['is_error'] ) {
 
 				// Log error and skip.
-				$e = new Exception();
+				$e     = new Exception();
 				$trace = $e->getTraceAsString();
-				error_log( print_r( [
-					'method' => __METHOD__,
-					'message' => $result['error_message'],
-					'params' => $params,
-					'result' => $result,
+				$log   = [
+					'method'    => __METHOD__,
+					'message'   => $result['error_message'],
+					'params'    => $params,
+					'result'    => $result,
 					'backtrace' => $trace,
-				], true ) );
+				];
+				$this->plugin->log_error( $log );
 				continue;
 
 			}
@@ -2416,7 +2424,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 				);
 
 				// Construct link to Rendez Vous.
-				$link = rendez_vous_get_single_link( $rendez_vous->id, $rendez_vous->organizer );
+				$link             = rendez_vous_get_single_link( $rendez_vous->id, $rendez_vous->organizer );
 				$rendez_vous_link = '<a href="' . esc_url( $link ) . '">' . esc_html( $rendez_vous->title ) . '</a>';
 
 				// Construct content..
@@ -2504,7 +2512,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 
 		// Bail if the current User is not an organizer.
 		$current_user = wp_get_current_user();
-		if ( ! in_array( $current_user->ID, (array) $organizer_ids ) ) {
+		if ( ! in_array( $current_user->ID, (array) $organizer_ids, true ) ) {
 			return $is_organiser;
 		}
 

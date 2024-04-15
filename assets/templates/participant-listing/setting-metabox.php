@@ -11,12 +11,13 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-?><!-- assets/templates/participant-listing/setting-metabox.php -->
+?>
+<!-- assets/templates/participant-listing/setting-metabox.php -->
 <div class="civi_eo_event_option_block">
 	<p>
 		<label for="civicrm_eo_event_listing"><?php esc_html_e( 'Participant Listing Profile:', 'civicrm-eo-attendance' ); ?></label>
 		<select id="civicrm_eo_event_listing" name="civicrm_eo_event_listing">
-			<?php echo $profiles; ?>
+			<?php echo $profiles; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ ?>
 		</select>
 	</p>
 
