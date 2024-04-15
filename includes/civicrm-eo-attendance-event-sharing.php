@@ -81,22 +81,22 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 	public function register_hooks() {
 
 		// Apply changes to CiviEvent when an EO Event is synced to CiviCRM.
-		add_filter( 'civicrm_event_organiser_prepared_civi_event', [ $this, 'prepare_civi_event' ], 10, 2 );
+		add_filter( 'ceo/civicrm/event/prepared', [ $this, 'prepare_civi_event' ], 10, 2 );
 
 		// Post-process an EO Event when a CiviEvent is synced to WordPress.
-		add_action( 'civicrm_event_organiser_eo_event_updated', [ $this, 'process_eo_event' ], 10, 2 );
+		add_action( 'ceo/eo/event/updated', [ $this, 'process_eo_event' ], 10, 2 );
 
 		// Add our settings to the settings table.
-		add_action( 'civicrm_event_organiser_settings_table_last_row', [ $this, 'settings_table' ] );
+		add_action( 'ceo/admin/settings/metabox/general/table/last_row', [ $this, 'settings_table' ] );
 
 		// Save our settings on plugin settings save.
-		add_action( 'civicrm_event_organiser_settings_updated', [ $this, 'settings_update' ] );
+		add_action( 'ceo/admin/settings/updated', [ $this, 'settings_update' ] );
 
 		// Add our components to the Event metabox.
-		add_action( 'civicrm_event_organiser_event_meta_box_after', [ $this, 'components_metabox' ] );
+		add_action( 'ceo/event/metabox/event/sync/after', [ $this, 'components_metabox' ] );
 
 		// Save our Event components on Event components save.
-		add_action( 'civicrm_event_organiser_event_components_updated', [ $this, 'components_update' ] );
+		add_action( 'ceo/admin/settings/metabox/general/table/last_row', [ $this, 'components_update' ] );
 
 	}
 

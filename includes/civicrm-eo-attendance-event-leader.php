@@ -81,16 +81,16 @@ class CiviCRM_EO_Attendance_Event_Leader {
 	public function register_hooks() {
 
 		// Add our settings to the settings table.
-		add_action( 'civicrm_event_organiser_settings_table_last_row', [ $this, 'settings_table' ] );
+		add_action( 'ceo/admin/settings/metabox/general/table/last_row', [ $this, 'settings_table' ] );
 
 		// Save our settings on plugin settings save.
-		add_action( 'civicrm_event_organiser_settings_updated', [ $this, 'settings_update' ] );
+		add_action( 'ceo/admin/settings/updated', [ $this, 'settings_update' ] );
 
 		// Add our components to the Event metabox.
-		add_action( 'civicrm_event_organiser_event_meta_box_after', [ $this, 'components_metabox' ] );
+		add_action( 'ceo/event/metabox/event/sync/after', [ $this, 'components_metabox' ] );
 
 		// Save our Event components on Event components save.
-		add_action( 'civicrm_event_organiser_event_components_updated', [ $this, 'components_update' ] );
+		add_action( 'ceo/admin/settings/metabox/general/table/last_row', [ $this, 'components_update' ] );
 
 	}
 
