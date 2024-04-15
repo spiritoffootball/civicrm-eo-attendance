@@ -109,6 +109,15 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	private $form;
 
 	/**
+	 * Rendez Vous meta data.
+	 *
+	 * @since 0.5
+	 * @access private
+	 * @var array
+	 */
+	private $item_meta;
+
+	/**
 	 * Initialises this object.
 	 *
 	 * @since 0.4.7
