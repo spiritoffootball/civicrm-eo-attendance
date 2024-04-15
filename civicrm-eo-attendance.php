@@ -196,13 +196,13 @@ class CiviCRM_Event_Organiser_Attendance {
 	public function include_files() {
 
 		// Load our class files.
-		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-participant-listing.php';
-		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-leader.php';
-		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-paid.php';
-		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-custom-data-participant.php';
-		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-custom-data-event.php';
-		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-event-sharing.php';
-		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/civicrm-eo-attendance-rendez-vous.php';
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/class-participant-listing.php';
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/class-event-leader.php';
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/class-event-paid.php';
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/class-custom-data-participant.php';
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/class-custom-data-event.php';
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/class-event-sharing.php';
+		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/class-rendez-vous.php';
 
 	}
 

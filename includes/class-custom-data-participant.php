@@ -100,7 +100,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	public function register_widgets() {
 
 		// Include widgets.
-		require_once CIVICRM_EO_ATTENDANCE_PATH . 'assets/widgets/custom-data-participant-widget.php';
+		require_once CIVICRM_EO_ATTENDANCE_PATH . 'assets/widgets/class-participant-widget.php';
 
 		// Register widgets.
 		register_widget( 'CiviCRM_EO_Attendance_CDP_Widget' );
