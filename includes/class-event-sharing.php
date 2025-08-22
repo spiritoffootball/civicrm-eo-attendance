@@ -184,7 +184,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$value = ( isset( $_POST[ $this->option_name ] ) ) ? 1 : 0;
 
 		// Save option.
-		$this->plugin->civicrm_eo->db->option_save( $this->option_name, $value );
+		$this->plugin->civicrm_eo->admin->option_save( $this->option_name, $value );
 
 	}
 
@@ -244,7 +244,7 @@ class CiviCRM_EO_Attendance_Event_Sharing {
 		$existing_id = 0;
 
 		// Do we have a default set?
-		$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
+		$default = $this->plugin->civicrm_eo->admin->option_get( $this->option_name );
 
 		// Override with default if we get one.
 		if ( '' !== $default && is_numeric( $default ) ) {

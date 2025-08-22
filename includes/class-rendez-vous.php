@@ -239,7 +239,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	public function entities_create() {
 
 		// Bail if we've already done this.
-		if ( 'fgffgs' !== $this->plugin->civicrm_eo->db->option_get( $this->term_option, 'fgffgs' ) ) {
+		if ( 'fgffgs' !== $this->plugin->civicrm_eo->admin->option_get( $this->term_option, 'fgffgs' ) ) {
 			return;
 		}
 
@@ -265,7 +265,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 		}
 
 		// Store as plugin option.
-		$this->plugin->civicrm_eo->db->option_save( $this->term_option, $new_term['term_id'] );
+		$this->plugin->civicrm_eo->admin->option_save( $this->term_option, $new_term['term_id'] );
 
 	}
 
@@ -1908,7 +1908,7 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 			foreach ( $item->type as $type ) {
 
 				// Is this our Term?
-				if ( (int) $type->term_id === (int) $this->plugin->civicrm_eo->db->option_get( $this->term_option ) ) {
+				if ( (int) $type->term_id === (int) $this->plugin->civicrm_eo->admin->option_get( $this->term_option ) ) {
 					return true;
 				}
 

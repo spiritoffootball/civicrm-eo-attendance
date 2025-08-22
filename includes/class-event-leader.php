@@ -132,7 +132,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$leader_role = (int) $leader_role;
 
 		// Save option.
-		$this->plugin->civicrm_eo->db->option_save( $this->option_name, $leader_role );
+		$this->plugin->civicrm_eo->admin->option_save( $this->option_name, $leader_role );
 
 	}
 
@@ -351,7 +351,7 @@ class CiviCRM_EO_Attendance_Event_Leader {
 		$existing_id = false;
 
 		// Do we have a default set?
-		$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
+		$default = $this->plugin->civicrm_eo->admin->option_get( $this->option_name );
 
 		// Override with default value if we get one.
 		if ( '' !== $default && is_numeric( $default ) ) {

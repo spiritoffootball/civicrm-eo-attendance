@@ -129,7 +129,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	public function entities_create() {
 
 		// Bail if we've already done this.
-		if ( 'fgffgs' !== $this->plugin->civicrm_eo->db->option_get( $this->group_name, 'fgffgs' ) ) {
+		if ( 'fgffgs' !== $this->plugin->civicrm_eo->admin->option_get( $this->group_name, 'fgffgs' ) ) {
 			return;
 		}
 
@@ -165,8 +165,8 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		}
 
 		// Store as plugin options.
-		$this->plugin->civicrm_eo->db->option_save( $this->group_name, $custom_group_id );
-		$this->plugin->civicrm_eo->db->option_save( $this->field_ids_name, $custom_field_ids );
+		$this->plugin->civicrm_eo->admin->option_save( $this->group_name, $custom_group_id );
+		$this->plugin->civicrm_eo->admin->option_save( $this->field_ids_name, $custom_field_ids );
 
 		// We can then allow renaming either via l18n or admin Field.
 
@@ -305,7 +305,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		}
 
 		// Get our list of Custom Fields.
-		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
+		$fields = $this->plugin->civicrm_eo->admin->option_get( $this->field_ids_name );
 
 		// Construct returns array.
 		$returns = [];
@@ -389,7 +389,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		}
 
 		// Get our list of Custom Fields.
-		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
+		$fields = $this->plugin->civicrm_eo->admin->option_get( $this->field_ids_name );
 
 		// Construct returns array.
 		$returns = [];
@@ -466,7 +466,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		}
 
 		// Get our list of Custom Fields.
-		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
+		$fields = $this->plugin->civicrm_eo->admin->option_get( $this->field_ids_name );
 
 		// Construct returns array.
 		$returns = [];
@@ -532,7 +532,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 	public function participant_has_data( $participant ) {
 
 		// Get Fields.
-		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
+		$fields = $this->plugin->civicrm_eo->admin->option_get( $this->field_ids_name );
 
 		// Construct "hours" key.
 		$key = 'custom_' . $fields['hours'];
@@ -946,7 +946,7 @@ class CiviCRM_EO_Attendance_Custom_Data_Participant {
 		];
 
 		// Get Fields.
-		$fields = $this->plugin->civicrm_eo->db->option_get( $this->field_ids_name );
+		$fields = $this->plugin->civicrm_eo->admin->option_get( $this->field_ids_name );
 
 		// Process each Field.
 		foreach ( $fields as $key => $field_id ) {

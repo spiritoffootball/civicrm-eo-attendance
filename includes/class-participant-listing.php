@@ -201,7 +201,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$default_listing = (int) $default_listing;
 
 		// Save option.
-		$this->plugin->civicrm_eo->db->option_save( $this->option_name, $default_listing );
+		$this->plugin->civicrm_eo->admin->option_save( $this->option_name, $default_listing );
 
 	}
 
@@ -391,7 +391,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		$existing_value = 0;
 
 		// Do we have a default set?
-		$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
+		$default = $this->plugin->civicrm_eo->admin->option_get( $this->option_name );
 
 		// Did we get one?
 		if ( '' !== $default && is_numeric( $default ) ) {
@@ -593,7 +593,7 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 		if ( is_null( $profile_id ) ) {
 
 			// Do we have a default set?
-			$default = $this->plugin->civicrm_eo->db->option_get( $this->option_name );
+			$default = $this->plugin->civicrm_eo->admin->option_get( $this->option_name );
 
 			// Did we get one?
 			if ( '' !== $default && is_numeric( $default ) ) {
