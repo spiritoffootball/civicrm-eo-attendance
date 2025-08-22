@@ -4,8 +4,8 @@
  *
  * Plugin Name: CiviCRM Event Organiser Attendance
  * Description: Attendance functionality for CiviCRM Event Organiser plugin.
- * Plugin URI:  https://github.com/christianwach/civicrm-eo-attendance
  * Version:     0.7.0a
+ * Plugin URI:  https://github.com/christianwach/civicrm-eo-attendance
  * Author:      Christian Wach
  * Author URI:  https://haystack.co.uk
  * Text Domain: civicrm-eo-attendance
@@ -133,43 +133,8 @@ class CiviCRM_Event_Organiser_Attendance {
 	 */
 	public function __construct() {
 
-		// Initialise.
-		$this->initialise();
-
-		// Translation.
-		add_action( 'plugins_loaded', [ $this, 'enable_translation' ] );
-
 		// External references.
-		add_action( 'plugins_loaded', [ $this, 'setup_objects' ], 20 );
-
-	}
-
-	/**
-	 * Do stuff on plugin activation.
-	 *
-	 * @since 0.3
-	 */
-	public function activate() {
-
-		// Set up objects.
-		$this->setup_objects();
-
-		// Pass to classes that need activation.
-		$this->custom_data_participant->activate();
-		$this->custom_data_event->activate();
-		$this->rendez_vous->activate();
-
-	}
-
-	/**
-	 * Do stuff on plugin deactivation.
-	 *
-	 * @since 0.3
-	 */
-	public function deactivate() {
-
-		// Pass to classes that need deactivation.
-		$this->rendez_vous->deactivate();
+		add_action( 'plugins_loaded', [ $this, 'initialise' ], 20 );
 
 	}
 
@@ -180,11 +145,29 @@ class CiviCRM_Event_Organiser_Attendance {
 	 */
 	public function initialise() {
 
-		// Include files.
-		$this->include_files();
+		// Bail if CiviCRM Event Organiser plugin is not persent.
+		if ( ! function_exists( 'civicrm_eo' ) ) {
+			return;
+		}
 
-		// Add actions and filters.
+		// Bail if Rendez Vous plugin is not persent.
+		if ( ! function_exists( 'rendez_vous' ) ) {
+			return;
+		}
+
+		// Only do this once.
+		static $done;
+		if ( isset( $done ) && true === $done ) {
+			return;
+		}
+
+		// Bootstrap plugin.
+		$this->include_files();
+		$this->setup_objects();
 		$this->register_hooks();
+
+		// We're done.
+		$done = true;
 
 	}
 
@@ -193,7 +176,7 @@ class CiviCRM_Event_Organiser_Attendance {
 	 *
 	 * @since 0.1
 	 */
-	public function include_files() {
+	private function include_files() {
 
 		// Load our class files.
 		require CIVICRM_EO_ATTENDANCE_PATH . 'includes/class-participant-listing.php';
@@ -207,50 +190,11 @@ class CiviCRM_Event_Organiser_Attendance {
 	}
 
 	/**
-	 * Register hooks.
-	 *
-	 * @since 0.1
-	 */
-	public function register_hooks() {
-
-		/*
-		// Test for basepage CiviEvent info requests so we can redirect to the
-		// relevant Event Organiser Event.
-		add_action( 'civicrm_initialized', array( $this, 'maybe_redirect_to_eo' ) );
-		*/
-
-		// Front end hooks.
-		if ( ! is_admin() ) {
-
-			// Change URLs on front end.
-			add_action( 'civicrm_alterContent', [ $this, 'content_parse' ], 10, 4 );
-
-			// Register any public styles.
-			add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_styles' ], 20 );
-
-		}
-
-	}
-
-	/**
 	 * Set up this plugin's objects.
 	 *
 	 * @since 0.3
 	 */
-	public function setup_objects() {
-
-		// Bail if CiviCRM Event Organiser plugin is not persent.
-		if ( ! function_exists( 'civicrm_eo' ) ) {
-			return;
-		}
-
-		// Init flag.
-		static $done;
-
-		// Only do this once.
-		if ( isset( $done ) && true === $done ) {
-			return;
-		}
+	private function setup_objects() {
 
 		// Store reference to CiviCRM Event Organiser.
 		$this->civicrm_eo = civicrm_eo();
@@ -273,8 +217,66 @@ class CiviCRM_Event_Organiser_Attendance {
 		$this->event_sharing->set_references( $this );
 		$this->rendez_vous->set_references( $this );
 
-		// We're done.
-		$done = true;
+	}
+
+	/**
+	 * Register hooks.
+	 *
+	 * @since 0.1
+	 */
+	private function register_hooks() {
+
+		// Translation.
+		add_action( 'init', [ $this, 'enable_translation' ] );
+
+		/*
+		// Test for basepage CiviEvent info requests so we can redirect to the
+		// relevant Event Organiser Event.
+		add_action( 'civicrm_initialized', array( $this, 'maybe_redirect_to_eo' ) );
+		*/
+
+		// Front end hooks.
+		if ( ! is_admin() ) {
+
+			// Change URLs on front end.
+			add_action( 'civicrm_alterContent', [ $this, 'content_parse' ], 10, 4 );
+
+			// Register any public styles.
+			add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_styles' ], 20 );
+
+		}
+
+	}
+
+	/**
+	 * Do stuff on plugin activation.
+	 *
+	 * @since 0.3
+	 */
+	public function activate() {
+
+		// Maybe initialise.
+		$this->initialise();
+
+		// Pass to classes that need activation.
+		$this->custom_data_participant->activate();
+		$this->custom_data_event->activate();
+		$this->rendez_vous->activate();
+
+	}
+
+	/**
+	 * Do stuff on plugin deactivation.
+	 *
+	 * @since 0.3
+	 */
+	public function deactivate() {
+
+		// Maybe initialise.
+		$this->initialise();
+
+		// Pass to classes that need deactivation.
+		$this->rendez_vous->deactivate();
 
 	}
 
