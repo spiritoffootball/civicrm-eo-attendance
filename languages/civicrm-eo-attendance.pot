@@ -1,4 +1,4 @@
-# Copyright (C) 2024 Christian Wach
+# Copyright (C) 2025 Christian Wach
 # This file is distributed under the same license as the CiviCRM Event Organiser Attendance plugin.
 msgid ""
 msgstr ""
@@ -9,9 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-04-15T20:48:07+00:00\n"
+"POT-Creation-Date: 2025-08-22T20:05:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.10.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: civicrm-eo-attendance\n"
 
 #. Plugin Name of the plugin
@@ -70,8 +70,8 @@ msgstr ""
 
 #: assets/templates/custom-data-event/event-form.php:54
 #: assets/templates/custom-data-participant/event-form.php:39
-#: includes/class-rendez-vous.php:297
-#: includes/class-rendez-vous.php:1462
+#: includes/class-rendez-vous.php:316
+#: includes/class-rendez-vous.php:1481
 msgid "Submit"
 msgstr ""
 
@@ -195,7 +195,7 @@ msgstr ""
 #: assets/widgets/class-participant-widget.php:394
 #: includes/class-custom-data-event.php:481
 #: includes/class-custom-data-participant.php:649
-#: includes/class-rendez-vous.php:299
+#: includes/class-rendez-vous.php:318
 msgid "Processing..."
 msgstr ""
 
@@ -275,18 +275,19 @@ msgstr ""
 #. translators: %s The formatted Event title.
 #: includes/class-custom-data-event.php:610
 #: includes/class-custom-data-participant.php:782
+#, php-format
 msgid "Feedback for %s"
 msgstr ""
 
 #: includes/class-custom-data-event.php:717
 #: includes/class-custom-data-participant.php:911
-#: includes/class-rendez-vous.php:1577
+#: includes/class-rendez-vous.php:1596
 msgid "Oops! Something went wrong."
 msgstr ""
 
 #: includes/class-custom-data-event.php:795
 #: includes/class-custom-data-participant.php:989
-#: includes/class-rendez-vous.php:1800
+#: includes/class-rendez-vous.php:1819
 msgid "Thanks!"
 msgstr ""
 
@@ -313,6 +314,7 @@ msgstr ""
 
 #. translators: %s The formatted Event title.
 #: includes/class-participant-listing.php:894
+#, php-format
 msgid "Participants for %s"
 msgstr ""
 
@@ -328,110 +330,117 @@ msgstr ""
 msgid "Registration is closed"
 msgstr ""
 
-#: includes/class-rendez-vous.php:238
+#: includes/class-rendez-vous.php:257
 msgid "Attendance"
 msgstr ""
 
-#: includes/class-rendez-vous.php:298
-#: includes/class-rendez-vous.php:1460
+#: includes/class-rendez-vous.php:317
+#: includes/class-rendez-vous.php:1479
 msgid "Update"
 msgstr ""
 
-#: includes/class-rendez-vous.php:300
+#: includes/class-rendez-vous.php:319
 msgid "You must choose someone to be the Event Leader."
 msgstr ""
 
-#: includes/class-rendez-vous.php:434
+#: includes/class-rendez-vous.php:453
 msgid "Refreshing this Rendez-vous failed."
 msgstr ""
 
-#: includes/class-rendez-vous.php:436
+#: includes/class-rendez-vous.php:455
 msgid "Rendez-vous successfully refreshed."
 msgstr ""
 
-#: includes/class-rendez-vous.php:531
+#: includes/class-rendez-vous.php:550
 msgid "Refreshing all Rendez-vous failed."
 msgstr ""
 
-#: includes/class-rendez-vous.php:533
+#: includes/class-rendez-vous.php:552
 msgid "All Rendez-vous successfully refreshed."
 msgstr ""
 
 #. translators: %s: The formatted Event date.
-#: includes/class-rendez-vous.php:640
+#: includes/class-rendez-vous.php:659
+#, php-format
 msgid "Availability for %s"
 msgstr ""
 
-#: includes/class-rendez-vous.php:720
+#: includes/class-rendez-vous.php:739
 msgid "Erfurt"
 msgstr ""
 
-#: includes/class-rendez-vous.php:1103
+#: includes/class-rendez-vous.php:1122
 msgid "Refresh All"
 msgstr ""
 
-#: includes/class-rendez-vous.php:1151
+#: includes/class-rendez-vous.php:1170
 msgid "Edit"
 msgstr ""
 
-#: includes/class-rendez-vous.php:1156
+#: includes/class-rendez-vous.php:1175
 msgid "Refresh"
 msgstr ""
 
-#: includes/class-rendez-vous.php:1271
+#: includes/class-rendez-vous.php:1290
 msgid "I am not available this month"
 msgstr ""
 
-#: includes/class-rendez-vous.php:1327
+#: includes/class-rendez-vous.php:1346
 msgid "Registration"
 msgstr ""
 
-#: includes/class-rendez-vous.php:1360
+#: includes/class-rendez-vous.php:1379
 msgid "Register"
 msgstr ""
 
-#: includes/class-rendez-vous.php:1667
+#: includes/class-rendez-vous.php:1686
 msgid "Registration via Rendez Vous"
 msgstr ""
 
 #. translators: 1: The Event title.
-#: includes/class-rendez-vous.php:1701
+#: includes/class-rendez-vous.php:1720
+#, php-format
 msgid "You have been registered for %s"
 msgstr ""
 
 #. translators: 1: The Event title, 2: The start date, 3: The start time.
-#: includes/class-rendez-vous.php:1708
+#: includes/class-rendez-vous.php:1727
+#, php-format
 msgid "This is to let you know that you have been registered as attending the Event \"%1$s\" on %2$s at %3$s. If you think this has been done in error, or you have anything else you want to say to the organiser, please follow the link below and reply to this conversation on the Spirit of Football website."
 msgstr ""
 
 #. translators: 1: The Event title.
-#: includes/class-rendez-vous.php:1774
+#: includes/class-rendez-vous.php:1793
+#, php-format
 msgid "You have been unregistered from %s"
 msgstr ""
 
 #. translators: 1: The Event title, 2: The start date, 3: The start time.
-#: includes/class-rendez-vous.php:1781
+#: includes/class-rendez-vous.php:1800
+#, php-format
 msgid "This is to let you know that your registration for the Event \"%1$s\" on %2$s at %3$s has been cancelled and that you will no longer be attending. If you think this has been done in error, please follow the link below and reply to this conversation on the Spirit of Football website."
 msgstr ""
 
-#: includes/class-rendez-vous.php:2033
+#: includes/class-rendez-vous.php:2052
 msgid "Enable Attendance"
 msgstr ""
 
-#: includes/class-rendez-vous.php:2082
+#: includes/class-rendez-vous.php:2101
 msgid "Attendance Organizers"
 msgstr ""
 
-#: includes/class-rendez-vous.php:2089
+#: includes/class-rendez-vous.php:2108
 msgid "Choose the people responsible for Attendance."
 msgstr ""
 
 #. translators: 1: The Contact name, 2: The Event title.
-#: includes/class-rendez-vous.php:2421
+#: includes/class-rendez-vous.php:2440
+#, php-format
 msgid "%1$s cannot attend \"%2$s\""
 msgstr ""
 
 #. translators: 1: The Contact name, 2: The Event title, 3: The Event date, 4: The Event time, 5: The link.
-#: includes/class-rendez-vous.php:2433
+#: includes/class-rendez-vous.php:2452
+#, php-format
 msgid "Unfortunately %1$s can no longer attend \"%2$s\" on %3$s at %4$s and their registration for this Event has been cancelled. Please visit the \"%5$s\" to review registrations for this Event."
 msgstr ""
