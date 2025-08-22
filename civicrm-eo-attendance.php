@@ -150,11 +150,6 @@ class CiviCRM_Event_Organiser_Attendance {
 			return;
 		}
 
-		// Bail if Rendez Vous plugin is not persent.
-		if ( ! function_exists( 'rendez_vous' ) ) {
-			return;
-		}
-
 		// Only do this once.
 		static $done;
 		if ( isset( $done ) && true === $done ) {

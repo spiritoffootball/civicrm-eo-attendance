@@ -124,6 +124,11 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 */
 	public function __construct() {
 
+		// Bail if Rendez Vous plugin is not persent.
+		if ( ! function_exists( 'rendez_vous' ) ) {
+			return;
+		}
+
 		// Register hooks.
 		$this->register_hooks();
 
@@ -137,6 +142,11 @@ class CiviCRM_EO_Attendance_Rendez_Vous {
 	 * @param object $parent The parent object.
 	 */
 	public function set_references( $parent ) {
+
+		// Bail if Rendez Vous plugin is not persent.
+		if ( ! function_exists( 'rendez_vous' ) ) {
+			return;
+		}
 
 		// Store.
 		$this->plugin = $parent;
