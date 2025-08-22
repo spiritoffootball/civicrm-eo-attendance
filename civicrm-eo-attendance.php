@@ -4,7 +4,7 @@
  *
  * Plugin Name: CiviCRM Event Organiser Attendance
  * Description: Attendance functionality for CiviCRM Event Organiser plugin.
- * Version:     0.7.0a
+ * Version:     0.7.0
  * Plugin URI:  https://github.com/christianwach/civicrm-eo-attendance
  * Author:      Christian Wach
  * Author URI:  https://haystack.co.uk
@@ -18,7 +18,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Set our version here.
-define( 'CIVICRM_EO_ATTENDANCE_VERSION', '0.7.0a' );
+define( 'CIVICRM_EO_ATTENDANCE_VERSION', '0.7.0' );
 
 // Store reference to this file.
 if ( ! defined( 'CIVICRM_EO_ATTENDANCE_FILE' ) ) {
