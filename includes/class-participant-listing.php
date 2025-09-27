@@ -658,7 +658,12 @@ class CiviCRM_EO_Attendance_Participant_Listing {
 	 */
 	public function list_render( $post_id = null ) {
 
-		// Deny to Users who aren't a member of a Group that has Attendance enabled.
+		// TODO: Deny to Users who aren't a member of a Group that has Attendance enabled.
+
+		// Bail if not logged in for now.
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
 
 		/**
 		 * Filter allows other plugins to modify access.
